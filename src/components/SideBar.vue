@@ -200,5 +200,4 @@ import { ref } from 'vue';
 const visible = ref(false);
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
