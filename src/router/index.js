@@ -1,7 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router';
 import Home from '../views/Home.vue';
 import Clases from '../views/Clases.vue';
-import AlumnosView from '../views/Alumnos.vue';
+import AlumnosView from '../views/AlumnosView.vue';
 import Promociones from '../views/Groups.vue';
 
 const routes = [
