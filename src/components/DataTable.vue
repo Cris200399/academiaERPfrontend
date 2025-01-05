@@ -8,7 +8,7 @@ import {FilterMatchMode} from '@primevue/core/api';
 import {getStudents} from "@/services/studentService";
 import {getGroups} from "@/services/groupService";
 
-const customers = ref();
+
 const students = ref();
 const groupNames = ref();
 
@@ -21,51 +21,20 @@ const filters = ref({
   gender: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
   phone: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
   address: {value: null, matchMode: FilterMatchMode.CONTAINS},
+  age: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
   dni: {value: null, matchMode: FilterMatchMode.STARTS_WITH}
 });
-const representatives = ref([
-  {name: 'Amy Elsner', image: 'amyelsner.png'},
-  {name: 'Anna Fali', image: 'annafali.png'},
-  {name: 'Asiya Javayant', image: 'asiyajavayant.png'},
-  {name: 'Bernardo Dominic', image: 'bernardodominic.png'},
-  {name: 'Elwin Sharvill', image: 'elwinsharvill.png'},
-  {name: 'Ioni Bowcher', image: 'ionibowcher.png'},
-  {name: 'Ivan Magalhaes', image: 'ivanmagalhaes.png'},
-  {name: 'Onyama Limba', image: 'onyamalimba.png'},
-  {name: 'Stephen Shaw', image: 'stephenshaw.png'},
-  {name: 'XuXue Feng', image: 'xuxuefeng.png'}
-]);
 
 
 const statuses = ref(['unqualified', 'qualified', 'new', 'negotiation', 'renewal', 'proposal']);
 const loading = ref(true);
 
 onMounted(async () => {
-  const data = [
-    {
-      id: 1,
-      name: 'John Doe',
-      country: {name: 'USA', code: 'us'},
-      representative: {name: 'Amy Elsner', image: 'amyelsner.png'},
-      status: 'qualified',
-      verified: true,
-      date: '2023-01-01'
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      country: {name: 'Canada', code: 'ca'},
-      representative: {name: 'Anna Fali', image: 'annafali.png'},
-      status: 'new',
-      verified: false,
-      date: '2023-02-01'
-    }
-  ];
-
   students.value = await getStudents();
 
   students.value.forEach(student => {
     student.group = student.group.name;
+    student.age = getAge(student.dateOfBirth);
   });
 
   const groups = await getGroups();
@@ -73,17 +42,20 @@ onMounted(async () => {
       g.name
   ));
 
-  customers.value = getCustomers(data);
   loading.value = false;
 });
 
-const getCustomers = (data) => {
-  return [...(data || [])].map((d) => {
-    d.date = new Date(d.date);
+function getAge(dateOfBirth) {
+  const today = new Date();
+  const birthDate = new Date(dateOfBirth);
+  let age = today.getFullYear() - birthDate.getFullYear();
+  const monthDifference = today.getMonth() - birthDate.getMonth();
+  if (monthDifference < 0 || (monthDifference === 0 && today.getDay() < birthDate.getDay())) {
+    age--;
+  }
+  return age;
+}
 
-    return d;
-  });
-};
 
 const getSeverity = (status) => {
   switch (status) {
@@ -176,6 +148,16 @@ const getSeverity = (status) => {
 
       </Column>
 
+      <Column field="age" header="Edad" style="min-width: 5rem">
+        <template #body="{ data }">
+          {{ data.age }}
+        </template>
+        <template #filter="{ filterModel, filterCallback }">
+          <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
+                     placeholder="Buscar por Edad"/>
+        </template>
+      </Column>
+
       <Column field="gender" header="Género" style="min-width: 5rem">
         <template #body="{ data }">
           {{ data.gender }}
@@ -216,87 +198,15 @@ const getSeverity = (status) => {
         </template>
       </Column>
 
+      <Column header="Opciones" style="min-width: 5rem">
+        <template #body="{ data }">
+          <div class="flex gap-2">
+            <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" @click="editStudent(data)"/>
+            <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" @click="deleteStudent(data)"/>
+          </div>
+        </template>
+      </Column>
 
-      <!--      <Column field="status" header="Status" :showFilterMenu="false" style="min-width: 12rem">-->
-      <!--        <template #body="{ data }">-->
-      <!--          <Tag :value="data.status" :severity="getSeverity(data.status)"/>-->
-      <!--        </template>-->
-      <!--        <template #filter="{ filterModel, filterCallback }">-->
-      <!--          <Select v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Select One"-->
-      <!--                  style="min-width: 12rem" :showClear="true">-->
-      <!--            <template #option="slotProps">-->
-      <!--              <Tag :value="slotProps.option" :severity="getSeverity(slotProps.option)"/>-->
-      <!--            </template>-->
-      <!--          </Select>-->
-      <!--        </template>-->
-      <!--      </Column>-->
-
-      <!--      <Column field="status" header="Status" :showFilterMenu="false" style="min-width: 12rem">-->
-      <!--        <template #body="{ data }">-->
-      <!--          <Tag :value="data.status" :severity="getSeverity(data.status)"/>-->
-      <!--        </template>-->
-      <!--        <template #filter="{ filterModel, filterCallback }">-->
-      <!--          <Select v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Select One"-->
-      <!--                  style="min-width: 12rem" :showClear="true">-->
-      <!--            <template #option="slotProps">-->
-      <!--              <Tag :value="slotProps.option" :severity="getSeverity(slotProps.option)"/>-->
-      <!--            </template>-->
-      <!--          </Select>-->
-      <!--        </template>-->
-      <!--      </Column>-->
-
-      <!--      <Column field="status" header="Status" :showFilterMenu="false" style="min-width: 12rem">-->
-      <!--        <template #body="{ data }">-->
-      <!--          <Tag :value="data.status" :severity="getSeverity(data.status)"/>-->
-      <!--        </template>-->
-      <!--        <template #filter="{ filterModel, filterCallback }">-->
-      <!--          <Select v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Select One"-->
-      <!--                  style="min-width: 12rem" :showClear="true">-->
-      <!--            <template #option="slotProps">-->
-      <!--              <Tag :value="slotProps.option" :severity="getSeverity(slotProps.option)"/>-->
-      <!--            </template>-->
-      <!--          </Select>-->
-      <!--        </template>-->
-      <!--      </Column>-->
-
-      <!--      <Column field="status" header="Status" :showFilterMenu="false" style="min-width: 12rem">-->
-      <!--        <template #body="{ data }">-->
-      <!--          <Tag :value="data.status" :severity="getSeverity(data.status)"/>-->
-      <!--        </template>-->
-      <!--        <template #filter="{ filterModel, filterCallback }">-->
-      <!--          <Select v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Select One"-->
-      <!--                  style="min-width: 12rem" :showClear="true">-->
-      <!--            <template #option="slotProps">-->
-      <!--              <Tag :value="slotProps.option" :severity="getSeverity(slotProps.option)"/>-->
-      <!--            </template>-->
-      <!--          </Select>-->
-      <!--        </template>-->
-      <!--      </Column>-->
-
-      <!--      <Column field="status" header="Status" :showFilterMenu="false" style="min-width: 12rem">-->
-      <!--        <template #body="{ data }">-->
-      <!--          <Tag :value="data.status" :severity="getSeverity(data.status)"/>-->
-      <!--        </template>-->
-      <!--        <template #filter="{ filterModel, filterCallback }">-->
-      <!--          <Select v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Select One"-->
-      <!--                  style="min-width: 12rem" :showClear="true">-->
-      <!--            <template #option="slotProps">-->
-      <!--              <Tag :value="slotProps.option" :severity="getSeverity(slotProps.option)"/>-->
-      <!--            </template>-->
-      <!--          </Select>-->
-      <!--        </template>-->
-      <!--      </Column>-->
-
-      <!--      <Column field="verified" header="Verified" dataType="boolean" style="min-width: 6rem">-->
-      <!--        <template #body="{ data }">-->
-      <!--          <i class="pi"-->
-      <!--             :class="{ 'pi-check-circle text-green-500': data.verified, 'pi-times-circle text-red-400': !data.verified }"></i>-->
-      <!--        </template>-->
-      <!--        <template #filter="{ filterModel, filterCallback }">-->
-      <!--          <Checkbox v-model="filterModel.value" :indeterminate="filterModel.value === null" binary-->
-      <!--                    @change="filterCallback()"/>-->
-      <!--        </template>-->
-      <!--      </Column>-->
 
     </DataTable>
   </div>
