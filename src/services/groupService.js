@@ -11,3 +11,4 @@ export const getGroups = async () => {
         throw error;
     }
 }
+

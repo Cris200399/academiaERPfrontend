@@ -2,26 +2,53 @@
   <div class="card p-6 bg-white shadow-md rounded-lg ml-2">
     <div class="flex justify-between items-center">
       <div>
-        <div class="text-4xl font-bold">
-          10
+        <div class="text-4xl font-bold text-center">
+          {{ totalStudents }}
         </div>
         <div class="text-xl font-semibold mt-2">
           Total de Alumnos
         </div>
       </div>
       <div class="flex items-end justify-center">
-        <AddStudentDialog></AddStudentDialog>
+        <AddStudentDialog @studentAdded='handleStudentAdded'></AddStudentDialog>
       </div>
     </div>
   </div>
   <div class="dataTable mt-0 ml-2">
-    <DataTable></DataTable>
+    <DataTable
+        @studentDeleted="handleStudentDeleted"
+        :newStudentAdded='newStudentAdded'
+    />
   </div>
 </template>
 
 <script setup>
-import DataTable from '../components/DataTable.vue';
-import AddStudentDialog from "@/components/AddStudentDialog.vue";
+import DataTable from '../components/students/DataTable.vue';
+import AddStudentDialog from "@/components/students/AddStudentDialog.vue";
+
+import {getTotalStudentsService} from "@/services/studentService";
+
+import {ref, onMounted} from 'vue';
+
+const totalStudents = ref();
+
+
+const newStudentAdded = ref();
+
+onMounted(async () => {
+  totalStudents.value = await getTotalStudentsService();
+});
+
+
+function handleStudentDeleted() {
+  totalStudents.value--;
+}
+
+function handleStudentAdded(newStudent) {
+  totalStudents.value++;
+  newStudentAdded.value = newStudent;
+}
+
 </script>
 
 <style scoped>

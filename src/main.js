@@ -10,30 +10,38 @@ import App from './App.vue';
 import router from './router';
 import ToastService from 'primevue/toastservice';
 
+import ConfirmationService from 'primevue/confirmationservice';
+
 import PrimeVue from "primevue/config";
 import StyleClass from 'primevue/styleclass';
 import Ripple from 'primevue/ripple';
+import {spanishLocale} from "@/language/spanishLocale";
 
 
 const app = createApp(App);
 
 app.use(router);
+app.use(ConfirmationService);
 app.use(ToastService);
 
 
-app.use(PrimeVue, {
-    theme: {
-        preset: Noir,
-        options: {
-            prefix: 'p',
-            // darkModeSelector: '.p-dark',
-            cssLayer: false,
+app.use(PrimeVue,
+    {
+        theme: {
+            preset: Noir,
+            options: {
+                prefix: 'p',
+                darkModeSelector: '.p-dark',
+                cssLayer: false,
+            },
         },
+        locale: spanishLocale
     }
-});
+);
 
 // Registrar la directiva StyleClass
 app.directive('styleclass', StyleClass);
 app.directive('ripple', Ripple);
+
 
 app.mount('#app');

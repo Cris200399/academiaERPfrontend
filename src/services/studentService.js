@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { API_URLS } from '@/config/apiConfig';
 
-export const getStudents = async () => {
+export const getStudentsService = async () => {
   try {
     const response = await axios.get(API_URLS.STUDENTS);
     return response.data;
@@ -12,7 +12,7 @@ export const getStudents = async () => {
   }
 };
 
-export const addStudent = async (student) => {
+export const addStudentService = async (student) => {
   try {
     const response = await axios.post(API_URLS.STUDENTS, student);
     return response.data;
@@ -22,4 +22,21 @@ export const addStudent = async (student) => {
   }
 };
 
-// Add more functions as needed
+export const deleteStudentService = async (id) => {
+    try {
+        await axios.delete(`${API_URLS.STUDENTS}/${id}`);
+    } catch (error) {
+        console.error('Error deleting student:', error);
+        throw error;
+    }
+}
+
+export const getTotalStudentsService = async () => {
+    try {
+        const response = await axios.get(`${API_URLS.STUDENTS}/total`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching total students:', error);
+        throw error;
+    }
+}

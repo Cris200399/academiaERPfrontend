@@ -2,15 +2,23 @@
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
-import {ref, onMounted} from 'vue';
-import {FilterMatchMode} from '@primevue/core/api';
+import {onMounted, ref, defineEmits, defineProps, watch} from 'vue';
+import {FilterMatchMode, FilterOperator} from '@primevue/core/api';
 
-import {getStudents} from "@/services/studentService";
+import {getStudentsService} from "@/services/studentService";
 import {getGroups} from "@/services/groupService";
+import DeleteStudentButton from "@/components/students/DeleteStudentButton.vue";
+import Student from "@/models/student";
+import EditStudentSpeedDial from "@/components/students/EditStudentSpeedDial.vue";
 
 
-const students = ref();
+const students = ref([]);
 const groupNames = ref();
+
+const emit = defineEmits(['studentDeleted']);
+const props = defineProps({
+  newStudentAdded: Object
+});
 
 
 const filters = ref({
@@ -21,6 +29,7 @@ const filters = ref({
   gender: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
   phone: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
   address: {value: null, matchMode: FilterMatchMode.CONTAINS},
+  dateOfBirth: {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.DATE_IS}]},
   age: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
   dni: {value: null, matchMode: FilterMatchMode.STARTS_WITH}
 });
@@ -30,11 +39,28 @@ const statuses = ref(['unqualified', 'qualified', 'new', 'negotiation', 'renewal
 const loading = ref(true);
 
 onMounted(async () => {
-  students.value = await getStudents();
+  const studentsResponseData = await getStudentsService();
+
+  studentsResponseData.map((student) => {
+    students.value.push(
+        new Student({
+              id: student._id,
+              name: student.name,
+              lastName: student.lastName,
+              address: student.address,
+              email: student.email,
+              gender: student.gender,
+              dateOfBirth: student.dateOfBirth,
+              phone: student.phone,
+              group: student.group,
+              dni: student.dni,
+            }
+        )
+    );
+  });
 
   students.value.forEach(student => {
-    student.group = student.group.name;
-    student.age = getAge(student.dateOfBirth);
+    formatStudent(student);
   });
 
   const groups = await getGroups();
@@ -44,6 +70,17 @@ onMounted(async () => {
 
   loading.value = false;
 });
+
+function formatStudent(student) {
+  student.group = student.group.name;
+  student.age = getAge(student.dateOfBirth);
+  student.dateOfBirth = new Date(student.dateOfBirth).toLocaleDateString('es-ES', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+
+}
 
 function getAge(dateOfBirth) {
   const today = new Date();
@@ -76,6 +113,35 @@ const getSeverity = (status) => {
   }
 }
 
+function getGender(gender) {
+  switch (gender) {
+    case 'male':
+      return 'Masculino';
+
+    case 'female':
+      return 'Femenino';
+
+    default:
+      return 'Otro';
+  }
+}
+
+function handleStudentDeleted(id) {
+  students.value = students.value.filter(student => student.id !== id);
+  emit('studentDeleted');
+}
+
+function handleStudentAdded(newStudent) {
+  formatStudent(newStudent);
+  students.value.push(newStudent);
+}
+
+watch(() => props.newStudentAdded, (newStudent) => {
+  if (newStudent) {
+    handleStudentAdded(newStudent);
+  }
+});
+
 </script>
 
 
@@ -87,11 +153,13 @@ const getSeverity = (status) => {
         paginator
         :rows="10"
         dataKey="id"
-        filterDisplay="row"
+        filterDisplay="menu"
         :loading="loading"
-        :globalFilterFields="['name', 'lastName', 'group.name', 'status', 'gender', 'dni']"
+        :globalFilterFields="['name', 'lastName', 'group', 'gender', 'dni', 'age', 'phone', 'address']"
         scrollable
-        scroll-height="600px"
+        show-gridlines
+        removable-sort
+        scroll-height="800px"
     >
       <template #header>
         <div class="flex justify-end">
@@ -106,7 +174,9 @@ const getSeverity = (status) => {
 
       <template #empty> No se encontraron alumnos</template>
 
-      <template #loading> Cargando datos de alumnos.</template>
+      <template #loading>
+        <ProgressSpinner/>
+      </template>
 
       <Column field="name" header="Nombre" style="min-width: 5rem">
         <template #body="{ data }">
@@ -128,7 +198,7 @@ const getSeverity = (status) => {
       </Column>
 
 
-      <Column header="Grupo" filterField="group" :showFilterMenu="false" style="min-width: 14rem">
+      <Column header="Grupo" filterField="group" style="min-width: 14rem">
         <template #body="{ data }">
           <div class="flex items-center gap-2">
             <span>{{ data.group }}</span>
@@ -148,7 +218,13 @@ const getSeverity = (status) => {
 
       </Column>
 
-      <Column field="age" header="Edad" style="min-width: 5rem">
+      <Column field="dateOfBirth" sortable dataType="date" header="Fecha de Nacimiento" style="min-width: 15rem">
+        <template #body="{ data }">
+          {{ data.dateOfBirth }}
+        </template>
+      </Column>
+
+      <Column field="age" header="Edad" sortable style="min-width: 5rem">
         <template #body="{ data }">
           {{ data.age }}
         </template>
@@ -160,7 +236,7 @@ const getSeverity = (status) => {
 
       <Column field="gender" header="Género" style="min-width: 5rem">
         <template #body="{ data }">
-          {{ data.gender }}
+          {{ getGender(data.gender) }}
         </template>
         <template #filter="{ filterModel, filterCallback }">
           <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
@@ -202,7 +278,8 @@ const getSeverity = (status) => {
         <template #body="{ data }">
           <div class="flex gap-2">
             <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" @click="editStudent(data)"/>
-            <Button icon="pi pi-trash" class="p-button-rounded p-button-danger" @click="deleteStudent(data)"/>
+            <DeleteStudentButton :data="data" @studentDeleted="handleStudentDeleted"/>
+            <EditStudentSpeedDial/>
           </div>
         </template>
       </Column>
@@ -212,7 +289,8 @@ const getSeverity = (status) => {
   </div>
 
 </template>
-
 <style scoped>
-
+.colum-width {
+  min-width: 5rem;
+}
 </style>

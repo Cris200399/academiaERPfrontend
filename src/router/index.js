@@ -2,7 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router';
 import Home from '../views/Home.vue';
 import Clases from '../views/Clases.vue';
 import AlumnosView from '../views/AlumnosView.vue';
-import Promociones from '../views/Groups.vue';
+import Promociones from '../views/GroupsView.vue';
 
 const routes = [
     {path: '/', name: 'Home', component: Home, icon: 'pi pi-home'},

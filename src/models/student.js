@@ -1,4 +1,3 @@
-// src/models/student.js
 
 class Student {
     constructor({id = null, name, lastName, address, email, gender, dateOfBirth, phone, group, dni}) {

@@ -1,8 +1,10 @@
 <template>
+  <Toast/>
+  <ConfirmDialog/>
   <div class="app-container flex">
     <SideBar class="sidebar"/>
     <div class="content-container flex-grow">
-      <router-view />
+      <router-view/>
     </div>
   </div>
 
@@ -16,10 +18,12 @@
 .app-container {
   height: 100vh;
 }
+
 .sidebar {
   width: 15vw;
   color: white;
 }
+
 .content-container {
   width: 85vw;
   background-color: #f4f4f4;
