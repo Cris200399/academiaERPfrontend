@@ -12,7 +12,7 @@ export const getStudentsService = async () => {
   }
 };
 
-export const addStudentService = async (student) => {
+export const createStudentService = async (student) => {
   try {
     const response = await axios.post(API_URLS.STUDENTS, student);
     return response.data;

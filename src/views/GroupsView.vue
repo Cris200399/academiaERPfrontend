@@ -10,14 +10,14 @@
         </div>
       </div>
       <div class="flex items-end justify-center">
-        <AddGroupDialog/>
+        <AddGroupDialog @groupAdded="handleGroupAdded"/>
       </div>
     </div>
   </div>
   <div class="mt-0 ml-2">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-5 p-2">
 
-      <GroupCard v-for="group in groups" :key="group.id" :group="group"/>
+      <GroupCard @group-deleted="handleGroupDeleted" v-for="group in groups" :key="group.id" :group="group"/>
 
     </div>
   </div>
@@ -26,7 +26,7 @@
 <script setup>
 import GroupCard from "@/components/groups/GroupCard.vue";
 
-import {getGroups} from "@/services/groupService";
+import {getGroupsService} from "@/services/groupService";
 
 import {onMounted, ref} from "vue";
 
@@ -36,7 +36,7 @@ import AddGroupDialog from "@/components/groups/AddGroupDialog.vue";
 const groups = ref([]);
 
 onMounted(async () => {
-  const groupsResponseData = await getGroups();
+  const groupsResponseData = await getGroupsService();
   groupsResponseData.map(group => {
     groups.value.push(
         new Group({
@@ -51,6 +51,24 @@ onMounted(async () => {
     )
   });
 });
+
+const handleGroupAdded = (group) => {
+  groups.value.push(new Group(
+      {
+        id: group._id,
+        name: group.name,
+        description: group.description,
+        members: group.members,
+        daysOfWeek: group.daysOfWeek,
+        maxMembers: group.maxMembers,
+        schedule: group.schedule,
+      }
+  ));
+}
+
+const handleGroupDeleted = (id) => {
+  groups.value = groups.value.filter(group => group.id !== id);
+}
 
 
 </script>

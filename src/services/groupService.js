@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { API_URLS } from '@/config/apiConfig';
 
-export const getGroups = async () => {
+export const getGroupsService = async () => {
     try {
         const response = await axios.get(API_URLS.GROUPS);
         return response.data;
@@ -12,3 +12,21 @@ export const getGroups = async () => {
     }
 }
 
+export const createGroupService = async (groupData) => {
+    try {
+        const response = await axios.post(API_URLS.GROUPS, groupData);
+        return response.data;
+    } catch (error) {
+        console.error('Error creating group:', error);
+        throw error;
+    }
+}
+
+export const deleteGroupService = async (groupId) => {
+    try {
+        await axios.delete(`${API_URLS.GROUPS}/${groupId}`);
+    } catch (error) {
+        console.error('Error deleting group:', error);
+        throw error;
+    }
+}

@@ -1,7 +1,7 @@
 ﻿<template>
   <Card style="width: 25rem; overflow: hidden; position: relative;">
     <template #title> {{ group.name }}
-      <GroupMenu class="absolute top-5 right-5 cursor-pointer"/>
+      <GroupMenu @group-deleted="handleGroupDeleted" :id="group.id" class="absolute top-5 right-5 cursor-pointer"/>
     </template>
     <template #subtitle>
       {{ group.description }}
@@ -27,6 +27,8 @@ const props = defineProps({
   group: Group
 });
 
+const emit = defineEmits(['groupDeleted']);
+
 
 onMounted(() => {
   totalStudents.value = props.group.members.length;
@@ -37,6 +39,11 @@ const totalStudents = ref(25);
 const maxStudents = ref(30);
 const progressValue = ref(60);
 progressValue.value = Math.round((totalStudents.value / maxStudents.value) * 100);
+
+
+function handleGroupDeleted(id) {
+  emit('groupDeleted', id);
+}
 </script>
 
 <style scoped>

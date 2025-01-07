@@ -16,7 +16,7 @@
         this.members = members;
         this.daysOfWeek = daysOfWeek;
         this.maxMembers = maxMembers;
-        this.schedule = schedule;
+        this.schedule = schedule; // e.g. "19:00 - 20:00" 24-hour format
     }
 }
 

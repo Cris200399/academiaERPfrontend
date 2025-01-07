@@ -221,9 +221,9 @@
 import {ref, reactive, computed, watch, onMounted, defineEmits} from 'vue';
 import Select from 'primevue/select';
 import {useToast} from "primevue/usetoast";
-import {addStudentService} from "@/services/studentService";
+import {createStudentService} from "@/services/studentService";
 import Student from "/src/models/student.js";
-import {getGroups} from "@/services/groupService";
+import {getGroupsService} from "@/services/groupService";
 
 import FloatLabel from 'primevue/floatlabel';
 import DatePicker from 'primevue/datepicker';
@@ -274,7 +274,7 @@ const genderOptions = ref([
 const groupOptions = ref([]);
 
 onMounted(async () => {
-  const groups = await getGroups();
+  const groups = await getGroupsService();
   groupOptions.value = groups.map(group => ({name: group.name, id: group._id}));
 });
 
@@ -435,7 +435,7 @@ const handleSubmit = async () => {
       dni: formData.dni
     });
     try {
-      const newStudentAdded = await addStudentService(newStudent);
+      const newStudentAdded = await createStudentService(newStudent);
       toast.add({severity: 'success', summary: 'Éxito', detail: 'Alumno creado exitosamente', life: 2500});
       emit('studentAdded', newStudentAdded);
       visible.value = false;

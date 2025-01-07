@@ -6,7 +6,7 @@ import {onMounted, ref, defineEmits, defineProps, watch} from 'vue';
 import {FilterMatchMode, FilterOperator} from '@primevue/core/api';
 
 import {getStudentsService} from "@/services/studentService";
-import {getGroups} from "@/services/groupService";
+import {getGroupsService} from "@/services/groupService";
 import DeleteStudentButton from "@/components/students/DeleteStudentButton.vue";
 import Student from "@/models/student";
 import EditStudentSpeedDial from "@/components/students/EditStudentSpeedDial.vue";
@@ -63,7 +63,7 @@ onMounted(async () => {
     formatStudent(student);
   });
 
-  const groups = await getGroups();
+  const groups = await getGroupsService();
   groupNames.value = groups.map(g => (
       g.name
   ));

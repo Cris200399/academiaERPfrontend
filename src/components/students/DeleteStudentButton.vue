@@ -3,7 +3,6 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue';
 import { useConfirm } from "primevue/useconfirm";
 import { deleteStudentService } from "@/services/studentService";
 
@@ -13,8 +12,10 @@ const toast = useToast();
 
 const confirm = useConfirm();
 
+// eslint-disable-next-line no-undef
 const emit = defineEmits(['studentDeleted']);
 
+// eslint-disable-next-line no-undef
 const props = defineProps({
   data: Object
 });

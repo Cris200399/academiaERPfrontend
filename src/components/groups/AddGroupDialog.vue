@@ -2,24 +2,32 @@
   <Button icon="pi pi-plus" class="text-lg" severity="success" label="Añadir Grupo" @click="visible = true"/>
   <Dialog v-model:visible="visible" modal @hide="resetForm" :draggable='false'>
     <div class="max-w-2xl mx-auto p-6">
-      <h1 class="text-3xl font-bold mb-2">Create Class Group</h1>
-      <p class="text-gray-600 mb-8">Create a class group to manage multiple classes together</p>
-
+      <h1 class="text-3xl font-bold mb-10">Crear grupo</h1>
       <form @submit.prevent="handleSubmit">
         <!-- Nombre del Grupo -->
         <div class="mb-6">
-          <label class="block text-xl font-bold mb-4">Group Name</label>
+          <label class="block text-xl font-bold mb-4">Nombre del Grupo</label>
           <input
               v-model="groupName"
               type="text"
               class="w-full p-3 rounded-lg border border-gray-200"
-              placeholder="Enter your group name"
+              placeholder="Ingresa el nombre del grupo"
           >
         </div>
 
+        <!-- Descripción del Grupo-->
+        <div class="mb-6">
+          <label class="block text-xl font-bold mb-4">Descripción del Grupo</label>
+          <Textarea auto-resize v-model="description"
+                    class="w-full p-3 rounded-lg border border-gray-200"
+                    placeholder="Ingresa una descripción del grupo"
+          ></Textarea>
+        </div>
+
+
         <!-- Días de repetición -->
         <div class="mb-6">
-          <label class="block text-xl font-bold mb-4">Repeat</label>
+          <label class="block text-xl font-bold mb-4">Días de la semana</label>
           <div class="flex flex-wrap gap-2">
             <button
                 v-for="day in days"
@@ -37,24 +45,34 @@
             </button>
           </div>
         </div>
+        <!-- Max number of members -->
+        <div class="mb-6">
+          <label class="block text-xl font-bold mb-4">Cantidad máxima de alumnos</label>
+          <InputNumber v-model="maxMembers" :min="0" :max="50" fluid/>
+        </div>
+        <!--              class="w-full p-3 rounded-lg border border-gray-200"-->
 
         <!-- Horario -->
         <div class="mb-6">
-          <label class="block text-xl font-bold mb-4">Time</label>
-          <div class="mb-2">Class Hours</div>
-          <div class="flex items-center gap-4">
-            <input
-                v-model="startTime"
-                type="time"
-                class="p-2 border rounded"
-            >
-            <span>to</span>
-            <input
-                v-model="endTime"
-                type="time"
-                class="p-2 border rounded"
-            >
+          <label class="block text-xl font-bold mb-4">Hora</label>
+          <div class="flex flex-wrap items-center">
+            <div class="mb-2 mr-4">Horas de clase:</div>
+
+            <div class="flex items-center gap-4">
+              <input
+                  v-model="startTime"
+                  type="time"
+                  class="p-2 border rounded"
+              >
+              <span>a</span>
+              <input
+                  v-model="endTime"
+                  type="time"
+                  class="p-2 border rounded"
+              >
+            </div>
           </div>
+
         </div>
 
         <!-- Botones -->
@@ -62,7 +80,7 @@
           <button
               type="button"
               class="px-6 py-2 rounded-lg bg-gray-100 hover:bg-gray-200"
-              @click="$emit('cancel')"
+              @click="visible = false"
           >
             Cancel
           </button>
@@ -82,39 +100,69 @@
 
 import {ref} from 'vue'
 
+import {createGroupService} from "@/services/groupService";
+import {useToast} from "primevue/usetoast";
+
 const visible = ref(false);
 
+const toast = useToast();
+
 const groupName = ref('');
-const days = ref(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']);
+// const days = ref([
+//   {name: 'Lunes', value: 'Monday'},
+//   {name: 'Martes', value: 'Tuesday'},
+//   {name: 'Miércoles', value: 'Wednesday'},
+//   {name: 'Jueves', value: 'Thursday'},
+//   {name: 'Viernes', value: 'Friday'},
+//   {name: 'Sábado', value: 'Saturday'},
+//   {name: 'Domingo', value: 'Sunday'}]);
+
+const days = ref(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']);
 const selectedDays = ref([]);
 const startTime = ref('00:00');
-const endTime = ref('23:59');
+const endTime = ref('23:00');
+const description = ref('');
+const maxMembers = ref();
+
+const orderDays = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
+// eslint-disable-next-line vue/valid-define-emits
+const emit = defineEmits(['groupAdded']);
 
 function toggleDay(day) {
-  if (this.selectedDays.includes(day)) {
-    this.selectedDays = this.selectedDays.filter(d => d !== day)
+  if (selectedDays.value.includes(day)) {
+    selectedDays.value = selectedDays.value.filter(d => d !== day)
   } else {
-    this.selectedDays.push(day)
+    selectedDays.value.push(day)
   }
 }
 
 function resetForm() {
-  this.groupName.value = '';
-  this.selectedDays.value = [];
-  this.startTime.value = '00:00';
-  this.endTime.value = '23:59';
+  groupName.value = '';
+  selectedDays.value = [];
+  startTime.value = '00:00';
+  endTime.value = '23:00';
 }
 
-function handleSubmit() {
-  const formData = {
-    groupName: this.groupName,
-    repeatDays: this.selectedDays,
-    classHours: {
-      start: this.startTime,
-      end: this.endTime
-    }
+async function handleSubmit() {
+  const newGroupFormat = {
+    name: groupName.value,
+    description: description.value,
+    daysOfWeek: selectedDays.value.map((day) => day.toString()).sort((a, b) => orderDays.indexOf(a) - orderDays.indexOf(b)),
+    schedule: `${startTime.value} - ${endTime.value}`,
+    maxMembers: maxMembers.value
   }
 
-  this.$emit('submit', formData)
+  try {
+    const newGroupAddedResponse = await createGroupService(newGroupFormat);
+    toast.add({severity: 'success', summary: 'Operación completa', detail: 'Grupo creado exitosamente', life: 2500});
+    emit('groupAdded', newGroupAddedResponse);
+    visible.value = false;
+
+  } catch (error) {
+    console.log(error)
+    toast.add({severity: 'error', summary: 'Error', detail: 'Ocurrió un error al crear el grupo', life: 2500});
+  }
+
 }
 </script>
