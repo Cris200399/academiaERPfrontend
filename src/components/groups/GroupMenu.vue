@@ -24,7 +24,7 @@ const emit = defineEmits(['groupDeleted']);
 
 const items = ref([
   {
-    label: 'Options',
+    label: 'Opciones',
     items: [
       {
         label: 'Delete',
@@ -33,10 +33,10 @@ const items = ref([
           handleDelete(props.id);
         }
       },
-      {
-        label: 'Export',
-        icon: 'pi pi-upload'
-      }
+      // {
+      //   label: 'Export',
+      //   icon: 'pi pi-upload'
+      // }
     ]
   }
 ]);

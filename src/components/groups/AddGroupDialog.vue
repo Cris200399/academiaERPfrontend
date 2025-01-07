@@ -82,13 +82,13 @@
               class="px-6 py-2 rounded-lg bg-gray-100 hover:bg-gray-200"
               @click="visible = false"
           >
-            Cancel
+            Cancelar
           </button>
           <button
               type="submit"
               class="px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
           >
-            Create
+            Crear
           </button>
         </div>
       </form>
@@ -108,14 +108,6 @@ const visible = ref(false);
 const toast = useToast();
 
 const groupName = ref('');
-// const days = ref([
-//   {name: 'Lunes', value: 'Monday'},
-//   {name: 'Martes', value: 'Tuesday'},
-//   {name: 'Miércoles', value: 'Wednesday'},
-//   {name: 'Jueves', value: 'Thursday'},
-//   {name: 'Viernes', value: 'Friday'},
-//   {name: 'Sábado', value: 'Saturday'},
-//   {name: 'Domingo', value: 'Sunday'}]);
 
 const days = ref(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']);
 const selectedDays = ref([]);

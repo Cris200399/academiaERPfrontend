@@ -2,7 +2,7 @@
   <div class="relative z-index">
     <SpeedDial
         button-class="p-button-rounded p-button-secondary"
-        :model="items" :radius="80" type="semi-circle" direction="left"
+        :model="items" :radius="80" type="linear" direction="left"
                style="top: calc(50% - 2rem); right: 0"/>
   </div>
 </template>
