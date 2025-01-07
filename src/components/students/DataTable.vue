@@ -9,7 +9,9 @@ import {getStudentsService} from "@/services/studentService";
 import {getGroupsService} from "@/services/groupService";
 import DeleteStudentButton from "@/components/students/DeleteStudentButton.vue";
 import Student from "@/models/student";
-import EditStudentSpeedDial from "@/components/students/EditStudentSpeedDial.vue";
+import EditStudentDialog from "@/components/students/editStudentDialog.vue";
+
+// import EditStudentSpeedDial from "@/components/students/EditStudentSpeedDial.vue";
 
 
 const students = ref([]);
@@ -20,6 +22,7 @@ const props = defineProps({
   newStudentAdded: Object
 });
 
+let groups;
 
 const filters = ref({
   global: {value: null, matchMode: FilterMatchMode.CONTAINS},
@@ -40,6 +43,7 @@ const loading = ref(true);
 
 onMounted(async () => {
   const studentsResponseData = await getStudentsService();
+
 
   studentsResponseData.map((student) => {
     students.value.push(
@@ -63,7 +67,7 @@ onMounted(async () => {
     formatStudent(student);
   });
 
-  const groups = await getGroupsService();
+  groups = await getGroupsService();
   groupNames.value = groups.map(g => (
       g.name
   ));
@@ -141,6 +145,23 @@ watch(() => props.newStudentAdded, (newStudent) => {
     handleStudentAdded(newStudent);
   }
 });
+
+function handleStudentUpdated(updatedStudent) {
+  const index = students.value.findIndex(student => student.id === updatedStudent._id);
+  formatUpdatedStudent(updatedStudent);
+  students.value[index] = updatedStudent;
+}
+
+function formatUpdatedStudent(updatedStudent) {
+  updatedStudent.id = updatedStudent._id;
+  updatedStudent.group = groups.find(group => group._id === updatedStudent.group).name;
+  updatedStudent.age = getAge(updatedStudent.dateOfBirth);
+  updatedStudent.dateOfBirth = new Date(updatedStudent.dateOfBirth).toLocaleDateString('es-ES', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+}
 
 </script>
 
@@ -277,9 +298,10 @@ watch(() => props.newStudentAdded, (newStudent) => {
       <Column header="Opciones" style="min-width: 5rem">
         <template #body="{ data }">
           <div class="flex gap-2">
-            <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" @click="editStudent(data)"/>
+            <!--            <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" @click="editStudent(data)"/>-->
+            <EditStudentDialog @studentUpdated="handleStudentUpdated" :student="data"/>
             <DeleteStudentButton :data="data" @studentDeleted="handleStudentDeleted"/>
-            <EditStudentSpeedDial/>
+            <!--            <EditStudentSpeedDial/>-->
           </div>
         </template>
       </Column>
@@ -290,7 +312,6 @@ watch(() => props.newStudentAdded, (newStudent) => {
 
 </template>
 <style scoped>
-.colum-width {
-  min-width: 5rem;
-}
+
+
 </style>

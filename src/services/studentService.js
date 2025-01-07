@@ -40,3 +40,13 @@ export const getTotalStudentsService = async () => {
         throw error;
     }
 }
+
+export const updateStudentService = async (id, student) => {
+    try {
+        const response = await axios.put(`${API_URLS.STUDENTS}/${id}`, student);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating student:', error);
+        throw error;
+    }
+}
