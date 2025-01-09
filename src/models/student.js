@@ -1,6 +1,17 @@
-
 class Student {
-    constructor({id = null, name, lastName, address, email, gender, dateOfBirth, phone, group, dni}) {
+    constructor({
+                    id = null,
+                    name,
+                    lastName,
+                    address,
+                    email,
+                    gender,
+                    dateOfBirth,
+                    phone,
+                    group,
+                    dni,
+                    guardianData = null
+                }) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -11,6 +22,7 @@ class Student {
         this.phone = phone;
         this.group = group;
         this.dni = dni;
+        this.guardianData = guardianData;
     }
 
     // Method to get the full name of the student

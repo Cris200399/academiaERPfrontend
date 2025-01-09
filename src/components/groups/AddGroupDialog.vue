@@ -1,5 +1,5 @@
 ﻿<template>
-  <Button icon="pi pi-plus" class="text-lg" severity="success" label="Añadir Grupo" @click="visible = true"/>
+  <Button :icon="buttonIcon" class="text-lg" severity="success" :label="buttonLabel" @click="visible = true"/>
   <Dialog v-model:visible="visible" modal @hide="resetForm" :draggable='false'>
     <div class="max-w-2xl mx-auto p-6">
       <h1 class="text-3xl font-bold mb-10">Crear grupo</h1>
@@ -98,7 +98,7 @@
 
 <script setup>
 
-import {ref} from 'vue'
+import {ref, onMounted, onUnmounted, computed} from 'vue'
 
 import {createGroupService} from "@/services/groupService";
 import {useToast} from "primevue/usetoast";
@@ -120,6 +120,23 @@ const orderDays = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábad
 
 // eslint-disable-next-line vue/valid-define-emits
 const emit = defineEmits(['groupAdded']);
+
+const screenSize = ref(window.innerWidth);
+
+const updateScreenSize = () => {
+  screenSize.value = window.innerWidth;
+};
+
+onMounted(() => {
+  window.addEventListener('resize', updateScreenSize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateScreenSize);
+});
+
+const buttonLabel = computed(() => screenSize.value >= 1024 ? 'Añadir Grupo' : '');
+const buttonIcon = 'pi pi-plus';
 
 function toggleDay(day) {
   if (selectedDays.value.includes(day)) {

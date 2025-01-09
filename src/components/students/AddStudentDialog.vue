@@ -420,20 +420,43 @@ const clearGuardianErrors = () => {
 
 // Handle form submission
 const handleSubmit = async () => {
-  validateForm();
+  // validateForm();
+  isFormValid.value = true;
 
   if (isFormValid.value) {
-    const newStudent = new Student({
-      name: formData.name,
-      lastName: formData.lastName,
-      address: formData.address,
-      email: formData.email,
-      gender: formData.gender.value,
-      dateOfBirth: formData.dateOfBirth,
-      phone: formData.phone,
-      group: formData.group.id,
-      dni: formData.dni
-    });
+    let newStudent;
+    if (isUnderAge.value) {
+      newStudent = new Student({
+        name: formData.name,
+        lastName: formData.lastName,
+        address: formData.address,
+        email: formData.email,
+        gender: formData.gender.value,
+        dateOfBirth: formData.dateOfBirth,
+        phone: formData.phone,
+        group: formData.group.id,
+        dni: formData.dni,
+        guardianData: {
+          name: formData.guardian.name,
+          phone: formData.guardian.phone,
+          relationship: formData.guardian.relationship
+        }
+      });
+    } else {
+      newStudent = new Student({
+        name: formData.name,
+        lastName: formData.lastName,
+        address: formData.address,
+        email: formData.email,
+        gender: formData.gender.value,
+        dateOfBirth: formData.dateOfBirth,
+        phone: formData.phone,
+        group: formData.group.id,
+        dni: formData.dni
+      });
+
+    }
+
     try {
       const newStudentAdded = await createStudentService(newStudent);
       toast.add({severity: 'success', summary: 'Éxito', detail: 'Alumno creado exitosamente', life: 2500});

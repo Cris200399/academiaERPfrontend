@@ -8,6 +8,9 @@
     </template>
     <template #content>
       <div class="flex-wrap">
+        <div class="flex-wrap">
+          <div v-for="day in group.daysOfWeek" class="day-oval"> {{ day }}</div>
+        </div>
         <div class="flex gap-2 justify-end">
           <span class="font-semibold">{{ `${totalStudents}/${maxStudents}` }}</span>
         </div>
@@ -47,5 +50,13 @@ function handleGroupDeleted(id) {
 </script>
 
 <style scoped>
-
+.day-oval {
+  font-size: 0.8rem;
+  display: inline-block;
+  padding: 3px 10px;
+  margin: 3px;
+  border-radius: 15px;
+  background-color: #f0f0f0;
+  text-align: center;
+}
 </style>

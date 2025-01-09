@@ -40,7 +40,6 @@ const filters = ref({
 });
 
 
-const statuses = ref(['unqualified', 'qualified', 'new', 'negotiation', 'renewal', 'proposal']);
 const loading = ref(true);
 
 onMounted(async () => {
@@ -100,31 +99,13 @@ function getAge(dateOfBirth) {
 }
 
 
-const getSeverity = (status) => {
-  switch (status) {
-    case 'unqualified':
-      return 'danger';
-
-    case 'qualified':
-      return 'success';
-
-    case 'new':
-      return 'info';
-
-    case 'negotiation':
-      return 'warn';
-
-    case 'renewal':
-      return null;
-  }
-}
 
 function getGender(gender) {
   switch (gender) {
-    case 'male':
+    case 'male' || 'Masculino':
       return 'Masculino';
 
-    case 'female':
+    case 'female' || 'Femenino':
       return 'Femenino';
 
     default:
