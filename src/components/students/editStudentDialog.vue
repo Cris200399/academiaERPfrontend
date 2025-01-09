@@ -1,5 +1,5 @@
 ﻿<template>
-  <Button icon="pi pi-pencil" class="text-lg" severity="info" @click="onShowDialog"/>
+  <Button icon="pi pi-pencil" class="p-button-rounded text-lg" severity="info" @click="onShowDialog"/>
 
   <Dialog v-model:visible="visible" modal header="Editar Alumno" class="w-[700px]" :draggable="false" @hide="resetForm">
     <Divider class="bg-[#E2E6F9] h-1 my-4"/>

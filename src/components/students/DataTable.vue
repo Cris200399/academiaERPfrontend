@@ -2,7 +2,7 @@
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 
-import {onMounted, ref, defineEmits, defineProps, watch} from 'vue';
+import {onMounted, ref, watch} from 'vue';
 import {FilterMatchMode, FilterOperator} from '@primevue/core/api';
 
 import {getStudentsService} from "@/services/studentService";
@@ -17,7 +17,9 @@ import EditStudentDialog from "@/components/students/editStudentDialog.vue";
 const students = ref([]);
 const groupNames = ref();
 
+// eslint-disable-next-line no-undef
 const emit = defineEmits(['studentDeleted']);
+// eslint-disable-next-line no-undef
 const props = defineProps({
   newStudentAdded: Object
 });
