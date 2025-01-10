@@ -102,6 +102,7 @@ import {ref, onMounted, onUnmounted, computed} from 'vue'
 
 import {createGroupService} from "@/services/groupService";
 import {useToast} from "primevue/usetoast";
+import Group from "@/models/group";
 
 const visible = ref(false);
 
@@ -116,9 +117,8 @@ const endTime = ref('23:00');
 const description = ref('');
 const maxMembers = ref();
 
-const orderDays = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-// eslint-disable-next-line vue/valid-define-emits
+// eslint-disable-next-line no-undef
 const emit = defineEmits(['groupAdded']);
 
 const screenSize = ref(window.innerWidth);
@@ -156,13 +156,15 @@ function resetForm() {
 }
 
 async function handleSubmit() {
-  const newGroupFormat = {
+
+  const newGroupFormat = new Group({
     name: groupName.value,
     description: description.value,
-    daysOfWeek: selectedDays.value.map((day) => day.toString()).sort((a, b) => orderDays.indexOf(a) - orderDays.indexOf(b)),
-    schedule: `${startTime.value} - ${endTime.value}`,
+    daysOfWeek: selectedDays.value,
+    startTime: startTime.value,
+    endTime: endTime.value,
     maxMembers: maxMembers.value
-  }
+  });
 
   try {
     const newGroupAddedResponse = await createGroupService(newGroupFormat);

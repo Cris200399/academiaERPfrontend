@@ -164,13 +164,13 @@ function handleStudentUpdated(updatedStudent) {
 
       </Column>
 
-      <Column field="dateOfBirth" sortable dataType="date" header="Fecha de Nacimiento" style="min-width: 15rem">
+      <Column field="dateOfBirth" :sortable="true" dataType="date" header="Fecha de Nacimiento" style="min-width: 15rem">
         <template #body="{ data }">
           {{ data.dateOfBirth }}
         </template>
       </Column>
 
-      <Column field="age" header="Edad" sortable dataType="numeric" style="min-width: 5rem">
+      <Column field="age" header="Edad" :sortable="true" dataType="numeric" style="min-width: 5rem">
         <template #body="{ data }">
           {{ data.age }}
         </template>

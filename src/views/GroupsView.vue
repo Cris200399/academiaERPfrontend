@@ -39,30 +39,14 @@ onMounted(async () => {
   const groupsResponseData = await getGroupsService();
   groupsResponseData.map(group => {
     groups.value.push(
-        new Group({
-          id: group._id,
-          name: group.name,
-          description: group.description,
-          members: group.members,
-          daysOfWeek: group.daysOfWeek,
-          maxMembers: group.maxMembers,
-          schedule: group.schedule,
-        })
+        new Group(group)
     )
   });
 });
 
 const handleGroupAdded = (group) => {
   groups.value.push(new Group(
-      {
-        id: group._id,
-        name: group.name,
-        description: group.description,
-        members: group.members,
-        daysOfWeek: group.daysOfWeek,
-        maxMembers: group.maxMembers,
-        schedule: group.schedule,
-      }
+      group
   ));
 }
 
