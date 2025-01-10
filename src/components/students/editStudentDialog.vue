@@ -70,7 +70,6 @@
         <Select
             v-model="formData.gender"
             :options="genderOptions"
-            optionLabel="name"
             placeholder="Género"
             class="input-size"
             :class="{'p-invalid': errors.gender}"
@@ -225,14 +224,17 @@ import {updateStudentService} from "@/services/studentService";
 import {getGroupsService} from "@/services/groupService";
 import FloatLabel from 'primevue/floatlabel';
 import DatePicker from 'primevue/datepicker';
+import {genderOptions} from "@/constants/genderOptions";
 
 const toast = useToast();
 const visible = ref(false);
 
+// eslint-disable-next-line no-undef
 const props = defineProps({
   student: Object
 });
 
+// eslint-disable-next-line no-undef
 const emit = defineEmits(['studentUpdated']);
 
 const formData = reactive({
@@ -269,11 +271,6 @@ const errors = reactive({
   guardianRelationship: ''
 });
 
-const genderOptions = ref([
-  {name: 'Masculino', value: 'male'},
-  {name: 'Femenino', value: 'female'},
-  {name: 'Otro', value: 'other'}
-]);
 
 const groupOptions = ref([]);
 
@@ -283,7 +280,7 @@ async function onShowDialog() {
   visible.value = true;
   Object.assign(formData, props.student);
   formData.group = groupOptions.value.find(groupOption => groupOption.name === props.student.group);
-  formData.gender = genderOptions.value.find(genderOption => genderOption.value === props.student.gender);
+  // formData.gender = genderOptions.value.find(genderOption => genderOption.value === props.student.gender);
 }
 
 onMounted(async () => {
@@ -439,7 +436,7 @@ const handleSubmit = async () => {
       lastName: formData.lastName,
       address: formData.address,
       email: formData.email,
-      gender: formData.gender.value,
+      gender: formData.gender,
       dateOfBirth: formData.dateOfBirth,
       phone: formData.phone,
       group: formData.group.id,

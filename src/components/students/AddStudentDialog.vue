@@ -70,7 +70,6 @@
         <Select
             v-model="formData.gender"
             :options="genderOptions"
-            optionLabel="name"
             placeholder="Género"
             class="input-size"
             :class="{'p-invalid': errors.gender}"
@@ -218,7 +217,7 @@
 </template>
 
 <script setup>
-import {ref, reactive, computed, watch, onMounted, defineEmits} from 'vue';
+import {ref, reactive, computed, watch, onMounted} from 'vue';
 import Select from 'primevue/select';
 import {useToast} from "primevue/usetoast";
 import {createStudentService} from "@/services/studentService";
@@ -227,10 +226,12 @@ import {getGroupsService} from "@/services/groupService";
 
 import FloatLabel from 'primevue/floatlabel';
 import DatePicker from 'primevue/datepicker';
+import {genderOptions} from "@/constants/genderOptions";
 
 const toast = useToast();
 const visible = ref(false);
 
+// eslint-disable-next-line no-undef
 const emit = defineEmits(['studentAdded']);
 
 const formData = reactive({
@@ -265,11 +266,6 @@ const errors = reactive({
   guardianRelationship: ''
 });
 
-const genderOptions = ref([
-  {name: 'Masculino', value: 'male'},
-  {name: 'Femenino', value: 'female'},
-  {name: 'Otro', value: 'other'}
-]);
 
 const groupOptions = ref([]);
 
@@ -431,7 +427,7 @@ const handleSubmit = async () => {
         lastName: formData.lastName,
         address: formData.address,
         email: formData.email,
-        gender: formData.gender.value,
+        gender: formData.gender,
         dateOfBirth: formData.dateOfBirth,
         phone: formData.phone,
         group: formData.group.id,
@@ -448,7 +444,7 @@ const handleSubmit = async () => {
         lastName: formData.lastName,
         address: formData.address,
         email: formData.email,
-        gender: formData.gender.value,
+        gender: formData.gender,
         dateOfBirth: formData.dateOfBirth,
         phone: formData.phone,
         group: formData.group.id,

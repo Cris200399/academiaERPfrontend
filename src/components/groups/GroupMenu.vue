@@ -6,12 +6,13 @@
 </template>
 
 <script setup>
-import {defineProps, ref} from "vue";
+import {ref} from "vue";
 
 import {useToast} from "primevue/usetoast";
 import {useConfirm} from "primevue/useconfirm";
 import {deleteGroupService} from "@/services/groupService";
 
+// eslint-disable-next-line no-undef
 const props = defineProps({
   id: String
 });
@@ -20,6 +21,7 @@ const menu = ref();
 const toast = useToast();
 const confirm = useConfirm();
 
+// eslint-disable-next-line no-undef
 const emit = defineEmits(['groupDeleted']);
 
 const items = ref([

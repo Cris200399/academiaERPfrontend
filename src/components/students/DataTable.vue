@@ -5,11 +5,13 @@ import Column from 'primevue/column';
 import {onMounted, ref, watch} from 'vue';
 import {FilterMatchMode, FilterOperator} from '@primevue/core/api';
 
+
 import {getStudentsService} from "@/services/studentService";
 import {getGroupsService} from "@/services/groupService";
 import DeleteStudentButton from "@/components/students/DeleteStudentButton.vue";
 import Student from "@/models/student";
 import EditStudentDialog from "@/components/students/editStudentDialog.vue";
+import {genderOptions} from "@/constants/genderOptions";
 
 // import EditStudentSpeedDial from "@/components/students/EditStudentSpeedDial.vue";
 
@@ -28,14 +30,14 @@ let groups;
 
 const filters = ref({
   global: {value: null, matchMode: FilterMatchMode.CONTAINS},
-  name: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
-  lastName: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+  name: {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.STARTS_WITH}]},
+  lastName: {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.STARTS_WITH}]},
   group: {value: null, matchMode: FilterMatchMode.IN},
-  gender: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+  gender: {value: null, matchMode: FilterMatchMode.IN},
   phone: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
   address: {value: null, matchMode: FilterMatchMode.CONTAINS},
   dateOfBirth: {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.DATE_IS}]},
-  age: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+  age: {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.EQUALS}]},
   dni: {value: null, matchMode: FilterMatchMode.STARTS_WITH}
 });
 
@@ -99,20 +101,6 @@ function getAge(dateOfBirth) {
 }
 
 
-
-function getGender(gender) {
-  switch (gender) {
-    case 'male' || 'Masculino':
-      return 'Masculino';
-
-    case 'female' || 'Femenino':
-      return 'Femenino';
-
-    default:
-      return 'Otro';
-  }
-}
-
 function handleStudentDeleted(id) {
   students.value = students.value.filter(student => student.id !== id);
   emit('studentDeleted');
@@ -159,7 +147,7 @@ function formatUpdatedStudent(updatedStudent) {
         dataKey="id"
         filterDisplay="menu"
         :loading="loading"
-        :globalFilterFields="['name', 'lastName', 'group', 'gender', 'dni', 'age', 'phone', 'address']"
+        :globalFilterFields="['name', 'lastName', 'group', 'gender', 'dni', 'age', 'phone', 'address', 'dateOfBirth']"
         scrollable
         show-gridlines
         removable-sort
@@ -186,8 +174,8 @@ function formatUpdatedStudent(updatedStudent) {
         <template #body="{ data }">
           {{ data.name }}
         </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" type="text" @input="filterCallback()" placeholder="Buscar por Nombre"/>
+        <template #filter="{ filterModel }">
+          <InputText v-model="filterModel.value" type="text" placeholder="Buscar por Nombre"/>
         </template>
       </Column>
 
@@ -195,23 +183,23 @@ function formatUpdatedStudent(updatedStudent) {
         <template #body="{ data }">
           {{ data.lastName }}
         </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
+        <template #filter="{ filterModel }">
+          <InputText v-model="filterModel.value" type="text"
                      placeholder="Buscar por Apellido"/>
         </template>
       </Column>
 
 
-      <Column header="Grupo" filterField="group" style="min-width: 14rem">
+      <Column header="Grupo" filterField="group" :show-filter-match-modes="false" style="min-width: 14rem">
         <template #body="{ data }">
           <div class="flex items-center gap-2">
             <span>{{ data.group }}</span>
           </div>
         </template>
 
-        <template #filter="{ filterModel, filterCallback }">
-          <MultiSelect v-model="filterModel.value" @change="filterCallback()" :options="groupNames"
-                       optionLabel="" placeholder="Todos" style="min-width: 14rem" :maxSelectedLabels="1">
+        <template #filter="{ filterModel }">
+          <MultiSelect v-model="filterModel.value" :options="groupNames" placeholder="Todos"
+                       style="min-width: 14rem" :maxSelectedLabels="1">
             <template #option="slotProps">
               <div class="flex items-center gap-2">
                 <span>{{ slotProps.option }}</span>
@@ -228,23 +216,30 @@ function formatUpdatedStudent(updatedStudent) {
         </template>
       </Column>
 
-      <Column field="age" header="Edad" sortable style="min-width: 5rem">
+      <Column field="age" header="Edad" sortable dataType="numeric" style="min-width: 5rem">
         <template #body="{ data }">
           {{ data.age }}
         </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
-                     placeholder="Buscar por Edad"/>
+        <template #filter="{ filterModel }">
+          <InputText v-model="filterModel.value" type="text" placeholder="Buscar por Edad"/>
         </template>
       </Column>
 
-      <Column field="gender" header="Género" style="min-width: 5rem">
+
+      <Column field="gender" header="Género" filterField="gender" :show-filter-match-modes="false"
+              style="min-width: 5rem">
         <template #body="{ data }">
-          {{ getGender(data.gender) }}
+          {{ data.gender }}
         </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
-                     placeholder="Buscar por Género"/>
+        <template #filter="{ filterModel }">
+          <MultiSelect v-model="filterModel.value" :options="genderOptions" placeholder="Todos"
+                       style="min-width: 14rem" :maxSelectedLabels="1">
+            <template #option="slotProps">
+              <div class="flex items-center gap-2">
+                <span>{{ slotProps.option }}</span>
+              </div>
+            </template>
+          </MultiSelect>
         </template>
       </Column>
 

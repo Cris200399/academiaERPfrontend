@@ -8,9 +8,20 @@
     </template>
     <template #content>
       <div class="flex-wrap">
-        <div class="flex-wrap">
-          <div v-for="day in group.daysOfWeek" class="day-oval"> {{ day }}</div>
+        <!-- Contenedor para días y hora -->
+        <div class="flex justify-between items-center mb-2">
+          <!-- Contenedor de días -->
+          <div class="flex flex-wrap gap-1">
+            <div v-for="day in group.daysOfWeek" :key="day" class="day-oval">
+              {{ day }}
+            </div>
+          </div>
+          <!-- Hora -->
+          <div>
+            <span class="font-semibold">{{group.schedule}}</span>
+          </div>
         </div>
+        <!-- Contador de estudiantes -->
         <div class="flex gap-2 justify-end">
           <span class="font-semibold">{{ `${totalStudents}/${maxStudents}` }}</span>
         </div>
@@ -23,13 +34,15 @@
 
 <script setup>
 import GroupMenu from "@/components/groups/GroupMenu.vue";
-import {ref, defineProps, onMounted} from "vue";
+import {ref, onMounted} from "vue";
 import Group from "@/models/group";
 
+// eslint-disable-next-line no-undef
 const props = defineProps({
   group: Group
 });
 
+// eslint-disable-next-line no-undef
 const emit = defineEmits(['groupDeleted']);
 
 
