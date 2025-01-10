@@ -10,7 +10,7 @@ import {getStudentsService} from "@/services/studentService";
 import {getGroupsService} from "@/services/groupService";
 import DeleteStudentButton from "@/components/students/DeleteStudentButton.vue";
 import Student from "@/models/student";
-import EditStudentDialog from "@/components/students/editStudentDialog.vue";
+import EditStudentDialog from "@/components/students/EditStudentDialog.vue";
 import {genderOptions} from "@/constants/genderOptions";
 
 // import EditStudentSpeedDial from "@/components/students/EditStudentSpeedDial.vue";
