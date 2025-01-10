@@ -148,6 +148,8 @@ function toggleDay(day) {
 
 function resetForm() {
   groupName.value = '';
+  description.value = '';
+  maxMembers.value = null;
   selectedDays.value = [];
   startTime.value = '00:00';
   endTime.value = '23:00';

@@ -50,25 +50,12 @@ onMounted(async () => {
 
   studentsResponseData.map((student) => {
     students.value.push(
-        new Student({
-              id: student._id,
-              name: student.name,
-              lastName: student.lastName,
-              address: student.address,
-              email: student.email,
-              gender: student.gender,
-              dateOfBirth: student.dateOfBirth,
-              phone: student.phone,
-              group: student.group,
-              dni: student.dni,
-            }
+        new Student(
+            student
         )
     );
   });
 
-  students.value.forEach(student => {
-    formatStudent(student);
-  });
 
   groups = await getGroupsService();
   groupNames.value = groups.map(g => (
@@ -78,28 +65,6 @@ onMounted(async () => {
   loading.value = false;
 });
 
-function formatStudent(student) {
-  student.group = student.group.name;
-  student.age = getAge(student.dateOfBirth);
-  student.dateOfBirth = new Date(student.dateOfBirth).toLocaleDateString('es-ES', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  });
-
-}
-
-function getAge(dateOfBirth) {
-  const today = new Date();
-  const birthDate = new Date(dateOfBirth);
-  let age = today.getFullYear() - birthDate.getFullYear();
-  const monthDifference = today.getMonth() - birthDate.getMonth();
-  if (monthDifference < 0 || (monthDifference === 0 && today.getDay() < birthDate.getDay())) {
-    age--;
-  }
-  return age;
-}
-
 
 function handleStudentDeleted(id) {
   students.value = students.value.filter(student => student.id !== id);
@@ -107,7 +72,7 @@ function handleStudentDeleted(id) {
 }
 
 function handleStudentAdded(newStudent) {
-  formatStudent(newStudent);
+  newStudent = new Student(newStudent);
   students.value.push(newStudent);
 }
 
@@ -118,20 +83,9 @@ watch(() => props.newStudentAdded, (newStudent) => {
 });
 
 function handleStudentUpdated(updatedStudent) {
-  const index = students.value.findIndex(student => student.id === updatedStudent._id);
-  formatUpdatedStudent(updatedStudent);
+  updatedStudent = new Student(updatedStudent);
+  const index = students.value.findIndex(student => student.id === updatedStudent.id);
   students.value[index] = updatedStudent;
-}
-
-function formatUpdatedStudent(updatedStudent) {
-  updatedStudent.id = updatedStudent._id;
-  updatedStudent.group = groups.find(group => group._id === updatedStudent.group).name;
-  updatedStudent.age = getAge(updatedStudent.dateOfBirth);
-  updatedStudent.dateOfBirth = new Date(updatedStudent.dateOfBirth).toLocaleDateString('es-ES', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit'
-  });
 }
 
 </script>
@@ -247,8 +201,8 @@ function formatUpdatedStudent(updatedStudent) {
         <template #body="{ data }">
           {{ data.phone }}
         </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
+        <template #filter="{ filterModel }">
+          <InputText v-model="filterModel.value" type="text"
                      placeholder="Buscar por Número"/>
         </template>
       </Column>

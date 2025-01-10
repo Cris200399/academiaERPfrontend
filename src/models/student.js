@@ -1,48 +1,58 @@
 class Student {
-    constructor({
-                    id = null,
-                    name,
-                    lastName,
-                    address,
-                    email,
-                    gender,
-                    dateOfBirth,
-                    phone,
-                    group,
-                    dni,
-                    guardianData = null
-                }) {
-        this.id = id;
-        this.name = name;
-        this.lastName = lastName;
-        this.address = address;
-        this.email = email;
-        this.gender = gender;
-        this.dateOfBirth = dateOfBirth;
-        this.phone = phone;
-        this.group = group;
-        this.dni = dni;
-        this.guardianData = guardianData;
+    constructor(data) {
+        if (data._id) {
+            // Constructor for receiving JSON from backend
+            this.id = data._id;
+            this.name = data.name;
+            this.lastName = data.lastName;
+            this.address = data.address;
+            this.email = data.email;
+            this.gender = data.gender;
+            this.dateOfBirth = this.formatDateOfBirth(data.dateOfBirth);
+            this.phone = data.phone;
+            this.group = data.group.name;
+            this.dni = data.dni;
+            this.guardianData = data.guardianData;
+            this.age = this.calculateAge(data.dateOfBirth);
+        } else {
+            // Constructor for sending student to an endpoint
+            this.name = data.name;
+            this.lastName = data.lastName;
+            this.address = data.address;
+            this.email = data.email;
+            this.gender = data.gender;
+            this.dateOfBirth = data.dateOfBirth;
+            this.phone = data.phone;
+            this.group = data.group;
+            this.dni = data.dni;
+            this.guardianData = data.guardianData;
+        }
     }
 
     // Method to get the full name of the student
     getFullName() {
-        return `${this.firstName} ${this.lastName}`;
+        return `${this.name} ${this.lastName}`;
     }
 
-    // Method to get the student's age
-    getAge() {
+    // Method to calculate the student's age
+    calculateAge(dateOfBirth) {
         const today = new Date();
-        const birthDate = new Date(this.dateOfBirth);
+        const birthDate = new Date(dateOfBirth);
         let age = today.getFullYear() - birthDate.getFullYear();
         const monthDifference = today.getMonth() - birthDate.getMonth();
-        if (monthDifference < 0 || (monthDifference === 0 && today.getDay() < birthDate.getDay())) {
+        if (monthDifference < 0 || (monthDifference === 0 && today.getDate() < birthDate.getDate())) {
             age--;
         }
         return age;
     }
 
-
+    formatDateOfBirth(dateOfBirth) {
+        return new Date(dateOfBirth).toLocaleDateString('es-ES', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        });
+    }
 }
 
 export default Student;

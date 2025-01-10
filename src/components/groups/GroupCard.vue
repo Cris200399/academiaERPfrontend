@@ -18,7 +18,7 @@
           </div>
           <!-- Hora -->
           <div>
-            <span class="font-semibold">{{group.schedule}}</span>
+            <span class="font-semibold whitespace-nowrap">{{group.schedule}}</span>
           </div>
         </div>
         <!-- Contador de estudiantes -->

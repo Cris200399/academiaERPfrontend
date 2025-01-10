@@ -416,8 +416,7 @@ const clearGuardianErrors = () => {
 
 // Handle form submission
 const handleSubmit = async () => {
-  // validateForm();
-  isFormValid.value = true;
+  validateForm();
 
   if (isFormValid.value) {
     let newStudent;
