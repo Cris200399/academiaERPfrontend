@@ -431,17 +431,38 @@ const handleSubmit = async () => {
   validateForm();
 
   if (isFormValid.value) {
-    const updatedStudent = {
-      name: formData.name,
-      lastName: formData.lastName,
-      address: formData.address,
-      email: formData.email,
-      gender: formData.gender,
-      dateOfBirth: formData.dateOfBirth,
-      phone: formData.phone,
-      group: formData.group.id,
-      dni: formData.dni
-    };
+    let updatedStudent;
+    if (isUnderAge.value) {
+      updatedStudent = {
+        name: formData.name,
+        lastName: formData.lastName,
+        address: formData.address,
+        email: formData.email,
+        gender: formData.gender,
+        dateOfBirth: formData.dateOfBirth,
+        phone: formData.phone,
+        group: formData.group.id,
+        dni: formData.dni,
+        guardian: {
+          id: formData.guardian.id,
+          name: formData.guardian.name,
+          phone: formData.guardian.phone,
+          relationship: formData.guardian.relationship
+        }
+      };
+    } else {
+      updatedStudent = {
+        name: formData.name,
+        lastName: formData.lastName,
+        address: formData.address,
+        email: formData.email,
+        gender: formData.gender,
+        dateOfBirth: formData.dateOfBirth,
+        phone: formData.phone,
+        group: formData.group.id,
+        dni: formData.dni
+      };
+    }
     try {
       const updatedStudentResponse = await updateStudentService(props.student.id, updatedStudent);
       toast.add({severity: 'success', summary: 'Éxito', detail: 'Alumno actualizado exitosamente', life: 2500});

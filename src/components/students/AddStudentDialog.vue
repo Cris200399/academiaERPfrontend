@@ -102,7 +102,7 @@
           <InputMask
               id="phone"
               v-model="formData.phone"
-              mask="999 999 999"
+              mask="999999999"
               fluid
               :class="{'p-invalid': errors.phone}"
               @blur="validateField('phone')"
@@ -149,7 +149,7 @@
       </Divider>
 
       <div class="grid grid-cols-2 gap-4">
-        <div class="flex flex-wrap justify-center items-center">
+        <div class="flex flex-col justify-center">
           <FloatLabel variant="on" class="input-size">
             <InputText
                 v-model="formData.guardian.name"
@@ -163,12 +163,13 @@
           <small class="p-error" v-if="errors.guardianName">{{ errors.guardianName }}</small>
         </div>
 
-        <div class="flex flex-wrap justify-center items-center">
+        <div class="flex flex-col justify-center">
           <FloatLabel variant="on" class="input-size">
-            <InputText
+            <InputMask
+                id="phone"
                 v-model="formData.guardian.phone"
-                size="large"
-                class="input-size"
+                mask="999999999"
+                fluid
                 :class="{'p-invalid': errors.guardianPhone}"
                 @blur="validateField('guardianPhone')"
             />
@@ -177,7 +178,7 @@
           <small class="p-error" v-if="errors.guardianPhone">{{ errors.guardianPhone }}</small>
         </div>
 
-        <div class="flex flex-wrap justify-center items-center col-span-2">
+        <div class="flex flex-col justify-center col-span-2">
           <FloatLabel variant="on" class="input-size">
             <InputText
                 v-model="formData.guardian.relationship"
@@ -431,7 +432,7 @@ const handleSubmit = async () => {
         phone: formData.phone,
         group: formData.group.id,
         dni: formData.dni,
-        guardianData: {
+        guardian: {
           name: formData.guardian.name,
           phone: formData.guardian.phone,
           relationship: formData.guardian.relationship

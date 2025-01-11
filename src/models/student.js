@@ -12,7 +12,7 @@ class Student {
             this.phone = data.phone;
             this.group = data.group.name;
             this.dni = data.dni;
-            this.guardianData = data.guardianData;
+            this.guardian = data.guardian;
             this.age = this.calculateAge(data.dateOfBirth);
         } else {
             // Constructor for sending student to an endpoint
@@ -25,7 +25,7 @@ class Student {
             this.phone = data.phone;
             this.group = data.group;
             this.dni = data.dni;
-            this.guardianData = data.guardianData;
+            this.guardian = data.guardian;
         }
     }
 

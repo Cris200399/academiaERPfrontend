@@ -12,6 +12,7 @@ import DeleteStudentButton from "@/components/students/DeleteStudentButton.vue";
 import Student from "@/models/student";
 import EditStudentDialog from "@/components/students/EditStudentDialog.vue";
 import {genderOptions} from "@/constants/genderOptions";
+import ProfileStudentDialog from "@/components/students/ProfileStudentDialog.vue";
 
 // import EditStudentSpeedDial from "@/components/students/EditStudentSpeedDial.vue";
 
@@ -233,6 +234,7 @@ function handleStudentUpdated(updatedStudent) {
             <!--            <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" @click="editStudent(data)"/>-->
             <EditStudentDialog @studentUpdated="handleStudentUpdated" :student="data"/>
             <DeleteStudentButton :data="data" @studentDeleted="handleStudentDeleted"/>
+            <ProfileStudentDialog :student="data"/>
             <!--            <EditStudentSpeedDial/>-->
           </div>
         </template>
