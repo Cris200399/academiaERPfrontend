@@ -17,7 +17,10 @@
   <div class="mt-0 ml-2">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-5 p-2">
 
-      <GroupCard @group-deleted="handleGroupDeleted" v-for="group in groups" :key="group.id" :group="group"/>
+      <GroupCard
+          @group-deleted="handleGroupDeleted"
+          @groupUpdated="handleGroupUpdated"
+          v-for="group in groups" :key="group.id" :group="group"/>
 
     </div>
   </div>
@@ -52,6 +55,11 @@ const handleGroupAdded = (group) => {
 
 const handleGroupDeleted = (id) => {
   groups.value = groups.value.filter(group => group.id !== id);
+}
+
+const handleGroupUpdated = (group) => {
+  const index = groups.value.findIndex(g => g.id === group.id);
+  groups.value[index] = group;
 }
 
 

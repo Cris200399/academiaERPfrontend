@@ -26,9 +26,12 @@ class Group {
         return days.map((day) => day.toString()).sort((a, b) => orderDays.indexOf(a) - orderDays.indexOf(b));
     }
 
-    getScheduleIn12Format() {
-        const [start, end] = this.schedule.split(' - ');
-        return `${this.convertTo12HourFormat(start)} - ${this.convertTo12HourFormat(end)}`;
+    getStartTime() {
+        return (this.schedule.split(' - ')[0]);
+    }
+
+    getEndTime() {
+        return (this.schedule.split(' - ')[1]);
     }
 
     convertTo12HourFormat(hour) {

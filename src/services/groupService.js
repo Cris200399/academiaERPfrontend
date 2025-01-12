@@ -30,3 +30,13 @@ export const deleteGroupService = async (groupId) => {
         throw error;
     }
 }
+
+export const updateGroupInfoService = async (groupId, groupData) => {
+    try {
+        const response = await axios.put(`${API_URLS.GROUPS}/${groupId}/info`, groupData);
+        return response.data;
+    } catch (error) {
+        console.error('Error updating group:', error);
+        throw error;
+    }
+}

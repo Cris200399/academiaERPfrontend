@@ -1,7 +1,10 @@
 ﻿<template>
   <Card style="width: 25rem; overflow: hidden; position: relative;">
     <template #title> {{ group.name }}
-      <GroupMenu @group-deleted="handleGroupDeleted" :id="group.id" class="absolute top-5 right-5 cursor-pointer"/>
+      <GroupMenu @group-deleted="handleGroupDeleted"
+                 @groupUpdated="handleGroupUpdated"
+
+                 :id="group.id" :groupData="group"/>
     </template>
     <template #subtitle>
       {{ group.description }}
@@ -18,7 +21,7 @@
           </div>
           <!-- Hora -->
           <div>
-            <span class="font-semibold whitespace-nowrap">{{group.schedule}}</span>
+            <span class="font-semibold whitespace-nowrap">{{ group.schedule }}</span>
           </div>
         </div>
         <!-- Contador de estudiantes -->
@@ -43,7 +46,7 @@ const props = defineProps({
 });
 
 // eslint-disable-next-line no-undef
-const emit = defineEmits(['groupDeleted']);
+const emit = defineEmits(['groupDeleted', 'groupUpdated']);
 
 
 onMounted(() => {
@@ -59,6 +62,10 @@ progressValue.value = Math.round((totalStudents.value / maxStudents.value) * 100
 
 function handleGroupDeleted(id) {
   emit('groupDeleted', id);
+}
+
+function handleGroupUpdated(group) {
+  emit('groupUpdated', group);
 }
 </script>
 

@@ -1,8 +1,11 @@
 ﻿<template>
-  <div class="justify-center">
+  <div class="absolute top-5 right-5 cursor-pointer justify-center">
     <Button type="button" icon="pi pi-ellipsis-h" @click="toggle" aria-haspopup="true" aria-controls="overlay_menu"/>
     <Menu ref="menu" id="overlay_menu" :model="items" :popup="true"/>
   </div>
+  <EditGroupDialog v-model:visible="visibleEditDialog"
+                   @groupUpdated="handleGroupUpdated"
+                   @hideEditDialog="handleHideEditDialog" :groupData="groupData" />
 </template>
 
 <script setup>
@@ -11,10 +14,13 @@ import {ref} from "vue";
 import {useToast} from "primevue/usetoast";
 import {useConfirm} from "primevue/useconfirm";
 import {deleteGroupService} from "@/services/groupService";
+import EditGroupDialog from "@/components/groups/EditGroupDialog.vue";
+import Group from "@/models/group";
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
-  id: String
+  id: String,
+  groupData: Group
 });
 
 const menu = ref();
@@ -22,7 +28,9 @@ const toast = useToast();
 const confirm = useConfirm();
 
 // eslint-disable-next-line no-undef
-const emit = defineEmits(['groupDeleted']);
+const emit = defineEmits(['groupDeleted', 'groupUpdated']);
+
+const visibleEditDialog = ref(false);
 
 const items = ref([
   {
@@ -35,10 +43,13 @@ const items = ref([
           handleDelete(props.id);
         }
       },
-      // {
-      //   label: 'Export',
-      //   icon: 'pi pi-upload'
-      // }
+      {
+        label: 'Edit',
+        icon: 'pi pi-pencil',
+        command: () => {
+          visibleEditDialog.value = true;
+        }
+      }
     ]
   }
 ]);
@@ -76,4 +87,12 @@ const handleDelete = async (id) => {
     }
   });
 };
+
+function handleHideEditDialog(){
+  visibleEditDialog.value = false;
+}
+
+function handleGroupUpdated(updatedGroup){
+  emit('groupUpdated', updatedGroup);
+}
 </script>
