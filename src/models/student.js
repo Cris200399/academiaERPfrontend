@@ -14,6 +14,7 @@ class Student {
             this.dni = data.dni;
             this.guardian = data.guardian;
             this.age = this.calculateAge(data.dateOfBirth);
+            this.profileImageId = data.profileImageId;
         } else {
             // Constructor for sending student to an endpoint
             this.name = data.name;
@@ -26,6 +27,7 @@ class Student {
             this.group = data.group;
             this.dni = data.dni;
             this.guardian = data.guardian;
+            this.profileImageId = data.profileImageId;
         }
     }
 

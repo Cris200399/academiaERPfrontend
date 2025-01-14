@@ -12,6 +12,7 @@
 
 <script setup>
 
+import SideBar from "@/components/shared/SideBar.vue";
 </script>
 
 <style>

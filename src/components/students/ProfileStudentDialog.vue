@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Botón para abrir el dialog -->
-    <Button icon="pi pi-user" class="p-button-rounded" @click="visible = true"/>
+    <Button icon="pi pi-user" class="p-button-rounded" @click="onVisible"/>
 
     <Dialog
         v-model:visible="visible"
@@ -16,12 +16,8 @@
         <div class="card w-full md:w-2/5">
           <div class="flex flex-col items-start content-start">
             <div class="flex flex-wrap justify-center w-full mb-5">
-              <Avatar
-                  :image="profileImage"
-                  size="xlarge"
-                  class="p-overlay-badge img-size"
-                  :pt="{      image: { class: 'rounded-full' }       }"
-              />
+
+              <StudentAvatar :studentId="student.id" :profileImageId="student.profileImageId"/>
               <Divider/>
 
             </div>
@@ -130,7 +126,7 @@ import {useToast} from 'primevue/usetoast'
 
 import Chart from 'primevue/chart';
 import Student from "@/models/student";
-import {getStudentProfileImageService} from "@/services/studentService";
+import StudentAvatar from "@/components/students/StudentAvatar.vue";
 
 const toast = useToast();
 const visible = ref(false);
@@ -170,8 +166,11 @@ const onSelect = (event) => {
 onMounted(() => {
   chartData.value = setChartData();
   chartOptions.value = setChartOptions();
-  getProfileImage();
 });
+
+function onVisible() {
+  visible.value = true;
+}
 
 const chartData = ref();
 const chartOptions = ref();
@@ -207,10 +206,7 @@ const setChartOptions = () => {
   };
 };
 
-async function getProfileImage() {
-  const blob = await getStudentProfileImageService(props.student.id);
-  profileImage.value = URL.createObjectURL(blob);
-}
+
 </script>
 
 <style scoped>
@@ -225,12 +221,6 @@ async function getProfileImage() {
   width: 100px;
 }
 
-.img-size {
-  width: 100%;
-  max-width: 200px;
-  height: auto;
-}
-
 .details-label {
   width: 200px;
   font-weight: bold;
@@ -241,4 +231,5 @@ async function getProfileImage() {
   margin-right: 0.5rem;
   color: rgb(186, 181, 129);
 }
+
 </style>

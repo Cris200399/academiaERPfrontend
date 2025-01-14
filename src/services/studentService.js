@@ -63,3 +63,24 @@ export const getStudentProfileImageService = async (id) => {
         throw error;
     }
 }
+
+export const updateStudentProfileImageService = async (id, image) => {
+    try {
+        const formData = new FormData();
+        formData.append('image', image, image.name);
+
+        const response = await axios.put(
+            `${API_URLS.STUDENTS}/${id}/profile-image`,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error('Error updating student profile image:', error);
+        throw error;
+    }
+}
