@@ -14,9 +14,6 @@ import EditStudentDialog from "@/components/students/EditStudentDialog.vue";
 import {genderOptions} from "@/constants/genderOptions";
 import ProfileStudentDialog from "@/components/students/ProfileStudentDialog.vue";
 
-// import EditStudentSpeedDial from "@/components/students/EditStudentSpeedDial.vue";
-
-
 const students = ref([]);
 const groupNames = ref();
 

@@ -7,6 +7,7 @@
         v-model:visible="visible"
         modal
         :header="student.getFullName()"
+        :draggable="false"
         :style="{ width: '50vw' }"
         :breakpoints="{ '960px': '75vw', '641px': '100vw' }"
     >
@@ -16,7 +17,7 @@
           <div class="flex flex-col items-start content-start">
             <div class="flex flex-wrap justify-center w-full mb-5">
               <Avatar
-                  :image="'https://i0.wp.com/newdoorfiji.com/wp-content/uploads/2018/03/profile-img-1.jpg?ssl=1'"
+                  :image="profileImage"
                   size="xlarge"
                   class="p-overlay-badge img-size"
                   :pt="{      image: { class: 'rounded-full' }       }"
@@ -129,16 +130,19 @@ import {useToast} from 'primevue/usetoast'
 
 import Chart from 'primevue/chart';
 import Student from "@/models/student";
+import {getStudentProfileImageService} from "@/services/studentService";
 
-const toast = useToast()
-const visible = ref(false)
+const toast = useToast();
+const visible = ref(false);
+const profileImage = ref();
 
+// eslint-disable-next-line no-undef
 const props = defineProps({
   student: {
     type: Student,
     required: true
   }
-})
+});
 
 
 // Manejo de archivos
@@ -166,6 +170,7 @@ const onSelect = (event) => {
 onMounted(() => {
   chartData.value = setChartData();
   chartOptions.value = setChartOptions();
+  getProfileImage();
 });
 
 const chartData = ref();
@@ -201,6 +206,11 @@ const setChartOptions = () => {
     }
   };
 };
+
+async function getProfileImage() {
+  const blob = await getStudentProfileImageService(props.student.id);
+  profileImage.value = URL.createObjectURL(blob);
+}
 </script>
 
 <style scoped>

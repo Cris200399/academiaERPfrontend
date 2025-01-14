@@ -1,25 +1,25 @@
 import axios from 'axios';
 
-import { API_URLS } from '@/config/apiConfig';
+import {API_URLS} from '@/config/apiConfig';
 
 export const getStudentsService = async () => {
-  try {
-    const response = await axios.get(API_URLS.STUDENTS);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching students:', error);
-    throw error;
-  }
+    try {
+        const response = await axios.get(API_URLS.STUDENTS);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching students:', error);
+        throw error;
+    }
 };
 
 export const createStudentService = async (student) => {
-  try {
-    const response = await axios.post(API_URLS.STUDENTS, student);
-    return response.data;
-  } catch (error) {
-    console.error('Error adding student:', error);
-    throw error;
-  }
+    try {
+        const response = await axios.post(API_URLS.STUDENTS, student);
+        return response.data;
+    } catch (error) {
+        console.error('Error adding student:', error);
+        throw error;
+    }
 };
 
 export const deleteStudentService = async (id) => {
@@ -47,6 +47,19 @@ export const updateStudentService = async (id, student) => {
         return response.data;
     } catch (error) {
         console.error('Error updating student:', error);
+        throw error;
+    }
+}
+
+export const getStudentProfileImageService = async (id) => {
+    try {
+        const response = await axios.get(`${API_URLS.STUDENTS}/${id}/profile-image`,
+            {
+                responseType: 'blob'
+            });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching student profile image:', error);
         throw error;
     }
 }
