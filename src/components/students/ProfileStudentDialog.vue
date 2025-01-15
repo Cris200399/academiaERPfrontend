@@ -17,7 +17,8 @@
           <div class="flex flex-col items-start content-start">
             <div class="flex flex-wrap justify-center w-full mb-5">
 
-              <StudentAvatar :studentId="student.id" :profileImageId="student.profileImageId"/>
+              <StudentAvatar :studentId="student.id" :profileImageId="student.profileImageId"
+                             @updateImage="handleUpdateImage"/>
               <Divider/>
 
             </div>
@@ -130,7 +131,6 @@ import StudentAvatar from "@/components/students/StudentAvatar.vue";
 
 const toast = useToast();
 const visible = ref(false);
-const profileImage = ref();
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
@@ -205,7 +205,6 @@ const setChartOptions = () => {
     }
   };
 };
-
 
 </script>
 

@@ -96,6 +96,8 @@
         <small class="p-error" v-if="errors.dateOfBirth">{{ errors.dateOfBirth }}</small>
       </div>
 
+
+
       <!-- Phone -->
       <div class="flex flex-col justify-center ">
         <FloatLabel variant="on" class="input-size">
@@ -251,6 +253,7 @@ const formData = reactive({
     relationship: ''
   }
 });
+
 
 const errors = reactive({
   name: '',

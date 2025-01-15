@@ -83,7 +83,7 @@ const props = defineProps({
 
 // Emits
 // eslint-disable-next-line no-undef
-const emit = defineEmits(['update:image']);
+const emit = defineEmits(['updateImage']);
 
 // Composables
 const toast = useToast();
@@ -136,10 +136,10 @@ const saveImage = async () => {
   loading.value = true;
   try {
 
-    await updateStudentProfileImageService(props.id, selectedFile.value);
-
+    await updateStudentProfileImageService(props.studentId, selectedFile.value);
     // Emitir evento con la nueva imagen
-    emit('update:image');
+    emit('updateImage');
+    await getProfileImage();
 
     toast.add({
       severity: 'success',

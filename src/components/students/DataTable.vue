@@ -195,7 +195,7 @@ function handleStudentUpdated(updatedStudent) {
         </template>
       </Column>
 
-      <Column field="phone" header="Número de Celular" style="min-width: 5rem">
+      <Column field="phone" header="#Celular" style="min-width: 5rem">
         <template #body="{ data }">
           {{ data.phone }}
         </template>
