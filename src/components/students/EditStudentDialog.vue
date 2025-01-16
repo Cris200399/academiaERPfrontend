@@ -225,13 +225,14 @@ import {getGroupsService} from "@/services/groupService";
 import FloatLabel from 'primevue/floatlabel';
 import DatePicker from 'primevue/datepicker';
 import {genderOptions} from "@/constants/genderOptions";
+import Student from "@/models/student";
 
 const toast = useToast();
 const visible = ref(false);
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
-  student: Object
+  student: Student
 });
 
 // eslint-disable-next-line no-undef
