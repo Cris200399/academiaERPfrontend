@@ -84,3 +84,36 @@ export const updateStudentProfileImageService = async (id, image) => {
         throw error;
     }
 }
+
+export const getDocumentService = async (studentId) => {
+    try {
+        const response = await axios.get(
+            `${API_URLS.STUDENTS}/${studentId}/document`,
+            {responseType: 'blob'}
+        );
+        return URL.createObjectURL(response.data);
+    } catch (error) {
+        throw new Error('Error al obtener el documento');
+    }
+}
+
+export const updateDocumentService = async (studentId, document) => {
+    try {
+        const formData = new FormData();
+        formData.append('document', document);
+
+        const response = await axios.put(
+            `${API_URLS.STUDENTS}/${studentId}/document`,
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.log('Error al actualizar el documento:', error)
+        throw new Error('Error al actualizar el documento');
+    }
+}

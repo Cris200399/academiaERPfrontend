@@ -17,8 +17,7 @@
           <div class="flex flex-col items-start content-start">
             <div class="flex flex-wrap justify-center w-full mb-5">
 
-              <StudentAvatar :studentId="student.id" :profileImageId="student.profileImageId"
-                             @updateImage="handleUpdateImage"/>
+              <StudentAvatar :studentId="student.id" :profileImageId="student.profileImageId"/>
               <Divider/>
 
             </div>
@@ -100,21 +99,45 @@
 
           <!-- Estadísticas Académicas -->
           <div class="mb-5">
-            <h2 class="text-xl font-bold mb-3">Estadísticas de Asistencia</h2>
+            <h2 class="text-xl font-bold mb-3">Asistencia</h2>
             <div class="flex align-items-center justify-center">
               <Chart type="pie" :width="600" :data="chartData" :options="chartOptions"/>
             </div>
           </div>
 
-          <!-- Subir Documentos -->
-          <div>
-            <h2 class="text-xl font-bold mb-3">Documentos</h2>
-            <FileUpload mode="basic" name="demo[]" url="/api/upload" @upload="onUpload($event)"
-                        accept="application/pdf"
-                        :maxFileSize="1000000">
-            </FileUpload>
-            <small class="block mt-2 text-gray-500">Tamaño máximo: 1MB. Solo archivos PDF.</small>
+
+          <div v-if="pdfUrl" class="mt-4">
+            <h3 class="text-lg font-bold mb-2">DNI</h3>
+            <div class="pdf-preview-container">
+              <iframe
+                  :src="pdfUrl"
+                  type="application/pdf"
+                  width="100%"
+                  height="500px"
+                  class="border rounded-lg"
+              ></iframe>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="mt-5 flex gap-2 justify-around ">
+              <Button
+                  @click="openInNewTab"
+                  class="p-button-secondary"
+              >
+                <i class="pi pi-external-link mr-2"></i>
+                Abrir en nueva pestaña
+              </Button>
+              <Spacer/>
+
+              <!-- Subir Documentos -->
+              <UploadDocumentDialog @updateDocument="loadDocument" :student="student"/>
+            </div>
           </div>
+          <div v-else>
+            <UploadDocumentDialog @updateDocument="loadDocument" :student="student"/>
+          </div>
+
+
         </div>
       </div>
     </Dialog>
@@ -123,14 +146,18 @@
 
 <script setup>
 import {onMounted, ref} from 'vue'
-import {useToast} from 'primevue/usetoast'
 
 import Chart from 'primevue/chart';
 import Student from "@/models/student";
 import StudentAvatar from "@/components/students/StudentAvatar.vue";
+import {getDocumentService} from "@/services/studentService";
+import UploadDocumentDialog from "@/components/students/UploadDocumentDialog.vue";
 
-const toast = useToast();
 const visible = ref(false);
+
+const pdfUrl = ref('');
+const loading = ref(false);
+const error = ref('');
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
@@ -141,28 +168,6 @@ const props = defineProps({
 });
 
 
-// Manejo de archivos
-const onUpload = (event) => {
-  toast.add({
-    severity: 'success',
-    summary: 'Archivo Subido',
-    detail: 'El documento se ha subido correctamente',
-    life: 3000
-  })
-}
-
-const onSelect = (event) => {
-  const file = event.files[0]
-  if (file.size > 10000000) {
-    toast.add({
-      severity: 'error',
-      summary: 'Error',
-      detail: 'El archivo excede el tamaño máximo permitido de 1MB',
-      life: 3000
-    })
-    return false
-  }
-}
 onMounted(() => {
   chartData.value = setChartData();
   chartOptions.value = setChartOptions();
@@ -170,6 +175,7 @@ onMounted(() => {
 
 function onVisible() {
   visible.value = true;
+  loadDocument();
 }
 
 const chartData = ref();
@@ -206,6 +212,23 @@ const setChartOptions = () => {
   };
 };
 
+
+// Cargar documento
+const loadDocument = async () => {
+  try {
+    loading.value = true;
+    pdfUrl.value = await getDocumentService(props.student.id);
+  } catch (err) {
+    error.value = err.message;
+  } finally {
+    loading.value = false;
+  }
+};
+
+const openInNewTab = () => {
+  window.open(pdfUrl.value, '_blank');
+};
+
 </script>
 
 <style scoped>
@@ -231,4 +254,22 @@ const setChartOptions = () => {
   color: rgb(186, 181, 129);
 }
 
+.document-container {
+  padding: 1rem;
+}
+
+.pdf-preview-container {
+  width: 100%;
+  background-color: #f8f9fa;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+/* Responsive iframe */
+@media (max-width: 640px) {
+  iframe {
+    height: 300px;
+  }
+}
 </style>
+

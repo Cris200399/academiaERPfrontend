@@ -90,7 +90,7 @@
 
 <script setup>
 import {ref} from 'vue';
-import {updateGroupInfoService} from '@/services/groupService';
+import {updateGroupService} from '@/services/groupService';
 import {useToast} from 'primevue/usetoast';
 import Group from '@/models/group';
 
@@ -145,7 +145,7 @@ async function handleSubmit() {
   });
 
   try {
-    const updatedGroupResponse = await updateGroupInfoService(props.groupData.id, updatedGroup);
+    const updatedGroupResponse = await updateGroupService(props.groupData.id, updatedGroup);
     toast.add({
       severity: 'success',
       summary: 'Operación completa',
