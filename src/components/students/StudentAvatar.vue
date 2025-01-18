@@ -27,7 +27,7 @@
       <div class="flex flex-col gap-4">
         <!-- Preview de la imagen -->
         <div v-if="previewImage" class="w-full flex justify-center">
-          <img :src="previewImage" class="max-w-[200px] rounded-full"/>
+          <img :src="previewImage" alt="Preview" class="max-w-[200px] rounded-full"/>
         </div>
 
         <!-- Input para subir archivo -->
@@ -137,15 +137,16 @@ const saveImage = async () => {
   try {
 
     await updateStudentProfileImageService(props.studentId, selectedFile.value);
+
     // Emitir evento con la nueva imagen
-    emit('updateImage');
+    emit('updateImage', props.studentId);
     await getProfileImage();
 
     toast.add({
       severity: 'success',
       summary: 'Éxito',
       detail: 'Imagen actualizada correctamente',
-      life: 3000
+      life: 1000
     });
 
     closeDialog();
@@ -155,7 +156,7 @@ const saveImage = async () => {
       severity: 'error',
       summary: 'Error',
       detail: error.response?.data?.message || 'No se pudo actualizar la imagen',
-      life: 3000
+      life: 1000
     });
   } finally {
     loading.value = false;

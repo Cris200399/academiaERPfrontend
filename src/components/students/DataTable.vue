@@ -6,7 +6,7 @@ import {onMounted, ref, watch} from 'vue';
 import {FilterMatchMode, FilterOperator} from '@primevue/core/api';
 
 
-import {getStudentsService} from "@/services/studentService";
+import {getStudentService, getStudentsService} from "@/services/studentService";
 import {getGroupsService} from "@/services/groupService";
 import DeleteStudentButton from "@/components/students/DeleteStudentButton.vue";
 import Student from "@/models/student";
@@ -80,10 +80,10 @@ watch(() => props.newStudentAdded, (newStudent) => {
   }
 });
 
-function handleStudentUpdated(updatedStudent) {
-  updatedStudent = new Student(updatedStudent);
-  const index = students.value.findIndex(student => student.id === updatedStudent.id);
-  students.value[index] = updatedStudent;
+async function handleStudentUpdated(studentId) {
+  const newStudent = await getStudentService(studentId);
+  const index = students.value.findIndex(student => student.id === studentId);
+  students.value[index] = new Student(newStudent);
 }
 
 </script>
@@ -162,7 +162,8 @@ function handleStudentUpdated(updatedStudent) {
 
       </Column>
 
-      <Column field="dateOfBirth" :sortable="true" dataType="date" header="Fecha de Nacimiento" style="min-width: 15rem">
+      <Column field="dateOfBirth" :sortable="true" dataType="date" header="Fecha de Nacimiento"
+              style="min-width: 15rem">
         <template #body="{ data }">
           {{ data.dateOfBirth }}
         </template>
@@ -228,11 +229,9 @@ function handleStudentUpdated(updatedStudent) {
       <Column header="Opciones" style="min-width: 5rem">
         <template #body="{ data }">
           <div class="flex gap-2">
-            <!--            <Button icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" @click="editStudent(data)"/>-->
             <EditStudentDialog @studentUpdated="handleStudentUpdated" :student="data"/>
             <DeleteStudentButton :data="data" @studentDeleted="handleStudentDeleted"/>
-            <ProfileStudentDialog :student="data"/>
-            <!--            <EditStudentSpeedDial/>-->
+            <ProfileStudentDialog :student="data" @updateImage="handleStudentUpdated"/>
           </div>
         </template>
       </Column>

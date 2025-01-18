@@ -1,5 +1,5 @@
 ﻿<template>
-  <Button icon="pi pi-plus" class="text-lg" severity="success" label="Agregar Alumno" @click="visible = true"/>
+  <Button icon="pi pi-plus" class="text-lg" severity="success" label="Agregar Alumno" @click="onVisible"/>
 
   <Dialog v-model:visible="visible" modal header="Agregar Alumno" class="w-[700px]" @hide="resetForm">
     <Divider class="bg-[#E2E6F9] h-1 my-4"/>
@@ -225,7 +225,7 @@ import Select from 'primevue/select';
 import {useToast} from "primevue/usetoast";
 import {createStudentService} from "@/services/studentService";
 import Student from "/src/models/student.js";
-import {getGroupsService} from "@/services/groupService";
+import {getAvailableGroupsService} from "@/services/groupService";
 
 import FloatLabel from 'primevue/floatlabel';
 import DatePicker from 'primevue/datepicker';
@@ -273,10 +273,11 @@ const errors = reactive({
 
 const groupOptions = ref([]);
 
-onMounted(async () => {
-  const groups = await getGroupsService();
+async function onVisible(){
+  visible.value = true;
+  const groups = await getAvailableGroupsService();
   groupOptions.value = groups.map(group => ({name: group.name, id: group._id}));
-});
+}
 
 // Computed property to check if student is under 18
 const isUnderAge = computed(() => {
@@ -458,12 +459,12 @@ const handleSubmit = async () => {
 
     try {
       const newStudentAdded = await createStudentService(newStudent);
-      toast.add({severity: 'success', summary: 'Éxito', detail: 'Alumno creado exitosamente', life: 2500});
+      toast.add({severity: 'success', summary: 'Éxito', detail: 'Alumno creado exitosamente', life: 1500});
       emit('studentAdded', newStudentAdded);
       visible.value = false;
       resetForm();
     } catch (error) {
-      toast.add({severity: 'error', summary: 'Error', detail: 'Hubo un error al crear el alumno', life: 2500});
+      toast.add({severity: 'error', summary: 'Error', detail: 'Hubo un error al crear el alumno', life: 1500});
     }
   }
 };

@@ -17,7 +17,8 @@
           <div class="flex flex-col items-start content-start">
             <div class="flex flex-wrap justify-center w-full mb-5">
 
-              <StudentAvatar :studentId="student.id" :profileImageId="student.profileImageId"/>
+              <StudentAvatar @updateImage="handleUpdatedImage" :studentId="student.id"
+                             :profileImageId="student.profileImageId"/>
               <Divider/>
 
             </div>
@@ -127,7 +128,7 @@
                 <i class="pi pi-external-link mr-2"></i>
                 Abrir en nueva pestaña
               </Button>
-              <Spacer/>
+<!--              <Spacer/>-->
 
               <!-- Subir Documentos -->
               <UploadDocumentDialog @updateDocument="loadDocument" :student="student"/>
@@ -158,6 +159,9 @@ const visible = ref(false);
 const pdfUrl = ref('');
 const loading = ref(false);
 const error = ref('');
+
+// eslint-disable-next-line no-undef
+const emit = defineEmits(['updateImage']);
 
 // eslint-disable-next-line no-undef
 const props = defineProps({
@@ -228,6 +232,10 @@ const loadDocument = async () => {
 const openInNewTab = () => {
   window.open(pdfUrl.value, '_blank');
 };
+
+function handleUpdatedImage(studentId) {
+  emit('updateImage', studentId);
+}
 
 </script>
 

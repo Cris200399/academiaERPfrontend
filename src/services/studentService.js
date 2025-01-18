@@ -12,6 +12,16 @@ export const getStudentsService = async () => {
     }
 };
 
+export const getStudentService = async (id) => {
+    try {
+        const response = await axios.get(`${API_URLS.STUDENTS}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching student:', error);
+        throw error;
+    }
+}
+
 export const createStudentService = async (student) => {
     try {
         const response = await axios.post(API_URLS.STUDENTS, student);

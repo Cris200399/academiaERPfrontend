@@ -465,13 +465,13 @@ const handleSubmit = async () => {
       };
     }
     try {
-      const updatedStudentResponse = await updateStudentService(props.student.id, updatedStudent);
-      toast.add({severity: 'success', summary: 'Éxito', detail: 'Alumno actualizado exitosamente', life: 2500});
-      emit('studentUpdated', updatedStudentResponse);
+      await updateStudentService(props.student.id, updatedStudent);
+      toast.add({severity: 'success', summary: 'Éxito', detail: 'Alumno actualizado exitosamente', life: 1000});
+      emit('studentUpdated', props.student.id);
       visible.value = false;
       resetForm();
     } catch (error) {
-      toast.add({severity: 'error', summary: 'Error', detail: 'Hubo un error al actualizar el alumno', life: 2500});
+      toast.add({severity: 'error', summary: 'Error', detail: 'Hubo un error al actualizar el alumno', life: 1500});
     }
   }
 };
