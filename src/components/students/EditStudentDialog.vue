@@ -85,6 +85,7 @@
               v-model="formData.dateOfBirth"
               inputId="on_label"
               showIcon
+              date-format="dd/mm/yy"
               iconDisplay="input"
               class="input-size"
               :class="{'p-invalid': errors.dateOfBirth}"
@@ -213,11 +214,12 @@
           :disabled="!isFormValid"
       />
     </div>
+
   </Dialog>
 </template>
 
 <script setup>
-import {ref, reactive, computed, watch, onMounted} from 'vue';
+import {ref, reactive, computed, watch} from 'vue';
 import Select from 'primevue/select';
 import {useToast} from "primevue/usetoast";
 import {updateStudentService} from "@/services/studentService";
@@ -283,9 +285,6 @@ async function onShowDialog() {
   formData.group = groupOptions.value.find(groupOption => groupOption.name === props.student.group);
   // formData.gender = genderOptions.value.find(genderOption => genderOption.value === props.student.gender);
 }
-
-onMounted(async () => {
-});
 
 // Computed property to check if student is under 18
 const isUnderAge = computed(() => {

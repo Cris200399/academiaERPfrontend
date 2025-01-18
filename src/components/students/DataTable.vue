@@ -13,6 +13,7 @@ import Student from "@/models/student";
 import EditStudentDialog from "@/components/students/EditStudentDialog.vue";
 import {genderOptions} from "@/constants/genderOptions";
 import ProfileStudentDialog from "@/components/students/ProfileStudentDialog.vue";
+import {formatDate} from "../../utils/formatDate";
 
 const students = ref([]);
 const groupNames = ref();
@@ -41,7 +42,6 @@ const filters = ref({
 
 
 const loading = ref(true);
-
 onMounted(async () => {
   const studentsResponseData = await getStudentsService();
 
@@ -53,7 +53,6 @@ onMounted(async () => {
         )
     );
   });
-
 
   groups = await getGroupsService();
   groupNames.value = groups.map(g => (
@@ -162,10 +161,13 @@ async function handleStudentUpdated(studentId) {
 
       </Column>
 
-      <Column field="dateOfBirth" :sortable="true" dataType="date" header="Fecha de Nacimiento"
+      <Column field="dateOfBirth" dataType="date" header="Fecha de Nacimiento"
               style="min-width: 15rem">
         <template #body="{ data }">
-          {{ data.dateOfBirth }}
+          {{ formatDate(data.dateOfBirth) }}
+        </template>
+        <template #filter="{ filterModel }">
+          <DatePicker v-model="filterModel.value" dateFormat="dd/mm/yy" placeholder="mm/dd/yyyy" />
         </template>
       </Column>
 

@@ -41,7 +41,7 @@
               <div class="flex justify-content-between items-center mb-3">
                 <span class="material-icons">cake</span>
                 <span class="label">Fecha de Nacimiento:</span>
-                <span>{{ student.dateOfBirth }}</span>
+                <span>{{ formatDate(student.dateOfBirth) }}</span>
               </div>
               <div class="flex justify-content-between mb-3">
                 <span class="material-icons">phone_iphone</span>
@@ -153,6 +153,7 @@ import Student from "@/models/student";
 import StudentAvatar from "@/components/students/StudentAvatar.vue";
 import {getDocumentService} from "@/services/studentService";
 import UploadDocumentDialog from "@/components/students/UploadDocumentDialog.vue";
+import {formatDate} from "../../utils/formatDate";
 
 const visible = ref(false);
 

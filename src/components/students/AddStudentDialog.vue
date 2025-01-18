@@ -220,7 +220,7 @@
 </template>
 
 <script setup>
-import {ref, reactive, computed, watch, onMounted} from 'vue';
+import {ref, reactive, computed, watch} from 'vue';
 import Select from 'primevue/select';
 import {useToast} from "primevue/usetoast";
 import {createStudentService} from "@/services/studentService";
