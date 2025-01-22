@@ -19,6 +19,10 @@ export const menuItems = [
     label: 'Grupos',
     icon: 'pi pi-table',
     route: '/groups',
-    active: true
+  },
+  {
+    label: 'Asistencia',
+    icon: 'pi pi-check',
+    route: '/assistance',
   }
 ];

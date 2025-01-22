@@ -34,6 +34,11 @@ class Group {
         return (this.schedule.split(' - ')[1]);
     }
 
+    getScheduleIn12HourFormat() {
+        const [start, end] = this.schedule.split(' - ');
+        return `${this.convertTo12HourFormat(start)} - ${this.convertTo12HourFormat(end)}`;
+    }
+
     convertTo12HourFormat(hour) {
         const [hours, minutes] = hour.split(':');
         const amPm = hours >= 12 ? 'pm' : 'am';

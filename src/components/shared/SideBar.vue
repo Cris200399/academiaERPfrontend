@@ -39,8 +39,4 @@ import {menuItems} from '@/data/menuItems';
 </script>
 
 <style scoped>
-.active-link {
-  background-color: #ebf8ff;
-  border-left: 4px solid #4299e1;
-}
 </style>

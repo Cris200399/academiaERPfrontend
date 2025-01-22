@@ -150,7 +150,7 @@ import {onMounted, ref} from 'vue'
 
 import Chart from 'primevue/chart';
 import Student from "@/models/student";
-import StudentAvatar from "@/components/students/StudentAvatar.vue";
+import StudentAvatar from "@/components/shared/StudentAvatar.vue";
 import {getDocumentService} from "@/services/studentService";
 import UploadDocumentDialog from "@/components/students/UploadDocumentDialog.vue";
 import {formatDate} from "../../utils/formatDate";

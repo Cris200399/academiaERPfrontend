@@ -50,3 +50,13 @@ export const updateGroupService = async (groupId, groupData) => {
         throw error;
     }
 }
+
+export const getGroupInProgressService = async () => {
+    try {
+        const response = await axios.get(`${API_URLS.GROUPS}/in-progress`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching groups:', error);
+        throw error;
+    }
+}

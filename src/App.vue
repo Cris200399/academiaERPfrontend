@@ -22,6 +22,7 @@ import SideBar from "@/components/shared/SideBar.vue";
 
 .sidebar {
   width: 15vw;
+  height: 100vh;
   color: white;
 }
 
