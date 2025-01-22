@@ -12,6 +12,20 @@ export const getAssistanceService = async () => {
     }
 }
 
+export const deleteAssistanceService = async (assistanceId) => {
+    try {
+        const response = await axios.delete(`${API_URLS.ASSISTANCE}/${assistanceId}`);
+        if (response.status === 204) {
+            return {message: "Assistance deleted successfully"};
+        } else {
+            return {message: "Failed to delete assistance", status: response.status};
+        }
+    } catch (error) {
+        console.error("Error deleting assistance:", error);
+        throw error;
+    }
+}
+
 export const createAssistanceService = async (assistanceData) => {
     try {
         const response = await axios.post(API_URLS.ASSISTANCE, assistanceData);

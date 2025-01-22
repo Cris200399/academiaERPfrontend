@@ -2,7 +2,14 @@
 import Student from "@/models/student";
 import {onMounted, ref} from "vue";
 import {getStudentProfileImageService} from "@/services/studentService";
-import {createAssistanceService, getTodayAssistancePerStudentService} from "@/services/assistanceService";
+import {
+  createAssistanceService,
+  deleteAssistanceService,
+  getTodayAssistancePerStudentService
+} from "@/services/assistanceService";
+
+import {useToast} from "primevue/usetoast";
+import Assistance from "@/models/assistance";
 
 // eslint-disable-next-line no-undef,no-unused-vars
 const props = defineProps({
@@ -17,17 +24,24 @@ const props = defineProps({
 })
 const image = ref();
 
+const toast = useToast();
+
 const studentHasAssisted = ref(false);
 
-onMounted(() => {
+let assistance = null;
+
+onMounted(async () => {
   if (props.student.profileImageId) {
-    getProfileImage();
+    await getProfileImage();
   } else {
     image.value = 'src/assets/profileImageBlank.webp';
   }
 
-  getTodayAssistancePerStudentService(props.student.id, props.groupId).then((response) => {
+  await getTodayAssistancePerStudentService(props.student.id, props.groupId).then((response) => {
     studentHasAssisted.value = response !== null;
+    if (response) {
+      assistance = new Assistance(response);
+    }
   });
 });
 
@@ -52,17 +66,34 @@ const getSeverity = (paymentStatus) => {
   }
 };
 
-async function onPresent() {
+async function saveAssistance() {
   const newAssistanceObject = ({
     student: props.student.id,
     group: props.groupId,
     date: new Date(),
     status: "Presente"
   })
+  const newAssistance = await createAssistanceService(newAssistanceObject);
+  if (newAssistance) {
+    studentHasAssisted.value = true;
+    assistance = new Assistance(newAssistance);
+    toast.add({severity: 'success', summary: 'Asistencia guardada', life: 1000});
+  } else {
+    toast.add({severity: 'error', summary: 'Error al guardar la asistencia', life: 1000});
+  }
 
-  const response = await createAssistanceService(newAssistanceObject);
 
-  console.log(response);
+}
+
+async function deleteAssistance() {
+  const response = await deleteAssistanceService(assistance.id);
+  if (response) {
+    studentHasAssisted.value = false;
+    assistance = null;
+    toast.add({severity: 'success', summary: 'Asistencia eliminada', life: 1000});
+  } else {
+    toast.add({severity: 'error', summary: 'Error al eliminar la asistencia', life: 1000});
+  }
 }
 
 </script>
@@ -94,9 +125,11 @@ async function onPresent() {
       </div>
       <div class="flex flex-col gap-6 mt-6">
         <div class="flex gap-2">
-          <Button icon="pi pi-check-circle" @click="onPresent" :disabled="studentHasAssisted" rounded severity="success" label="Asistió"
+          <Button icon="pi pi-check-circle" @click="saveAssistance" :disabled="studentHasAssisted"
+                  severity="success"
+                  label="Marcar Asistencia"
                   class="flex-auto w-8/12"></Button>
-          <Button icon="pi pi-times-circle" rounded severity="warn" label="Falta"
+          <Button v-if="studentHasAssisted" @click="deleteAssistance" icon="pi pi-times-circle" severity="warn"
                   class="flex-auto w-4/12"></Button>
         </div>
       </div>

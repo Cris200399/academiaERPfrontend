@@ -54,7 +54,7 @@ async function getGroupInProgress() {
               <h1 class="text-3xl mt-4">{{ groupInProgress.name }}</h1>
             </div>
             <div>
-              <h2 class="text-3xl">{{groupInProgress.getScheduleIn12HourFormat()}}</h2>
+              <h2 class="text-3xl">{{ groupInProgress.getScheduleIn12HourFormat() }}</h2>
             </div>
           </div>
         </div>
