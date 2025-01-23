@@ -103,7 +103,12 @@ export const getDocumentService = async (studentId) => {
         );
         return URL.createObjectURL(response.data);
     } catch (error) {
-        throw new Error('Error al obtener el documento');
+        if (error.response && error.response.status === 404) {
+            return null; // o cualquier valor que consideres adecuado
+        } else {
+            console.error('Error fetching document:', error);
+            return null; // o cualquier valor que consideres adecuado
+        }
     }
 }
 

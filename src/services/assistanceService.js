@@ -65,3 +65,13 @@ export const getTodayAssistancePerStudentService = async (studentId, groupId) =>
         throw error;
     }
 }
+
+export const getAssistancesPerStudentIdService = async (studentId) => {
+    try {
+        const response = await axios.get(`${API_URLS.ASSISTANCE}/student/${studentId}`);
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching student's assistances:", error);
+        throw error;
+    }
+}

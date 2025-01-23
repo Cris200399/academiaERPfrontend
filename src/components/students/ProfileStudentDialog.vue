@@ -7,6 +7,7 @@
         v-model:visible="visible"
         modal
         :header="student.getFullName()"
+        @hide="onHide"
         :draggable="false"
         :style="{ width: '50vw' }"
         :breakpoints="{ '960px': '75vw', '641px': '100vw' }"
@@ -63,7 +64,7 @@
           </div>
         </div>
 
-        <!-- Detalles Académicos -->
+        <!-- Detalles Extras -->
         <div class="card w-full md:w-4/5">
           <div class="mb-5">
             <h2 class="text-xl font-bold mb-3">Detalles del Estudiante</h2>
@@ -98,17 +99,29 @@
             </div>
           </div>
 
-          <!-- Estadísticas Académicas -->
-          <div class="mb-5">
-            <h2 class="text-xl font-bold mb-3">Asistencia</h2>
-            <div class="flex align-items-center justify-center">
-              <Chart type="pie" :width="600" :data="chartData" :options="chartOptions"/>
+          <!-- Asistencia -->
+
+          <div v-if="assistances.length >= 1" class="mb-5">
+            <h2 class="text-xl font-bold mb-3">Asistencias en los últimos 30 días</h2>
+            <div class="flex justify-center">
+              <DatePicker inline v-model="date" :minDate="minDate" :max-date="maxDate" :disabled-dates="disabledDates">
+                <template #date="slotProps">
+                  <div v-if="isAssistanceDate(slotProps.date)"
+                       v-tooltip="{ value: getTooltip(slotProps.date), hideDelay: 200 }"
+                       class="font-bold bg-green-400 rounded-full p-2 text-white relative">
+                    {{ slotProps.date.day }}
+                  </div>
+                  <div v-else class="text-black-alpha-80">{{ slotProps.date.day }}</div>
+                </template>
+              </DatePicker>
+
             </div>
           </div>
 
 
           <div v-if="pdfUrl" class="mt-4">
-            <h3 class="text-lg font-bold mb-2">DNI</h3>
+            <h3 class="text-lg font-bold mb-2">DNI
+            </h3>
             <div class="pdf-preview-container">
               <iframe
                   :src="pdfUrl"
@@ -128,7 +141,7 @@
                 <i class="pi pi-external-link mr-2"></i>
                 Abrir en nueva pestaña
               </Button>
-<!--              <Spacer/>-->
+              <!--              <Spacer/>-->
 
               <!-- Subir Documentos -->
               <UploadDocumentDialog @updateDocument="loadDocument" :student="student"/>
@@ -138,7 +151,6 @@
             <UploadDocumentDialog @updateDocument="loadDocument" :student="student"/>
           </div>
 
-
         </div>
       </div>
     </Dialog>
@@ -146,20 +158,33 @@
 </template>
 
 <script setup>
-import {onMounted, ref} from 'vue'
+import {ref} from 'vue'
 
-import Chart from 'primevue/chart';
 import Student from "@/models/student";
 import StudentAvatar from "@/components/shared/StudentAvatar.vue";
 import {getDocumentService} from "@/services/studentService";
 import UploadDocumentDialog from "@/components/students/UploadDocumentDialog.vue";
-import {formatDate} from "../../utils/formatDate";
+import {formatDate} from "@/utils/formatDate";
+import {getAssistancesPerStudentIdService} from "@/services/assistanceService";
+import Assistance from "@/models/assistance";
+import DatePicker from "primevue/datepicker";
 
 const visible = ref(false);
 
 const pdfUrl = ref('');
 const loading = ref(false);
 const error = ref('');
+const assistances = ref([]);
+
+
+const date = ref(new Date());
+
+let minDate = new Date(new Date().setDate(new Date().getDate() - 29));
+
+let maxDate = new Date();
+
+
+let disabledDates;
 
 // eslint-disable-next-line no-undef
 const emit = defineEmits(['updateImage']);
@@ -173,50 +198,25 @@ const props = defineProps({
 });
 
 
-onMounted(() => {
-  chartData.value = setChartData();
-  chartOptions.value = setChartOptions();
-});
+async function getAssitances() {
+  const assistancesResponse = await getAssistancesPerStudentIdService(props.student.id);
+  assistancesResponse.map((assistance) => {
+    assistances.value.push(new Assistance((assistance)));
+  });
 
-function onVisible() {
-  visible.value = true;
-  loadDocument();
 }
 
-const chartData = ref();
-const chartOptions = ref();
+async function onVisible() {
+  visible.value = true;
+  await loadDocument();
+  await getAssitances();
+  disabledDates = getDisabledDays();
+}
 
-const setChartData = () => {
-  return {
-    labels: ['Enero', 'Febrero', 'Marzo', 'Abril'],
-    datasets: [
-      {
-        label: 'Asistencia',
-        data: [12, 10, 11, 9],
-        backgroundColor: ['rgba(249, 115, 22, 0.2)', 'rgba(6, 182, 212, 0.2)', 'rgb(107, 114, 128, 0.2)', 'rgba(224,25,56,0.2)'],
-        hoverBackgroundColor: ['rgb(57,213,59)'],
-        // borderColor: ['rgb(249, 115, 22)', 'rgb(6, 182, 212)', 'rgb(107, 114, 128)', 'rgb(139, 92, 246)'],
-        // borderWidth: 1
-      }
-    ]
-  };
-};
-const setChartOptions = () => {
-  const documentStyle = getComputedStyle(document.documentElement);
-  const textColor = documentStyle.getPropertyValue('--p-text-color');
-
-  return {
-    plugins: {
-      legend: {
-        labels: {
-          usePointStyle: true,
-          color: textColor
-        }
-      }
-    }
-  };
-};
-
+function onHide() {
+  visible.value = false;
+  assistances.value = [];
+}
 
 // Cargar documento
 const loadDocument = async () => {
@@ -236,6 +236,35 @@ const openInNewTab = () => {
 
 function handleUpdatedImage(studentId) {
   emit('updateImage', studentId);
+}
+
+function isSameDay(date1, date2) {
+  return date1.getDate() === date2.day &&
+      date1.getMonth() === date2.month &&
+      date1.getFullYear() === date2.year;
+}
+
+const isAssistanceDate = (slotDate) => {
+  return assistances.value.some((a) => isSameDay(a.date, slotDate));
+};
+
+const getTooltip = (slotDate) => {
+  const assistance = assistances.value.find((a) =>
+      isSameDay(a.date, slotDate)
+  );
+
+  console.log(assistance);
+  return assistance ? `✔️ ${assistance.getHour()}` : null;
+};
+
+function getDisabledDays(){
+  const assistanceDates = assistances.value.map(a => a.date.toDateString());
+  const allDates = Array.from({length: 30}, (_, i) => {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    return date.toDateString();
+  });
+  return allDates.filter(date => !assistanceDates.includes(date)).map(date => new Date(date));
 }
 
 </script>
@@ -263,9 +292,6 @@ function handleUpdatedImage(studentId) {
   color: rgb(186, 181, 129);
 }
 
-.document-container {
-  padding: 1rem;
-}
 
 .pdf-preview-container {
   width: 100%;
