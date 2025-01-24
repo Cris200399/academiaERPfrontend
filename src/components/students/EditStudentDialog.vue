@@ -130,14 +130,15 @@
       <!-- DNI -->
       <div class="flex flex-col justify-center ">
         <FloatLabel variant="on" class="input-size">
-          <InputText
+          <InputMask
+              id="phone"
               v-model="formData.dni"
-              size="large"
-              class="input-size"
+              mask="99999999"
+              fluid
               :class="{'p-invalid': errors.dni}"
               @blur="validateField('dni')"
           />
-          <label class="justify-center mb-5" for="on_label">DNI</label>
+          <label class="justify-center mb-5">DNI</label>
         </FloatLabel>
         <small class="p-error" v-if="errors.dni">{{ errors.dni }}</small>
       </div>
