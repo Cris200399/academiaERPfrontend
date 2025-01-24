@@ -10,7 +10,7 @@
         </div>
       </div>
       <div class="flex items-end justify-center">
-        <Button icon="pi pi-plus" class="text-lg" severity="success" :label="buttonLabel" @click="showGroupDialog"/>
+        <Button icon="pi pi-plus" class="text-lg" severity="success" :label="buttonLabel" @click="showAddGroupDialog"/>
         <AddGroupDialog v-model:visible="visibleGroupDialog" @groupAdded="handleGroupAdded"/>
       </div>
     </div>
@@ -78,7 +78,7 @@ const handleGroupUpdated = (group) => {
   groups.value[index] = group;
 }
 
-function showGroupDialog() {
+function showAddGroupDialog() {
   visibleGroupDialog.value = true;
 }
 

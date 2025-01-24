@@ -1,7 +1,5 @@
 ﻿<template>
-  <Button icon="pi pi-plus" class="text-lg" severity="success" label="Agregar Alumno" @click="onVisible"/>
-
-  <Dialog v-model:visible="visible" modal header="Agregar Alumno" class="w-[700px]" @hide="resetForm">
+  <Dialog v-model:visible="visible" @show="onVisible" modal header="Agregar Alumno" class="w-[700px]" @hide="resetForm">
     <Divider class="bg-[#E2E6F9] h-1 my-4"/>
 
     <div class="grid grid-cols-2 gap-4">
