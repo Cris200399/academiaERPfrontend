@@ -1,5 +1,4 @@
 ﻿<template>
-  <Button :icon="buttonIcon" class="text-lg" severity="success" :label="buttonLabel" @click="visible = true"/>
   <Dialog v-model:visible="visible" modal @hide="resetForm" :draggable='false'>
     <div class="max-w-2xl mx-auto p-6">
       <h1 class="text-3xl font-bold mb-10">Crear grupo</h1>
@@ -98,13 +97,12 @@
 
 <script setup>
 
-import {ref, onMounted, onUnmounted, computed} from 'vue'
+import {ref} from 'vue'
 
 import {createGroupService} from "@/services/groupService";
 import {useToast} from "primevue/usetoast";
 import Group from "@/models/group";
-
-const visible = ref(false);
+const visible = ref(true);
 
 const toast = useToast();
 
@@ -121,22 +119,6 @@ const maxMembers = ref();
 // eslint-disable-next-line no-undef
 const emit = defineEmits(['groupAdded']);
 
-const screenSize = ref(window.innerWidth);
-
-const updateScreenSize = () => {
-  screenSize.value = window.innerWidth;
-};
-
-onMounted(() => {
-  window.addEventListener('resize', updateScreenSize);
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', updateScreenSize);
-});
-
-const buttonLabel = computed(() => screenSize.value >= 1024 ? 'Añadir Grupo' : '');
-const buttonIcon = 'pi pi-plus';
 
 function toggleDay(day) {
   if (selectedDays.value.includes(day)) {

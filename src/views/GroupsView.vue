@@ -10,7 +10,8 @@
         </div>
       </div>
       <div class="flex items-end justify-center">
-        <AddGroupDialog @groupAdded="handleGroupAdded"/>
+        <Button icon="pi pi-plus" class="text-lg" severity="success" :label="buttonLabel" @click="showGroupDialog"/>
+        <AddGroupDialog v-model:visible="visibleGroupDialog" @groupAdded="handleGroupAdded"/>
       </div>
     </div>
   </div>
@@ -31,12 +32,22 @@ import GroupCard from "@/components/groups/GroupCard.vue";
 
 import {getGroupsService} from "@/services/groupService";
 
-import {onMounted, ref} from "vue";
+import {computed, onMounted, onUnmounted, ref} from "vue";
 
 import Group from "@/models/group";
 import AddGroupDialog from "@/components/groups/AddGroupDialog.vue";
 
 const groups = ref([]);
+
+const visibleGroupDialog = ref(false);
+
+const screenSize = ref(window.innerWidth);
+
+const updateScreenSize = () => {
+  screenSize.value = window.innerWidth;
+};
+const buttonLabel = computed(() => screenSize.value >= 1024 ? 'Añadir Grupo' : '');
+
 
 onMounted(async () => {
   const groupsResponseData = await getGroupsService();
@@ -45,6 +56,11 @@ onMounted(async () => {
         new Group(group)
     )
   });
+  window.addEventListener('resize', updateScreenSize);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('resize', updateScreenSize);
 });
 
 const handleGroupAdded = (group) => {
@@ -60,6 +76,10 @@ const handleGroupDeleted = (id) => {
 const handleGroupUpdated = (group) => {
   const index = groups.value.findIndex(g => g.id === group.id);
   groups.value[index] = group;
+}
+
+function showGroupDialog() {
+  visibleGroupDialog.value = true;
 }
 
 
