@@ -60,3 +60,13 @@ export const getGroupInProgressService = async () => {
         throw error;
     }
 }
+
+export const getGroupWithStudentsService = async (groupId) => {
+    try {
+        const response = await axios.get(`${API_URLS.GROUPS}/${groupId}/members`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching group:', error);
+        throw error;
+    }
+}
