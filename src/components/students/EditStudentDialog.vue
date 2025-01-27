@@ -67,15 +67,17 @@
 
       <!-- Gender -->
       <div class="flex flex-col justify-center ">
-        <Select
-            v-model="formData.gender"
-            :options="genderOptions"
-            placeholder="Género"
-            class="input-size"
-            :class="{'p-invalid': errors.gender}"
-            @blur="validateField('gender')"
-        />
-        <small class="p-error" v-if="errors.gender">{{ errors.gender }}</small>
+        <FloatLabel variant="on" class="input-size">
+          <Select
+              v-model="formData.gender"
+              :options="genderOptions"
+              class="input-size"
+              :class="{'p-invalid': errors.gender}"
+              @blur="validateField('gender')"
+          />
+          <small class="p-error" v-if="errors.gender">{{ errors.gender }}</small>
+          <label for="on_label">Género</label>
+        </FloatLabel>
       </div>
 
       <!-- Date of Birth -->
@@ -115,16 +117,18 @@
 
       <!-- Group -->
       <div class="flex flex-col justify-center">
-        <Select
-            v-model="formData.group"
-            :options="groupOptions"
-            optionLabel="name"
-            placeholder="Grupo"
-            class="input-size"
-            :class="{'p-invalid': errors.group}"
-            @blur="validateField('group')"
-        />
-        <small class="p-error" v-if="errors.group">{{ errors.group }}</small>
+        <FloatLabel variant="on" class="input-size">
+          <Select
+              v-model="formData.group"
+              :options="groupOptions"
+              optionLabel="name"
+              class="input-size"
+              :class="{'p-invalid': errors.group}"
+              @blur="validateField('group')"
+          />
+          <small class="p-error" v-if="errors.group">{{ errors.group }}</small>
+          <label for="on_label">Grupo</label>
+        </FloatLabel>
       </div>
 
       <!-- DNI -->

@@ -89,158 +89,156 @@ async function handleStudentUpdated(studentId) {
 
 
 <template>
-  <div class="card">
-    <DataTable
-        v-model:filters="filters"
-        :value="students"
-        paginator
-        :rows="10"
-        dataKey="id"
-        filterDisplay="menu"
-        :loading="loading"
-        :globalFilterFields="['name', 'lastName', 'group', 'gender', 'dni', 'age', 'phone', 'address', 'dateOfBirth']"
-        scrollable
-        show-gridlines
-        removable-sort
-        scroll-height="800px"
-    >
-      <template #header>
-        <div class="flex justify-end">
-          <IconField>
-            <InputIcon>
-              <i class="pi pi-search"/>
-            </InputIcon>
-            <InputText v-model="filters['global'].value" placeholder="Buscar"/>
-          </IconField>
+  <DataTable
+      v-model:filters="filters"
+      :value="students"
+      paginator
+      :rows="10"
+      dataKey="id"
+      filterDisplay="menu"
+      :loading="loading"
+      :globalFilterFields="['name', 'lastName', 'group', 'gender', 'dni', 'age', 'phone', 'address', 'dateOfBirth']"
+      scrollable
+      show-gridlines
+      removable-sort
+      scroll-height="800px"
+  >
+    <template #header>
+      <div class="flex justify-end">
+        <IconField>
+          <InputIcon>
+            <i class="pi pi-search"/>
+          </InputIcon>
+          <InputText v-model="filters['global'].value" placeholder="Buscar"/>
+        </IconField>
+      </div>
+    </template>
+
+    <template #empty> No se encontraron alumnos</template>
+
+    <template #loading>
+      <ProgressSpinner/>
+    </template>
+
+    <Column field="name" header="Nombre" style="min-width: 5rem">
+      <template #body="{ data }">
+        {{ data.name }}
+      </template>
+      <template #filter="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text" placeholder="Buscar por Nombre"/>
+      </template>
+    </Column>
+
+    <Column field="lastName" header="Apellido" style="min-width: 5rem">
+      <template #body="{ data }">
+        {{ data.lastName }}
+      </template>
+      <template #filter="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text"
+                   placeholder="Buscar por Apellido"/>
+      </template>
+    </Column>
+
+
+    <Column header="Grupo" filterField="group" :show-filter-match-modes="false" style="min-width: 14rem">
+      <template #body="{ data }">
+        <div class="flex items-center gap-2">
+          <span>{{ data.group }}</span>
         </div>
       </template>
 
-      <template #empty> No se encontraron alumnos</template>
-
-      <template #loading>
-        <ProgressSpinner/>
+      <template #filter="{ filterModel }">
+        <MultiSelect v-model="filterModel.value" :options="groupNames" placeholder="Todos"
+                     style="min-width: 14rem" :maxSelectedLabels="1">
+          <template #option="slotProps">
+            <div class="flex items-center gap-2">
+              <span>{{ slotProps.option }}</span>
+            </div>
+          </template>
+        </MultiSelect>
       </template>
 
-      <Column field="name" header="Nombre" style="min-width: 5rem">
-        <template #body="{ data }">
-          {{ data.name }}
-        </template>
-        <template #filter="{ filterModel }">
-          <InputText v-model="filterModel.value" type="text" placeholder="Buscar por Nombre"/>
-        </template>
-      </Column>
+    </Column>
 
-      <Column field="lastName" header="Apellido" style="min-width: 5rem">
-        <template #body="{ data }">
-          {{ data.lastName }}
-        </template>
-        <template #filter="{ filterModel }">
-          <InputText v-model="filterModel.value" type="text"
-                     placeholder="Buscar por Apellido"/>
-        </template>
-      </Column>
+    <Column field="dateOfBirth" dataType="date" header="Fecha de Nacimiento"
+            style="min-width: 15rem">
+      <template #body="{ data }">
+        {{ formatDate(data.dateOfBirth) }}
+      </template>
+      <template #filter="{ filterModel }">
+        <DatePicker v-model="filterModel.value" dateFormat="dd/mm/yy" placeholder="mm/dd/yyyy"/>
+      </template>
+    </Column>
 
-
-      <Column header="Grupo" filterField="group" :show-filter-match-modes="false" style="min-width: 14rem">
-        <template #body="{ data }">
-          <div class="flex items-center gap-2">
-            <span>{{ data.group }}</span>
-          </div>
-        </template>
-
-        <template #filter="{ filterModel }">
-          <MultiSelect v-model="filterModel.value" :options="groupNames" placeholder="Todos"
-                       style="min-width: 14rem" :maxSelectedLabels="1">
-            <template #option="slotProps">
-              <div class="flex items-center gap-2">
-                <span>{{ slotProps.option }}</span>
-              </div>
-            </template>
-          </MultiSelect>
-        </template>
-
-      </Column>
-
-      <Column field="dateOfBirth" dataType="date" header="Fecha de Nacimiento"
-              style="min-width: 15rem">
-        <template #body="{ data }">
-          {{ formatDate(data.dateOfBirth) }}
-        </template>
-        <template #filter="{ filterModel }">
-          <DatePicker v-model="filterModel.value" dateFormat="dd/mm/yy" placeholder="mm/dd/yyyy" />
-        </template>
-      </Column>
-
-      <Column field="age" header="Edad" :sortable="true" dataType="numeric" style="min-width: 5rem">
-        <template #body="{ data }">
-          {{ data.age }}
-        </template>
-        <template #filter="{ filterModel }">
-          <InputText v-model="filterModel.value" type="text" placeholder="Buscar por Edad"/>
-        </template>
-      </Column>
+    <Column field="age" header="Edad" :sortable="true" dataType="numeric" style="min-width: 5rem">
+      <template #body="{ data }">
+        {{ data.age }}
+      </template>
+      <template #filter="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text" placeholder="Buscar por Edad"/>
+      </template>
+    </Column>
 
 
-      <Column field="gender" header="Género" filterField="gender" :show-filter-match-modes="false"
-              style="min-width: 5rem">
-        <template #body="{ data }">
-          {{ data.gender }}
-        </template>
-        <template #filter="{ filterModel }">
-          <MultiSelect v-model="filterModel.value" :options="genderOptions" placeholder="Todos"
-                       style="min-width: 14rem" :maxSelectedLabels="1">
-            <template #option="slotProps">
-              <div class="flex items-center gap-2">
-                <span>{{ slotProps.option }}</span>
-              </div>
-            </template>
-          </MultiSelect>
-        </template>
-      </Column>
+    <Column field="gender" header="Género" filterField="gender" :show-filter-match-modes="false"
+            style="min-width: 5rem">
+      <template #body="{ data }">
+        {{ data.gender }}
+      </template>
+      <template #filter="{ filterModel }">
+        <MultiSelect v-model="filterModel.value" :options="genderOptions" placeholder="Todos"
+                     style="min-width: 14rem" :maxSelectedLabels="1">
+          <template #option="slotProps">
+            <div class="flex items-center gap-2">
+              <span>{{ slotProps.option }}</span>
+            </div>
+          </template>
+        </MultiSelect>
+      </template>
+    </Column>
 
-      <Column field="phone" header="#Celular" style="min-width: 5rem">
-        <template #body="{ data }">
-          {{ data.phone }}
-        </template>
-        <template #filter="{ filterModel }">
-          <InputText v-model="filterModel.value" type="text"
-                     placeholder="Buscar por Número"/>
-        </template>
-      </Column>
+    <Column field="phone" header="#Celular" style="min-width: 5rem">
+      <template #body="{ data }">
+        {{ data.phone }}
+      </template>
+      <template #filter="{ filterModel }">
+        <InputText v-model="filterModel.value" type="text"
+                   placeholder="Buscar por Número"/>
+      </template>
+    </Column>
 
-      <Column field="address" header="Dirección" style="min-width: 5rem">
-        <template #body="{ data }">
-          {{ data.address }}
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
-                     placeholder="Buscar por Dirección"/>
-        </template>
-      </Column>
+    <Column field="address" header="Dirección" style="min-width: 5rem">
+      <template #body="{ data }">
+        {{ data.address }}
+      </template>
+      <template #filter="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
+                   placeholder="Buscar por Dirección"/>
+      </template>
+    </Column>
 
-      <Column field="dni" header="DNI" style="min-width: 5rem">
-        <template #body="{ data }">
-          {{ data.dni }}
-        </template>
-        <template #filter="{ filterModel, filterCallback }">
-          <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
-                     placeholder="Buscar por DNI"/>
-        </template>
-      </Column>
+    <Column field="dni" header="DNI" style="min-width: 5rem">
+      <template #body="{ data }">
+        {{ data.dni }}
+      </template>
+      <template #filter="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
+                   placeholder="Buscar por DNI"/>
+      </template>
+    </Column>
 
-      <Column header="Opciones" style="min-width: 5rem">
-        <template #body="{ data }">
-          <div class="flex gap-2">
-            <EditStudentDialog @studentUpdated="handleStudentUpdated" :student="data"/>
-            <DeleteStudentButton :data="data" @studentDeleted="handleStudentDeleted"/>
-            <ProfileStudentDialog :student="data" @updateImage="handleStudentUpdated"/>
-          </div>
-        </template>
-      </Column>
+    <Column header="Opciones" style="min-width: 5rem">
+      <template #body="{ data }">
+        <div class="flex gap-2">
+          <EditStudentDialog @studentUpdated="handleStudentUpdated" :student="data"/>
+          <DeleteStudentButton :data="data" @studentDeleted="handleStudentDeleted"/>
+          <ProfileStudentDialog :student="data" @updateImage="handleStudentUpdated"/>
+        </div>
+      </template>
+    </Column>
 
 
-    </DataTable>
-  </div>
+  </DataTable>
 
 </template>
 <style scoped>
