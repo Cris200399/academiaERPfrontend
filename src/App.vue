@@ -30,6 +30,8 @@
           :modal="false"
           :show-close-icon="false"
           position="left"
+          @hide="hideDrawIfIsMobile"
+
       >
         <div class="flex flex-col h-full bg-white">
           <!-- Logo -->
@@ -127,6 +129,7 @@
 <script setup>
 import {ref, onMounted, onUnmounted} from 'vue';
 import {menuItems} from '@/data/menuItems';
+import Drawer from 'primevue/drawer';
 
 const visible = ref(true);
 const isMobile = ref(false);
@@ -146,10 +149,9 @@ onUnmounted(() => {
 });
 
 function hideDrawIfIsMobile() {
-  if (isMobile.value) {
-    visible.value = !visible.value;
-  }
+  visible.value = !isMobile.value;
 }
+
 </script>
 
 
