@@ -7,7 +7,6 @@ import DatePicker from "primevue/datepicker";
 
 import Student from "@/models/student";
 import {paymentMethodsOptions} from "@/constants/paymentMethodsOptions";
-import {paymentTypesOptions} from "@/constants/paymentTypesOptions";
 import {paymentStatusOptions} from "@/constants/paymentStatusOptions";
 
 const groups = ref([]);

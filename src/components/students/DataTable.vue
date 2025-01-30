@@ -8,12 +8,11 @@ import {FilterMatchMode, FilterOperator} from '@primevue/core/api';
 
 import {getStudentService, getStudentsService} from "@/services/studentService";
 import {getGroupsService} from "@/services/groupService";
-import DeleteStudentButton from "@/components/students/DeleteStudentButton.vue";
+import ChangeStudentStatusButton from "@/components/students/DeleteStudentButton.vue";
 import Student from "@/models/student";
 import EditStudentDialog from "@/components/students/EditStudentDialog.vue";
-import {genderOptions} from "@/constants/genderOptions";
 import ProfileStudentDialog from "@/components/students/ProfileStudentDialog.vue";
-import {formatDate} from "../../utils/formatDate";
+import {formatDate} from "@/utils/formatDate";
 
 const students = ref([]);
 const groupNames = ref();
@@ -27,6 +26,8 @@ const props = defineProps({
 
 let groups;
 
+const statuses = ref(['activo', 'inactivo']);
+
 const filters = ref({
   global: {value: null, matchMode: FilterMatchMode.CONTAINS},
   name: {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.STARTS_WITH}]},
@@ -37,7 +38,8 @@ const filters = ref({
   address: {value: null, matchMode: FilterMatchMode.CONTAINS},
   dateOfBirth: {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.DATE_IS}]},
   age: {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.EQUALS}]},
-  dni: {value: null, matchMode: FilterMatchMode.STARTS_WITH}
+  dni: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+  status: { value: null, matchMode: FilterMatchMode.EQUALS },
 });
 
 
@@ -63,9 +65,10 @@ onMounted(async () => {
 });
 
 
-function handleStudentDeleted(id) {
-  students.value = students.value.filter(student => student.id !== id);
-  emit('studentDeleted');
+function handleStudentStatusChanged(id) {
+  const index = students.value.findIndex(student => student.id === id);
+  students.value[index].status = students.value[index].status === 'activo' ? 'inactivo' : 'activo';
+  // emit('studentDeleted');
 }
 
 function handleStudentAdded(newStudent) {
@@ -85,6 +88,14 @@ async function handleStudentUpdated(studentId) {
   students.value[index] = new Student(newStudent);
 }
 
+const getSeverity = (status) => {
+  switch (status) {
+    case 'activo':
+      return 'success';
+    case 'inactivo':
+      return 'danger';
+  }
+}
 </script>
 
 
@@ -118,6 +129,19 @@ async function handleStudentUpdated(studentId) {
     <template #loading>
       <ProgressSpinner/>
     </template>
+
+    <Column field="status" header="Estado" style="min-width: 5rem">
+      <template #body="{ data }">
+        <Tag :value="data.status.charAt(0).toUpperCase() + data.status.slice(1)" :severity="getSeverity(data.status)" />
+      </template>
+      <template #filter="{ filterModel, filterCallback }">
+        <Select v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Selecciona uno" style="min-width: 12rem" :showClear="true">
+          <template #option="slotProps">
+            <Tag :value="slotProps.option.charAt(0).toUpperCase() + slotProps.option.slice(1)" :severity="getSeverity(slotProps.option)" />
+          </template>
+        </Select>
+      </template>
+    </Column>
 
     <Column field="dni" header="DNI" style="min-width: 5rem">
       <template #body="{ data }">
@@ -204,7 +228,7 @@ async function handleStudentUpdated(studentId) {
       <template #body="{ data }">
         <div class="flex gap-2">
           <EditStudentDialog @studentUpdated="handleStudentUpdated" :student="data"/>
-          <DeleteStudentButton :data="data" @studentDeleted="handleStudentDeleted"/>
+          <ChangeStudentStatusButton :student="data" @studentStatusChanged="handleStudentStatusChanged"/>
           <ProfileStudentDialog :student="data" @updateImage="handleStudentUpdated"/>
         </div>
       </template>

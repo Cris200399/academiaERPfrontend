@@ -32,11 +32,12 @@ export const createStudentService = async (student) => {
     }
 };
 
-export const deleteStudentService = async (id) => {
+export const changeStudentStatusService = async (id, status) => {
     try {
-        await axios.delete(`${API_URLS.STUDENTS}/${id}`);
+        const response = await axios.patch(`${API_URLS.STUDENTS}/${id}/status`, {status});
+        return response.data;
     } catch (error) {
-        console.error('Error deleting student:', error);
+        console.error('Error changing student status:', error);
         throw error;
     }
 }

@@ -17,6 +17,7 @@ class Student {
             this.age = this.calculateAge(data.dateOfBirth);
             this.profileImageId = data.profileImageId;
             this.documentId = data.documentId;
+            this.status = data.status;
         } else {
             // Constructor for sending student to an endpoint
             this.name = data.name;
@@ -31,6 +32,7 @@ class Student {
             this.guardian = data.guardian;
             this.profileImageId = data.profileImageId;
             this.documentId = data.documentId;
+            this.status = data.status
         }
     }
 

@@ -1,4 +1,5 @@
 <template>
+  <ConfirmDialog/>
   <!-- Barra de navegación superior (visible solo en pantallas pequeñas) -->
   <nav class="bg-white shadow-md md:hidden mb-2">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -133,10 +134,6 @@ const isMobile = ref(false);
 const checkScreenSize = () => {
   isMobile.value = window.innerWidth < 768; // sm: 640px
   visible.value = !isMobile.value;
-};
-
-const toggleMenu = () => {
-  visible.value = !visible.value;
 };
 
 onMounted(() => {
