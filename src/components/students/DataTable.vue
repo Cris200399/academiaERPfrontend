@@ -136,6 +136,10 @@ const getSeverity = (status) => {
       </template>
       <template #filter="{ filterModel, filterCallback }">
         <Select v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Selecciona uno" style="min-width: 12rem" :showClear="true">
+          <template #value="slotProps">
+            <Tag v-if="slotProps.value" :value="slotProps.value.charAt(0).toUpperCase() + slotProps.value.slice(1)" :severity="getSeverity(slotProps.value)" />
+            <span v-else>{{ slotProps.placeholder }}</span>
+          </template>
           <template #option="slotProps">
             <Tag :value="slotProps.option.charAt(0).toUpperCase() + slotProps.option.slice(1)" :severity="getSeverity(slotProps.option)" />
           </template>

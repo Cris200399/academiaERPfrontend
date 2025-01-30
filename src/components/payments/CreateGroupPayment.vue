@@ -4,6 +4,7 @@ import {onMounted, ref} from "vue";
 import {getGroupsService, getGroupWithStudentsService} from "@/services/groupService";
 import Group from "@/models/group";
 import DatePicker from "primevue/datepicker";
+import Select from "primevue/select";
 
 import Student from "@/models/student";
 import {paymentMethodsOptions} from "@/constants/paymentMethodsOptions";
@@ -32,8 +33,8 @@ onMounted(async () => {
 
 async function onChangeGroup() {
   students.value = [];
-  if (selectedGroup.value && selectedGroup.value.length === 1) {
-    await getGroupWithStudentsService(selectedGroup.value[0]).then(studentsResponseData => {
+  if (selectedGroup.value) {
+    await getGroupWithStudentsService(selectedGroup.value.id).then(studentsResponseData => {
       studentsResponseData.members.map(student => {
         students.value.push(
             new Student(student)
@@ -41,6 +42,7 @@ async function onChangeGroup() {
       });
     });
   }
+
 }
 
 function togglePaymentMethods(paymentOption) {
@@ -66,28 +68,45 @@ function onSubmit() {
       <h1 class="text-6xl font-bold mb-10">Crear Pago Grupal</h1>
       <div class="mt-4">
         <h2 class="text-4xl font-semibold mb-4">Seleccionar el grupo</h2>
-        <MultiSelect option-value="id" :selection-limit="1" v-model="selectedGroup" :options="groups" optionLabel="name"
-                     @change="onChangeGroup"
-                     filter
-                     placeholder="Seleccionar grupo"
-                     :maxSelectedLabels="3" class="w-full md:w-80">
-        </MultiSelect>
-      </div>
-      <div v-if=" selectedGroup && selectedGroup.length === 1" class="mt-4">
-        <h2 class="text-4xl font-semibold mb-4">Seleccionar el estudiante</h2>
-        <MultiSelect option-value="id" :selection-limit="1" v-model="selectedStudent" :options="students"
-                     optionLabel="name"
-                     filter
-                     placeholder="Seleccionar estudiante"
-                     :maxSelectedLabels="3" class="w-full md:w-80">
+        <Select v-model="selectedGroup" :options="groups" filter optionLabel="name" placeholder="Seleccionar grupo"
+                @update:modelValue="onChangeGroup"
+                class="w-full md:w-56">
+          <template #value="slotProps">
+            <div v-if="slotProps.value" class="flex items-center">
+              <div>{{ slotProps.value.name }}</div>
+            </div>
+            <span v-else>
+            {{ slotProps.placeholder }}
+        </span>
+          </template>
           <template #option="slotProps">
-            <div class="flex items center gap-2">
+            <div class="flex items-center">
+              <div>{{ slotProps.option.name }}</div>
+            </div>
+          </template>
+        </Select>
+
+      </div>
+      <div v-if=" selectedGroup" class="mt-4">
+        <h2 class="text-4xl font-semibold mb-4">Seleccionar el estudiante</h2>
+
+        <Select v-model="selectedStudent" :options="students" filter optionLabel="name"
+                placeholder="Seleccionar estudiante"
+                class="w-full md:w-56">
+          <template #value="slotProps">
+            <div v-if="slotProps.value" class="flex items-center">
+              <div>{{ slotProps.value.getFullName() }}</div>
+            </div>
+            <span v-else>{{ slotProps.placeholder }}</span>
+          </template>
+          <template #option="slotProps">
+            <div class="flex items-center">
               <div>{{ slotProps.option.getFullName() }}</div>
             </div>
           </template>
-        </MultiSelect>
+        </Select>
 
-        <div v-if="selectedStudent && selectedStudent.length === 1" class="mt-4">
+        <div v-if="selectedStudent " class="mt-4">
           <h2 class="text-4xl font-semibold mb-4">Monto</h2>
           <div class="display-width">
             <InputNumber v-model="amount" inputId="currency-peru" mode="currency" currency="PEN" locale="es-PE" fluid/>
