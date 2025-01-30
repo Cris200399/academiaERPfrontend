@@ -206,7 +206,7 @@
           severity="info"
           variant="outlined"
           raised
-          @click="visible = false"
+          @click="hideDialog"
           class="w-1/3"
       />
       <Button
@@ -238,7 +238,7 @@ const toast = useToast();
 const visible = ref(false);
 
 // eslint-disable-next-line no-undef
-const emit = defineEmits(['studentAdded']);
+const emit = defineEmits(['studentAdded', 'hideDialog']);
 
 const formData = reactive({
   name: '',
@@ -280,6 +280,10 @@ async function onVisible() {
   visible.value = true;
   const groups = await getAvailableGroupsService();
   groupOptions.value = groups.map(group => ({name: group.name, id: group._id}));
+}
+
+function hideDialog() {
+  emit('hideDialog');
 }
 
 // Computed property to check if student is under 18
@@ -337,10 +341,6 @@ const validateField = (field) => {
       if (!formData.gender) errors.gender = 'El género es requerido';
       break;
 
-    case 'group':
-      if (!formData.group) errors.group = 'El grupo es requerido';
-      break;
-
       // Guardian validations
     case 'guardianName':
       if (isUnderAge.value && !formData.guardian.name) {
@@ -364,7 +364,7 @@ const validateField = (field) => {
 
 // Validate all fields
 const validateForm = () => {
-  const fields = ['name', 'lastName', 'email', 'dni', 'phone', 'dateOfBirth', 'gender', 'group'];
+  const fields = ['name', 'lastName', 'email', 'dni', 'phone', 'dateOfBirth', 'gender'];
   fields.forEach(validateField);
 
   if (isUnderAge.value) {
@@ -377,7 +377,7 @@ const validateForm = () => {
 // Check if form is valid
 const isFormValid = computed(() => {
   const hasErrors = Object.values(errors).some(error => error !== '');
-  const requiredFields = ['name', 'lastName', 'email', 'dni', 'phone', 'dateOfBirth', 'gender', 'group'];
+  const requiredFields = ['name', 'lastName', 'email', 'dni', 'phone', 'dateOfBirth', 'gender'];
   const hasAllFields = requiredFields.every(field => formData[field]);
 
   if (isUnderAge.value) {
@@ -437,7 +437,6 @@ const handleSubmit = async () => {
         gender: formData.gender,
         dateOfBirth: formData.dateOfBirth,
         phone: formData.phone,
-        group: formData.group.id,
         dni: formData.dni,
         guardian: {
           name: formData.guardian.name,
@@ -454,10 +453,11 @@ const handleSubmit = async () => {
         gender: formData.gender,
         dateOfBirth: formData.dateOfBirth,
         phone: formData.phone,
-        group: formData.group.id,
         dni: formData.dni
       });
-
+      if (formData.group) {
+        newStudent.group = formData.group.id;
+      }
     }
 
     try {

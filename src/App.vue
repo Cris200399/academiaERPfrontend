@@ -1,5 +1,7 @@
 <template>
   <ConfirmDialog/>
+  <Dialog/>
+  <Toast/>
   <!-- Barra de navegación superior (visible solo en pantallas pequeñas) -->
   <nav class="bg-white shadow-md md:hidden mb-2">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

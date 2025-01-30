@@ -11,7 +11,8 @@
       </div>
       <div class="flex items-end justify-center">
         <Button icon="pi pi-plus" class="text-lg" severity="success" :label="buttonLabel" @click="showAddGroupDialog"/>
-        <AddGroupDialog v-model:visible="visibleGroupDialog" @groupAdded="handleGroupAdded"/>
+        <AddGroupDialog v-model:visible="visibleGroupDialog" @groupAdded="handleGroupAdded"
+                        @hideDialog="visibleGroupDialog = false"/>
       </div>
     </div>
   </div>

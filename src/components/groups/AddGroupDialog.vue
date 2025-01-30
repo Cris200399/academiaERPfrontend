@@ -75,20 +75,25 @@
         </div>
 
         <!-- Botones -->
-        <div class="flex justify-end gap-4 mt-8">
-          <button
+        <div class="flex justify-center gap-2 mt-8">
+          <div class="w-2/3 flex gap-2">
+
+          <Button
               type="button"
-              class="px-6 py-2 rounded-lg bg-gray-100 hover:bg-gray-200"
-              @click="visible = false"
-          >
-            Cancelar
-          </button>
-          <button
+              severity="info"
+              class="w-2/5 px-2 py-2 rounded-lg bg-gray-100 hover:bg-gray-200"
+              @click="hideDialog"
+              label="Cancelar"
+              autofocus
+          />
+          <Button
               type="submit"
-              class="px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
-          >
-            Crear
-          </button>
+              severity="success"
+              label="Crear"
+              class="w-3/5 px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
+          />
+          </div>
+
         </div>
       </form>
     </div>
@@ -102,7 +107,9 @@ import {ref} from 'vue'
 import {createGroupService} from "@/services/groupService";
 import {useToast} from "primevue/usetoast";
 import Group from "@/models/group";
-const visible = ref(true);
+
+
+const visible = ref(false);
 
 const toast = useToast();
 
@@ -117,7 +124,7 @@ const maxMembers = ref();
 
 
 // eslint-disable-next-line no-undef
-const emit = defineEmits(['groupAdded']);
+const emit = defineEmits(['groupAdded', 'hideDialog']);
 
 
 function toggleDay(day) {
@@ -135,6 +142,10 @@ function resetForm() {
   selectedDays.value = [];
   startTime.value = '00:00';
   endTime.value = '23:00';
+}
+
+function hideDialog(){
+  emit('hideDialog');
 }
 
 async function handleSubmit() {
@@ -161,3 +172,6 @@ async function handleSubmit() {
 
 }
 </script>
+
+<style scoped>
+</style>

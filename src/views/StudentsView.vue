@@ -15,7 +15,7 @@
                 label="Agregar Alumno"/>
         <AddStudentDialog
             v-model:visible="visibleAddStudentDialog"
-            @studentAdded='handleStudentAdded'/>
+            @studentAdded='handleStudentAdded' @hideDialog="visibleAddStudentDialog = false"/>
       </div>
     </div>
   </div>
