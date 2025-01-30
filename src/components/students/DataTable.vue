@@ -97,9 +97,8 @@ async function handleStudentUpdated(studentId) {
       dataKey="id"
       filterDisplay="menu"
       :loading="loading"
-      :globalFilterFields="['name', 'lastName', 'group', 'gender', 'dni', 'age', 'phone', 'address', 'dateOfBirth']"
+      :globalFilterFields="['name', 'lastName', 'group', 'dni', 'age', 'phone', 'dateOfBirth']"
       scrollable
-      show-gridlines
       removable-sort
       scroll-height="800px"
   >
@@ -120,27 +119,37 @@ async function handleStudentUpdated(studentId) {
       <ProgressSpinner/>
     </template>
 
-    <Column field="name" header="Nombre" style="min-width: 5rem">
+    <Column field="dni" header="DNI" style="min-width: 5rem">
+      <template #body="{ data }">
+        {{ data.dni }}
+      </template>
+      <template #filter="{ filterModel, filterCallback }">
+        <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
+                   placeholder="Buscar por DNI"/>
+      </template>
+    </Column>
+
+    <Column field="name" header="Nombre(s)" style="min-width: 5rem">
       <template #body="{ data }">
         {{ data.name }}
       </template>
       <template #filter="{ filterModel }">
-        <InputText v-model="filterModel.value" type="text" placeholder="Buscar por Nombre"/>
+        <InputText v-model="filterModel.value" type="text" placeholder="Buscar por nombre(s)"/>
       </template>
     </Column>
 
-    <Column field="lastName" header="Apellido" style="min-width: 5rem">
+    <Column field="lastName" header="Apellido(s)" style="min-width: 5rem">
       <template #body="{ data }">
         {{ data.lastName }}
       </template>
       <template #filter="{ filterModel }">
         <InputText v-model="filterModel.value" type="text"
-                   placeholder="Buscar por Apellido"/>
+                   placeholder="Buscar por apellidos(s)"/>
       </template>
     </Column>
 
 
-    <Column header="Grupo" filterField="group" :show-filter-match-modes="false" style="min-width: 14rem">
+    <Column header="Grupo" filterField="group" :show-filter-match-modes="false" style="min-width: 5rem">
       <template #body="{ data }">
         <div class="flex items-center gap-2">
           <span>{{ data.group }}</span>
@@ -160,8 +169,8 @@ async function handleStudentUpdated(studentId) {
 
     </Column>
 
-    <Column field="dateOfBirth" dataType="date" header="Fecha de Nacimiento"
-            style="min-width: 15rem">
+    <Column field="dateOfBirth" dataType="date" header="F. Nacimiento"
+            style="min-width: 5rem">
       <template #body="{ data }">
         {{ formatDate(data.dateOfBirth) }}
       </template>
@@ -180,23 +189,6 @@ async function handleStudentUpdated(studentId) {
     </Column>
 
 
-    <Column field="gender" header="Género" filterField="gender" :show-filter-match-modes="false"
-            style="min-width: 5rem">
-      <template #body="{ data }">
-        {{ data.gender }}
-      </template>
-      <template #filter="{ filterModel }">
-        <MultiSelect v-model="filterModel.value" :options="genderOptions" placeholder="Todos"
-                     style="min-width: 14rem" :maxSelectedLabels="1">
-          <template #option="slotProps">
-            <div class="flex items-center gap-2">
-              <span>{{ slotProps.option }}</span>
-            </div>
-          </template>
-        </MultiSelect>
-      </template>
-    </Column>
-
     <Column field="phone" header="#Celular" style="min-width: 5rem">
       <template #body="{ data }">
         {{ data.phone }}
@@ -207,25 +199,6 @@ async function handleStudentUpdated(studentId) {
       </template>
     </Column>
 
-    <Column field="address" header="Dirección" style="min-width: 5rem">
-      <template #body="{ data }">
-        {{ data.address }}
-      </template>
-      <template #filter="{ filterModel, filterCallback }">
-        <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
-                   placeholder="Buscar por Dirección"/>
-      </template>
-    </Column>
-
-    <Column field="dni" header="DNI" style="min-width: 5rem">
-      <template #body="{ data }">
-        {{ data.dni }}
-      </template>
-      <template #filter="{ filterModel, filterCallback }">
-        <InputText v-model="filterModel.value" type="text" @input="filterCallback()"
-                   placeholder="Buscar por DNI"/>
-      </template>
-    </Column>
 
     <Column header="Opciones" style="min-width: 5rem">
       <template #body="{ data }">

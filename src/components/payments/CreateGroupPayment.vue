@@ -95,13 +95,13 @@ function onSubmit() {
           </div>
           <div>
             <div class="my-6">
-              <label class="block text-4xl font-semibold mb-4">Medio de pago</label>
+              <label class="block text-4xl font-semibold mb-4">Método(s) de pago</label>
               <div class="flex flex-wrap gap-2">
                 <button
                     v-for="paymentOption in paymentMethodsOptions"
                     :key="paymentOption.value"
                     type="button"
-                    :class="['px-4 py-2 rounded-full', paymentMethods.includes(paymentOption) ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800']"
+                    :class="['px-4 py-2 rounded-full', paymentMethods.includes(paymentOption) ? 'bg-black text-white' : 'bg-gray-100 text-gray-800']"
                     @click="togglePaymentMethods(paymentOption)">
                   {{ paymentOption.name }}
                 </button>
@@ -110,9 +110,11 @@ function onSubmit() {
           </div>
           <div>
             <div class="my-6">
-              <label class="block text-4xl font-semibold mb-4">Ingresar la fecha de inicio y fin?</label>
+              <label class="block text-4xl font-semibold mb-4">Fecha Inicio-Fin</label>
             </div>
-            <DatePicker v-model="dates" selectionMode="range" :manualInput="false" show-button-bar/>
+            <div class="display-width">
+              <DatePicker v-model="dates" selectionMode="range" fluid show-icon :manualInput="true" show-button-bar/>
+            </div>
           </div>
           <div>
             <div class="my-6">
@@ -122,19 +124,21 @@ function onSubmit() {
             </div>
           </div>
           <div class="mb-4">
-            <h2 class="text-4xl font-semibold mb-4">Tipo de pago</h2>
+            <h2 class="text-4xl font-semibold mb-4">Estado de pago</h2>
             <div class="flex flex-wrap gap-4">
               <div v-for="paymentStatusOption in paymentStatusOptions" :key="paymentStatusOption.value"
                    class="flex items-center gap-2">
                 <RadioButton v-model="paymentStatus" :inputId="paymentStatusOption.name"
                              :name="paymentStatusOption.name"
+                             variant="filled"
                              :value="paymentStatusOption.value"/>
                 <label class="text-xl" :for="paymentStatusOption.name">{{ paymentStatusOption.name }}</label>
               </div>
             </div>
           </div>
           <div class="mb-4 flex justify-center">
-            <Button label="Crear Pago" variant="outlined" class="w-2/4 text-3xl" icon="pi pi-check" @click="onSubmit" iconPos="left" severity="success" style="font-size: 1.5rem"/>
+            <Button label="Crear Pago" variant="outlined" class="w-2/4 text-3xl" icon="pi pi-check" @click="onSubmit"
+                    iconPos="left" severity="success" style="font-size: 1.5rem"/>
 
           </div>
         </div>

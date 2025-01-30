@@ -11,7 +11,7 @@ const routes = [
     {path: '/class', name: 'Class', component: Clases, icon: 'pi pi-th-large'},
     {path: '/students', name: 'Students', component: AlumnosView, icon: 'pi pi-users'},
     {path: '/groups', name: 'Groups', component: GroupsView, icon: 'pi pi-gift'},
-    {path: '/assistance', name: 'Assistance', component: AssistanceView, icon: 'pi pi-check'},
+    {path: '/students/assistance', name: 'Assistance', component: AssistanceView, icon: 'pi pi-check'},
     {path: '/create-payment', name: 'CreatePayment', component: CreateGroupPaymentView, icon: 'pi pi-money-bill'},
 ];
 

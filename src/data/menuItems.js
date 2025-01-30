@@ -8,7 +8,18 @@ export const menuItems = [
     {
         label: 'Alumnos',
         icon: 'pi pi-users',
-        route: '/students'
+        subItems: [
+            {
+                label: 'Lista de Alumnos',
+                route: '/students',
+                icon: 'pi pi-users',
+            },
+            {
+                label: 'Asistencia',
+                route: '/students/assistance',
+                icon: 'pi pi-list',
+            },
+        ]
     },
     {
         label: 'Horarios de Clases',
@@ -19,11 +30,6 @@ export const menuItems = [
         label: 'Grupos',
         icon: 'pi pi-table',
         route: '/groups',
-    },
-    {
-        label: 'Asistencia',
-        icon: 'pi pi-check',
-        route: '/assistance',
     },
     {
         label: 'Crear Pago',
