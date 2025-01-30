@@ -34,7 +34,7 @@ onMounted(async () => {
   if (props.student.profileImageId) {
     await getProfileImage();
   } else {
-    image.value = 'src/assets/profileImageBlank.webp';
+    image.value = '/src/assets/profileImageBlank.webp';
   }
 
   await getTodayAssistancePerStudentService(props.student.id, props.groupId).then((response) => {
@@ -90,7 +90,7 @@ async function deleteAssistance() {
   if (response) {
     studentHasAssisted.value = false;
     assistance = null;
-    toast.add({severity: 'success', summary: 'Asistencia eliminada', life: 1000});
+    toast.add({severity: 'info', summary: 'Asistencia eliminada', life: 1000});
   } else {
     toast.add({severity: 'error', summary: 'Error al eliminar la asistencia', life: 1000});
   }
@@ -103,11 +103,7 @@ async function deleteAssistance() {
       class="p-6 border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-900 rounded flex flex-col">
     <div class="bg-surface-50 flex justify-center rounded p-4">
       <div class="relative mx-auto">
-        <Avatar
-            :image="image"
-            class="p-overlay-badge img-size "
-            :pt="{ image: { class: 'rounded' } }"
-        />
+        <Image :src="image" alt="Image" width="250" />
       </div>
     </div>
     <div class="pt-6">
