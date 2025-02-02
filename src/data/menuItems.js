@@ -22,7 +22,7 @@ export const menuItems = [
         ]
     },
     {
-        label: 'Horarios de Clases',
+        label: 'Calendario',
         icon: 'pi pi-calendar',
         route: '/class'
     },

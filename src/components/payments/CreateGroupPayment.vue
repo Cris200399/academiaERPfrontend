@@ -9,14 +9,20 @@ import Select from "primevue/select";
 import Student from "@/models/student";
 import {paymentMethodsOptions} from "@/constants/paymentMethodsOptions";
 import {paymentStatusOptions} from "@/constants/paymentStatusOptions";
+import GroupPayment from "@/models/groupPayment";
+import {useToast} from "primevue/usetoast";
+import {createGroupPaymentService} from "@/services/groupPaymentService";
 
 const groups = ref([]);
 const selectedGroup = ref();
+
+const toast = useToast();
 
 const selectedStudent = ref();
 const students = ref([]);
 
 const amount = ref();
+const concept = ref();
 
 const paymentMethods = ref([]);
 const dates = ref();
@@ -54,8 +60,35 @@ function togglePaymentMethods(paymentOption) {
   }
 }
 
-function onSubmit() {
-  alert('Submit');
+async function onSubmit() {
+  const newGroupPayment = new GroupPayment(
+      selectedStudent.value.id,
+      amount.value,
+      paymentMethods.value.map(p => p.value),
+      selectedGroup.value.id,
+      dates.value[0],
+      dates.value[1],
+      concept.value,
+      paymentStatus.value
+  );
+
+  try {
+    await createGroupPaymentService(newGroupPayment);
+    resetForm();
+    toast.add({severity: 'success', summary: 'Pago creado', detail: 'El pago ha sido creado correctamente', life: 1000});
+  } catch (e) {
+    toast.add({severity: 'error', summary: 'Error', detail: 'Ha ocurrido un error al crear el pago', life: 1000});
+  }
+}
+
+function resetForm(){
+  selectedGroup.value = null;
+  selectedStudent.value = null;
+  amount.value = null;
+  concept.value = null;
+  paymentMethods.value = [];
+  dates.value = null;
+  paymentStatus.value = null;
 }
 
 
@@ -136,9 +169,9 @@ function onSubmit() {
           </div>
           <div>
             <div class="my-6">
-              <label class="block text-4xl font-semibold mb-4">Detalle</label>
-              <Textarea auto-resize class="w-2/4 p-3 rounded-lg border border-gray-200"
-                        placeholder="Agregar algun detalle"/>
+              <label class="block text-4xl font-semibold mb-4">Concepto</label>
+              <Textarea v-model="concept" auto-resize class="w-2/4 p-3 rounded-lg border border-gray-200"
+                        placeholder="Concepto de pago"/>
             </div>
           </div>
           <div class="mb-4">
