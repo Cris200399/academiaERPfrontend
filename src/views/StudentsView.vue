@@ -10,7 +10,12 @@
         </div>
       </div>
       <div class="flex items-end justify-center">
-        <AddStudentDialog @studentAdded='handleStudentAdded'></AddStudentDialog>
+        <Button icon="pi pi-plus" class="text-lg" severity="success"
+                @click="onVisibleAddStudentDialog"
+                label="Agregar Alumno"/>
+        <AddStudentDialog
+            v-model:visible="visibleAddStudentDialog"
+            @studentAdded='handleStudentAdded' @hideDialog="visibleAddStudentDialog = false"/>
       </div>
     </div>
   </div>
@@ -32,6 +37,8 @@ import {ref, onMounted} from 'vue';
 
 const totalStudents = ref();
 
+const visibleAddStudentDialog = ref(false);
+
 
 const newStudentAdded = ref();
 
@@ -47,6 +54,10 @@ function handleStudentDeleted() {
 function handleStudentAdded(newStudent) {
   totalStudents.value++;
   newStudentAdded.value = newStudent;
+}
+
+function onVisibleAddStudentDialog() {
+  visibleAddStudentDialog.value = !visibleAddStudentDialog.value;
 }
 
 </script>

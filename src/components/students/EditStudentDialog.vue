@@ -1,5 +1,7 @@
 ﻿<template>
-  <Dialog v-model:visible="visible" @show="onVisible" modal header="Agregar Alumno" class="w-[700px]" @hide="resetForm">
+  <Button icon="pi pi-pencil" class="p-button-rounded text-lg" severity="info" @click="onShowDialog"/>
+
+  <Dialog v-model:visible="visible" modal header="Editar Alumno" class="w-[700px]" :draggable="false" @hide="resetForm">
     <Divider class="bg-[#E2E6F9] h-1 my-4"/>
 
     <div class="grid grid-cols-2 gap-4">
@@ -85,6 +87,7 @@
               v-model="formData.dateOfBirth"
               inputId="on_label"
               showIcon
+              date-format="dd/mm/yy"
               iconDisplay="input"
               class="input-size"
               :class="{'p-invalid': errors.dateOfBirth}"
@@ -96,14 +99,13 @@
         <small class="p-error" v-if="errors.dateOfBirth">{{ errors.dateOfBirth }}</small>
       </div>
 
-
       <!-- Phone -->
       <div class="flex flex-col justify-center ">
         <FloatLabel variant="on" class="input-size">
           <InputMask
               id="phone"
               v-model="formData.phone"
-              mask="999999999"
+              mask="999 999 999"
               fluid
               :class="{'p-invalid': errors.phone}"
               @blur="validateField('phone')"
@@ -129,7 +131,6 @@
         </FloatLabel>
       </div>
 
-
       <!-- DNI -->
       <div class="flex flex-col justify-center ">
         <FloatLabel variant="on" class="input-size">
@@ -154,7 +155,7 @@
       </Divider>
 
       <div class="grid grid-cols-2 gap-4">
-        <div class="flex flex-col justify-center">
+        <div class="flex flex-wrap justify-center items-center">
           <FloatLabel variant="on" class="input-size">
             <InputText
                 v-model="formData.guardian.name"
@@ -168,13 +169,12 @@
           <small class="p-error" v-if="errors.guardianName">{{ errors.guardianName }}</small>
         </div>
 
-        <div class="flex flex-col justify-center">
+        <div class="flex flex-wrap justify-center items-center">
           <FloatLabel variant="on" class="input-size">
-            <InputMask
-                id="phone"
+            <InputText
                 v-model="formData.guardian.phone"
-                mask="999999999"
-                fluid
+                size="large"
+                class="input-size"
                 :class="{'p-invalid': errors.guardianPhone}"
                 @blur="validateField('guardianPhone')"
             />
@@ -183,7 +183,7 @@
           <small class="p-error" v-if="errors.guardianPhone">{{ errors.guardianPhone }}</small>
         </div>
 
-        <div class="flex flex-col justify-center col-span-2">
+        <div class="flex flex-wrap justify-center items-center col-span-2">
           <FloatLabel variant="on" class="input-size">
             <InputText
                 v-model="formData.guardian.relationship"
@@ -206,12 +206,12 @@
           severity="info"
           variant="outlined"
           raised
-          @click="hideDialog"
+          @click="visible = false"
           class="w-1/3"
       />
       <Button
           type="button"
-          label="Crear"
+          label="Guardar"
           severity="info"
           raised
           class="w-1/3"
@@ -219,6 +219,7 @@
           :disabled="!isFormValid"
       />
     </div>
+
   </Dialog>
 </template>
 
@@ -226,21 +227,26 @@
 import {ref, reactive, computed, watch} from 'vue';
 import Select from 'primevue/select';
 import {useToast} from "primevue/usetoast";
-import {createStudentService} from "@/services/studentService";
-import Student from "/src/models/student.js";
-import {getAvailableGroupsService} from "@/services/groupService";
-
+import {updateStudentService} from "@/services/studentService";
+import {getGroupsService} from "@/services/groupService";
 import FloatLabel from 'primevue/floatlabel';
 import DatePicker from 'primevue/datepicker';
 import {genderOptions} from "@/constants/genderOptions";
+import Student from "@/models/student";
 
 const toast = useToast();
 const visible = ref(false);
 
 // eslint-disable-next-line no-undef
-const emit = defineEmits(['studentAdded', 'hideDialog']);
+const props = defineProps({
+  student: Student
+});
+
+// eslint-disable-next-line no-undef
+const emit = defineEmits(['studentUpdated']);
 
 const formData = reactive({
+  id: '',
   name: '',
   lastName: '',
   address: '',
@@ -276,14 +282,13 @@ const errors = reactive({
 
 const groupOptions = ref([]);
 
-async function onVisible() {
-  visible.value = true;
-  const groups = await getAvailableGroupsService();
+async function onShowDialog() {
+  const groups = await getGroupsService();
   groupOptions.value = groups.map(group => ({name: group.name, id: group._id}));
-}
-
-function hideDialog() {
-  emit('hideDialog');
+  visible.value = true;
+  Object.assign(formData, props.student);
+  formData.group = groupOptions.value.find(groupOption => groupOption.name === props.student.group);
+  // formData.gender = genderOptions.value.find(genderOption => genderOption.value === props.student.gender);
 }
 
 // Computed property to check if student is under 18
@@ -341,6 +346,10 @@ const validateField = (field) => {
       if (!formData.gender) errors.gender = 'El género es requerido';
       break;
 
+    case 'group':
+      if (!formData.group) errors.group = 'El grupo es requerido';
+      break;
+
       // Guardian validations
     case 'guardianName':
       if (isUnderAge.value && !formData.guardian.name) {
@@ -364,7 +373,7 @@ const validateField = (field) => {
 
 // Validate all fields
 const validateForm = () => {
-  const fields = ['name', 'lastName', 'email', 'dni', 'phone', 'dateOfBirth', 'gender'];
+  const fields = ['name', 'lastName', 'email', 'dni', 'phone', 'dateOfBirth', 'gender', 'group'];
   fields.forEach(validateField);
 
   if (isUnderAge.value) {
@@ -377,7 +386,7 @@ const validateForm = () => {
 // Check if form is valid
 const isFormValid = computed(() => {
   const hasErrors = Object.values(errors).some(error => error !== '');
-  const requiredFields = ['name', 'lastName', 'email', 'dni', 'phone', 'dateOfBirth', 'gender'];
+  const requiredFields = ['name', 'lastName', 'email', 'dni', 'phone', 'dateOfBirth', 'gender', 'group'];
   const hasAllFields = requiredFields.every(field => formData[field]);
 
   if (isUnderAge.value) {
@@ -427,9 +436,9 @@ const handleSubmit = async () => {
   validateForm();
 
   if (isFormValid.value) {
-    let newStudent;
+    let updatedStudent;
     if (isUnderAge.value) {
-      newStudent = new Student({
+      updatedStudent = {
         name: formData.name,
         lastName: formData.lastName,
         address: formData.address,
@@ -437,15 +446,17 @@ const handleSubmit = async () => {
         gender: formData.gender,
         dateOfBirth: formData.dateOfBirth,
         phone: formData.phone,
+        group: formData.group.id,
         dni: formData.dni,
         guardian: {
+          id: formData.guardian.id,
           name: formData.guardian.name,
           phone: formData.guardian.phone,
           relationship: formData.guardian.relationship
         }
-      });
+      };
     } else {
-      newStudent = new Student({
+      updatedStudent = {
         name: formData.name,
         lastName: formData.lastName,
         address: formData.address,
@@ -453,24 +464,23 @@ const handleSubmit = async () => {
         gender: formData.gender,
         dateOfBirth: formData.dateOfBirth,
         phone: formData.phone,
+        group: formData.group.id,
         dni: formData.dni
-      });
-      if (formData.group) {
-        newStudent.group = formData.group.id;
-      }
+      };
     }
-
     try {
-      const newStudentAdded = await createStudentService(newStudent);
-      toast.add({severity: 'success', summary: 'Éxito', detail: 'Alumno creado exitosamente', life: 1500});
-      emit('studentAdded', newStudentAdded);
+      await updateStudentService(props.student.id, updatedStudent);
+      toast.add({severity: 'success', summary: 'Éxito', detail: 'Alumno actualizado exitosamente', life: 1000});
+      emit('studentUpdated', props.student.id);
       visible.value = false;
       resetForm();
     } catch (error) {
-      toast.add({severity: 'error', summary: 'Error', detail: 'Hubo un error al crear el alumno', life: 1500});
+      toast.add({severity: 'error', summary: 'Error', detail: 'Hubo un error al actualizar el alumno', life: 1500});
     }
   }
 };
+
+
 </script>
 
 <style scoped>

@@ -1,7 +1,7 @@
-﻿<template>
-  <Dialog v-model:visible="visible" modal @hide="resetForm" :draggable='false'>
+<template>
+  <Dialog modal @hide="resetForm" :draggable='false'>
     <div class="max-w-2xl mx-auto p-6">
-      <h1 class="text-3xl font-bold mb-10">Crear grupo</h1>
+      <h1 class="text-3xl font-bold mb-10">Editar grupo</h1>
       <form @submit.prevent="handleSubmit">
         <!-- Nombre del Grupo -->
         <div class="mb-6">
@@ -14,7 +14,7 @@
           >
         </div>
 
-        <!-- Descripción del Grupo-->
+        <!-- Descripción del Grupo -->
         <div class="mb-6">
           <label class="block text-xl font-bold mb-4">Descripción del Grupo</label>
           <Textarea auto-resize v-model="description"
@@ -22,7 +22,6 @@
                     placeholder="Ingresa una descripción del grupo"
           ></Textarea>
         </div>
-
 
         <!-- Días de repetición -->
         <div class="mb-6">
@@ -33,30 +32,26 @@
                 :key="day"
                 type="button"
                 :class="[
-              'px-4 py-2 rounded-full',
-              selectedDays.includes(day)
-                ? 'bg-blue-500 text-white'
-                : 'bg-gray-100 text-gray-800'
-            ]"
+                'px-4 py-2 rounded-full',
+                selectedDays.includes(day) ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-800'
+              ]"
                 @click="toggleDay(day)"
             >
               {{ day }}
             </button>
           </div>
         </div>
-        <!-- Max number of members -->
+
+        <!-- Cantidad máxima de alumnos -->
         <div class="mb-6">
           <label class="block text-xl font-bold mb-4">Cantidad máxima de alumnos</label>
           <InputNumber v-model="maxMembers" :min="0" :max="50" fluid/>
         </div>
-        <!--              class="w-full p-3 rounded-lg border border-gray-200"-->
 
         <!-- Horario -->
         <div class="mb-6">
           <label class="block text-xl font-bold mb-4">Hora</label>
           <div class="flex flex-wrap items-center">
-            <div class="mb-2 mr-4">Horas de clase:</div>
-
             <div class="flex items-center gap-4">
               <input
                   v-model="startTime"
@@ -71,29 +66,22 @@
               >
             </div>
           </div>
-
         </div>
-
         <!-- Botones -->
-        <div class="flex justify-center gap-2 mt-8">
-          <div class="w-2/3 flex gap-2">
-
-          <Button
+        <div class="flex justify-end gap-4 mt-8">
+          <button
               type="button"
-              severity="info"
-              class="w-2/5 px-2 py-2 rounded-lg bg-gray-100 hover:bg-gray-200"
-              @click="hideDialog"
-              label="Cancelar"
-              autofocus
-          />
-          <Button
+              class="px-6 py-2 rounded-lg bg-gray-100 hover:bg-gray-200"
+              @click="emitHideDialog"
+          >
+            Cancelar
+          </button>
+          <button
               type="submit"
-              severity="success"
-              label="Crear"
-              class="w-3/5 px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
-          />
-          </div>
-
+              class="px-6 py-2 rounded-lg bg-blue-500 text-white hover:bg-blue-600"
+          >
+            Guardar
+          </button>
         </div>
       </form>
     </div>
@@ -101,56 +89,53 @@
 </template>
 
 <script setup>
+import {ref} from 'vue';
+import {updateGroupService} from '@/services/groupService';
+import {useToast} from 'primevue/usetoast';
+import Group from '@/models/group';
 
-import {ref} from 'vue'
-
-import {createGroupService} from "@/services/groupService";
-import {useToast} from "primevue/usetoast";
-import Group from "@/models/group";
-
-
-const visible = ref(false);
+// Props para recibir datos del grupo a editar
+// eslint-disable-next-line no-undef
+const props = defineProps({
+  groupData: {
+    type: Group,
+    required: true
+  }
+});
 
 const toast = useToast();
-
-const groupName = ref('');
-
+const groupName = ref(props.groupData.name);
+const description = ref(props.groupData.description);
 const days = ref(['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']);
-const selectedDays = ref([]);
-const startTime = ref('00:00');
-const endTime = ref('23:00');
-const description = ref('');
-const maxMembers = ref();
+const selectedDays = ref([...props.groupData.daysOfWeek]);
+const startTime = ref(props.groupData.getStartTime());
+const endTime = ref(props.groupData.getEndTime());
+const maxMembers = ref(props.groupData.maxMembers);
 
-
+// Emit para notificar cambios
 // eslint-disable-next-line no-undef
-const emit = defineEmits(['groupAdded', 'hideDialog']);
+const emit = defineEmits(['groupUpdated', 'hideEditDialog']);
 
 
 function toggleDay(day) {
   if (selectedDays.value.includes(day)) {
-    selectedDays.value = selectedDays.value.filter(d => d !== day)
+    selectedDays.value = selectedDays.value.filter(d => d !== day);
   } else {
-    selectedDays.value.push(day)
+    selectedDays.value.push(day);
   }
 }
 
 function resetForm() {
-  groupName.value = '';
-  description.value = '';
-  maxMembers.value = null;
-  selectedDays.value = [];
-  startTime.value = '00:00';
-  endTime.value = '23:00';
-}
-
-function hideDialog(){
-  emit('hideDialog');
+  groupName.value = props.groupData.name;
+  description.value = props.groupData.description;
+  maxMembers.value = props.groupData.maxMembers;
+  selectedDays.value = [...props.groupData.daysOfWeek];
+  startTime.value = props.groupData.getStartTime();
+  endTime.value = props.groupData.getEndTime();
 }
 
 async function handleSubmit() {
-
-  const newGroupFormat = new Group({
+  const updatedGroup = new Group({
     name: groupName.value,
     description: description.value,
     daysOfWeek: selectedDays.value,
@@ -160,18 +145,22 @@ async function handleSubmit() {
   });
 
   try {
-    const newGroupAddedResponse = await createGroupService(newGroupFormat);
-    toast.add({severity: 'success', summary: 'Operación completa', detail: 'Grupo creado exitosamente', life: 2500});
-    emit('groupAdded', newGroupAddedResponse);
-    visible.value = false;
-
+    const updatedGroupResponse = await updateGroupService(props.groupData.id, updatedGroup);
+    toast.add({
+      severity: 'success',
+      summary: 'Operación completa',
+      detail: 'Grupo actualizado exitosamente',
+      life: 2500
+    });
+    emit('groupUpdated', new Group(updatedGroupResponse));
+    emitHideDialog();
   } catch (error) {
-    console.log(error)
-    toast.add({severity: 'error', summary: 'Error', detail: 'Ocurrió un error al crear el grupo', life: 2500});
+    console.error(error);
+    toast.add({severity: 'error', summary: 'Error', detail: 'Ocurrió un error al actualizar el grupo', life: 2500});
   }
+}
 
+function emitHideDialog() {
+  emit('hideEditDialog');
 }
 </script>
-
-<style scoped>
-</style>

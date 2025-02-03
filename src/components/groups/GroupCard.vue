@@ -1,13 +1,30 @@
 ﻿<template>
   <Card style="width: 25rem; overflow: hidden; position: relative;">
     <template #title> {{ group.name }}
-      <GroupMenu @group-deleted="handleGroupDeleted" :id="group.id" class="absolute top-5 right-5 cursor-pointer"/>
+      <GroupMenu @group-deleted="handleGroupDeleted"
+                 @groupUpdated="handleGroupUpdated"
+
+                 :id="group.id" :groupData="group"/>
     </template>
     <template #subtitle>
       {{ group.description }}
     </template>
     <template #content>
       <div class="flex-wrap">
+        <!-- Contenedor para días y hora -->
+        <div class="flex justify-between items-center mb-2">
+          <!-- Contenedor de días -->
+          <div class="flex flex-wrap gap-1">
+            <div v-for="day in group.daysOfWeek" :key="day" class="day-oval">
+              {{ day }}
+            </div>
+          </div>
+          <!-- Hora -->
+          <div>
+            <span class="font-semibold whitespace-nowrap">{{ group.schedule }}</span>
+          </div>
+        </div>
+        <!-- Contador de estudiantes -->
         <div class="flex gap-2 justify-end">
           <span class="font-semibold">{{ `${totalStudents}/${maxStudents}` }}</span>
         </div>
@@ -20,14 +37,16 @@
 
 <script setup>
 import GroupMenu from "@/components/groups/GroupMenu.vue";
-import {ref, defineProps, onMounted} from "vue";
+import {ref, onMounted} from "vue";
 import Group from "@/models/group";
 
+// eslint-disable-next-line no-undef
 const props = defineProps({
   group: Group
 });
 
-const emit = defineEmits(['groupDeleted']);
+// eslint-disable-next-line no-undef
+const emit = defineEmits(['groupDeleted', 'groupUpdated']);
 
 
 onMounted(() => {
@@ -44,8 +63,20 @@ progressValue.value = Math.round((totalStudents.value / maxStudents.value) * 100
 function handleGroupDeleted(id) {
   emit('groupDeleted', id);
 }
+
+function handleGroupUpdated(group) {
+  emit('groupUpdated', group);
+}
 </script>
 
 <style scoped>
-
+.day-oval {
+  font-size: 0.8rem;
+  display: inline-block;
+  padding: 3px 10px;
+  margin: 3px;
+  border-radius: 15px;
+  background-color: #f0f0f0;
+  text-align: center;
+}
 </style>

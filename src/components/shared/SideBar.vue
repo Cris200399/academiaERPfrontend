@@ -26,7 +26,7 @@
       <div class="flex items-center">
 <!--        <img src="@/assets/profile.jpg" alt="Profile" class="h-8 w-8 rounded-full"/>-->
         <div class="ml-2">
-          <p class="text-sm font-medium">Otor John</p>
+          <p class="text-sm font-medium text-gray-800">Otor John</p>
           <p class="text-xs text-gray-500">HR Office</p>
         </div>
       </div>
@@ -39,8 +39,4 @@ import {menuItems} from '@/data/menuItems';
 </script>
 
 <style scoped>
-.active-link {
-  background-color: #ebf8ff;
-  border-left: 4px solid #4299e1;
-}
 </style>
