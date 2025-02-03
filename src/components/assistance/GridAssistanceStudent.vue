@@ -10,6 +10,7 @@ import {
 
 import {useToast} from "primevue/usetoast";
 import Assistance from "@/models/assistance";
+import {getPaymentLabel, getPaymentStatusSeverity} from "@/constants/paymentStatusFunctions";
 
 // eslint-disable-next-line no-undef,no-unused-vars
 const props = defineProps({
@@ -50,21 +51,6 @@ async function getProfileImage() {
   image.value = URL.createObjectURL(blob);
 }
 
-const getSeverity = (paymentStatus) => {
-  switch (paymentStatus) {
-    case 'up-to-date':
-      return 'success';
-
-    case 'LOWSTOCK':
-      return 'warn';
-
-    case 'OUTOFSTOCK':
-      return 'danger';
-
-    default:
-      return null;
-  }
-};
 
 async function saveAssistance() {
   const newAssistanceObject = ({
@@ -99,23 +85,30 @@ async function deleteAssistance() {
 </script>
 
 <template>
-  <div
-      class="p-6 border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-900 rounded flex flex-col">
+  <div class="p-6 border border-surface-200 dark:border-surface-700 bg-surface-0 dark:bg-surface-900 rounded flex flex-col">
+
     <div class="bg-surface-50 flex justify-center rounded p-4">
-      <div class="relative mx-auto">
-        <Image :src="image" alt="Image" width="250" />
+      <div class="relative w-full min-h-[250px] min-w-[250px] max-w-[250px] aspect-[4/3] mx-auto">
+        <Image
+            :src="image"
+            alt="Image"
+            imageClass="w-full h-full object-cover rounded"
+        />
       </div>
     </div>
+
+
     <div class="pt-6">
       <div class="flex flex-row justify-between items-start gap-2">
         <div>
           <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{ student.dni }}</span>
           <div class="text-lg font-medium mt-1">{{ student.getFullName() }}</div>
         </div>
-        <div class="bg-surface-100 p-1" style="border-radius: 30px">
-          <div class="bg-surface-0 flex items-center gap-2 justify-center py-1 px-2"
+        <div class="p-1" style="border-radius: 30px">
+          <div class="flex items-center gap-2 justify-center"
                style="border-radius: 30px;">
-            <Tag :value="'Al día'" :severity="getSeverity('up-to-date')"></Tag>
+            <Tag :value="getPaymentLabel(student.paymentStatus)"
+                 :severity="getPaymentStatusSeverity(student.paymentStatus)"></Tag>
           </div>
         </div>
       </div>
@@ -135,7 +128,8 @@ async function deleteAssistance() {
 
 <style scoped>
 .img-size {
-  min-width: 200px;
-  min-height: 200px;
+  width: 100%;
+  max-width: 250px;
+  height: auto;
 }
 </style>

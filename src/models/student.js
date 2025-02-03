@@ -8,7 +8,6 @@ class Student {
             this.address = data.address;
             this.email = data.email;
             this.gender = data.gender;
-            // this.dateOfBirth = this.formatDateOfBirth(data.dateOfBirth);
             this.dateOfBirth = new Date(data.dateOfBirth);
             this.phone = data.phone;
             this.group = data.group.name;
@@ -18,6 +17,7 @@ class Student {
             this.profileImageId = data.profileImageId;
             this.documentId = data.documentId;
             this.status = data.status;
+            this.paymentStatus = data.paymentStatus;
         } else {
             // Constructor for sending student to an endpoint
             this.name = data.name;
@@ -33,6 +33,7 @@ class Student {
             this.profileImageId = data.profileImageId;
             this.documentId = data.documentId;
             this.status = data.status
+            this.paymentStatus = data.paymentStatus;
         }
     }
 

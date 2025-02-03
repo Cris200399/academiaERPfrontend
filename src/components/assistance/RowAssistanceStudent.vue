@@ -11,6 +11,7 @@ import {
   getTodayAssistancePerStudentService
 } from "@/services/assistanceService";
 import Assistance from "@/models/assistance";
+import {getPaymentLabel, getPaymentStatusSeverity} from "@/constants/paymentStatusFunctions";
 
 // eslint-disable-next-line no-undef,no-unused-vars
 const props = defineProps({
@@ -51,21 +52,6 @@ async function getProfileImage() {
   image.value = URL.createObjectURL(blob);
 }
 
-const getSeverity = (paymentStatus) => {
-  switch (paymentStatus) {
-    case 'up-to-date':
-      return 'success';
-
-    case 'LOWSTOCK':
-      return 'warn';
-
-    case 'OUTOFSTOCK':
-      return 'danger';
-
-    default:
-      return null;
-  }
-};
 
 async function saveAssistance() {
   const newAssistanceObject = ({
@@ -100,17 +86,30 @@ async function deleteAssistance() {
 
 <template>
   <div class="flex flex-col sm:flex-row sm:items-center p-6 gap-4">
-    <div class="md:w-40 relative">
-      <Image :src="image" alt="Image" width="250"/>
-    </div>
+<!--    <div class="md:w-40 relative">-->
+<!--      <Image :src="image" alt="Image" width="250"/>-->
+<!--    </div>-->
+      <div class="relative w-full min-h-[120px] min-w-[100px] max-w-[250px] aspect-[4/3] mx-auto">
+        <Image
+            :src="image"
+            alt="Image"
+            imageClass="w-full h-full object-cover rounded"
+        />
+      </div>
+
     <div class="flex flex-col md:flex-row justify-between md:items-center flex-1 gap-6">
       <div class="flex flex-row md:flex-col justify-between items-start gap-2">
         <div>
           <span class="font-medium text-surface-500 dark:text-surface-400 text-sm">{{ student.dni }}</span>
-          <div class="text-2xl font-semibold mt-1">{{ student.getFullName() }}</div>
+          <div class="font-semibold mt-1 text-base sm:text-lg md:text-xl">{{ student.getFullName() }}</div>
         </div>
-        <!--        <span class="text-xl font-semibold">{{ student.phone }}</span>-->
-        <Tag :value="'Al día'" :severity="getSeverity('up-to-date')"></Tag>
+        <div class="" style="border-radius: 30px">
+          <div class="flex items-center gap-2 justify-center"
+               style="border-radius: 30px;">
+            <Tag :value="getPaymentLabel(student.paymentStatus)"
+                 :severity="getPaymentStatusSeverity(student.paymentStatus)"></Tag>
+          </div>
+        </div>
       </div>
 
       <div class="flex flex-col gap-6 mt-6">
