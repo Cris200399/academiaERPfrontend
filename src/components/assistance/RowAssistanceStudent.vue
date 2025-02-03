@@ -11,7 +11,7 @@ import {
   getTodayAssistancePerStudentService
 } from "@/services/assistanceService";
 import Assistance from "@/models/assistance";
-import {getPaymentLabel, getPaymentStatusSeverity} from "@/constants/paymentStatusFunctions";
+import {getPaymentStatusLabel, getPaymentStatusSeverity} from "@/constants/paymentStatusFunctions";
 
 // eslint-disable-next-line no-undef,no-unused-vars
 const props = defineProps({
@@ -106,7 +106,7 @@ async function deleteAssistance() {
         <div class="" style="border-radius: 30px">
           <div class="flex items-center gap-2 justify-center"
                style="border-radius: 30px;">
-            <Tag :value="getPaymentLabel(student.paymentStatus)"
+            <Tag :value="getPaymentStatusLabel(student.paymentStatus)"
                  :severity="getPaymentStatusSeverity(student.paymentStatus)"></Tag>
           </div>
         </div>

@@ -8,7 +8,7 @@
       <div class="flex justify-between h-16">
         <div class="flex items-center">
           <!-- Logo -->
-          <img src="https://1000marcas.net/wp-content/uploads/2020/03/Logo-UFC.png" alt="Logo" class="h-8 w-8"/>
+          <img src="/src/assets/logo.png" alt="Logo" class="h-8 w-8"/>
           <h1 class="ml-2 text-lg font-semibold">ERP System</h1>
         </div>
         <!-- Botón del menú para móviles -->
@@ -37,8 +37,8 @@
       >
         <div class="flex flex-col h-full bg-white">
           <!-- Logo -->
-          <div class="flex items-center px-6 pt-4 shrink-0 mb-8">
-            <img src="https://1000marcas.net/wp-content/uploads/2020/03/Logo-UFC.png" alt="Logo" class="h-8 w-8"/>
+          <div class="flex flex-col items-center px-6 pt-4 shrink-0 mb-8">
+            <img src="/src/assets/logo.png" alt="Logo" class="h-auto w-full sm:w-60"/>
             <div class="ml-2">
               <h1 class="text-lg font-semibold">ERP System</h1>
             </div>

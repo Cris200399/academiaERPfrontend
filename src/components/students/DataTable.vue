@@ -1,6 +1,7 @@
 <script setup>
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
+import DatePicker from 'primevue/datepicker';
 
 import {onMounted, ref, watch} from 'vue';
 import {FilterMatchMode, FilterOperator} from '@primevue/core/api';
@@ -13,6 +14,7 @@ import Student from "@/models/student";
 import EditStudentDialog from "@/components/students/EditStudentDialog.vue";
 import ProfileStudentDialog from "@/components/students/ProfileStudentDialog.vue";
 import {formatDate} from "@/utils/formatDate";
+import {getPaymentStatusLabel, getPaymentStatusSeverity} from "@/constants/paymentStatusFunctions";
 
 const students = ref([]);
 const groupNames = ref();
@@ -28,6 +30,8 @@ let groups;
 
 const statuses = ref(['activo', 'inactivo']);
 
+const paymentStatuses = ref(['al_día', 'por_vencer', 'vencido', 'sin_pago']);
+
 const filters = ref({
   global: {value: null, matchMode: FilterMatchMode.CONTAINS},
   name: {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.STARTS_WITH}]},
@@ -39,7 +43,7 @@ const filters = ref({
   dateOfBirth: {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.DATE_IS}]},
   age: {operator: FilterOperator.AND, constraints: [{value: null, matchMode: FilterMatchMode.EQUALS}]},
   dni: {value: null, matchMode: FilterMatchMode.STARTS_WITH},
-  status: { value: null, matchMode: FilterMatchMode.EQUALS },
+  status: {value: null, matchMode: FilterMatchMode.EQUALS},
 });
 
 
@@ -111,7 +115,8 @@ const getSeverity = (status) => {
       :globalFilterFields="['name', 'lastName', 'group', 'dni', 'age', 'phone', 'dateOfBirth']"
       scrollable
       removable-sort
-      scroll-height="800px"
+      row-hover
+      scrollHeight="400px"
   >
     <template #header>
       <div class="flex justify-end">
@@ -130,18 +135,21 @@ const getSeverity = (status) => {
       <ProgressSpinner/>
     </template>
 
-    <Column field="status" header="Estado" style="min-width: 5rem">
+    <Column field="status" header="Estado" style="min-width: 100px; max-width: 100px">
       <template #body="{ data }">
-        <Tag :value="data.status.charAt(0).toUpperCase() + data.status.slice(1)" :severity="getSeverity(data.status)" />
+        <Tag :value="data.status.charAt(0).toUpperCase() + data.status.slice(1)" :severity="getSeverity(data.status)"/>
       </template>
       <template #filter="{ filterModel, filterCallback }">
-        <Select v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Selecciona uno" style="min-width: 12rem" :showClear="true">
+        <Select v-model="filterModel.value" @change="filterCallback()" :options="statuses" placeholder="Selecciona uno"
+                style="min-width: 12rem" :showClear="true">
           <template #value="slotProps">
-            <Tag v-if="slotProps.value" :value="slotProps.value.charAt(0).toUpperCase() + slotProps.value.slice(1)" :severity="getSeverity(slotProps.value)" />
+            <Tag v-if="slotProps.value" :value="slotProps.value.charAt(0).toUpperCase() + slotProps.value.slice(1)"
+                 :severity="getSeverity(slotProps.value)"/>
             <span v-else>{{ slotProps.placeholder }}</span>
           </template>
           <template #option="slotProps">
-            <Tag :value="slotProps.option.charAt(0).toUpperCase() + slotProps.option.slice(1)" :severity="getSeverity(slotProps.option)" />
+            <Tag :value="slotProps.option.charAt(0).toUpperCase() + slotProps.option.slice(1)"
+                 :severity="getSeverity(slotProps.option)"/>
           </template>
         </Select>
       </template>
@@ -198,7 +206,7 @@ const getSeverity = (status) => {
     </Column>
 
     <Column field="dateOfBirth" dataType="date" header="F. Nacimiento"
-            style="min-width: 5rem">
+            style="min-width: 110px; max-width: 110px">
       <template #body="{ data }">
         {{ formatDate(data.dateOfBirth) }}
       </template>
@@ -207,7 +215,7 @@ const getSeverity = (status) => {
       </template>
     </Column>
 
-    <Column field="age" header="Edad" :sortable="true" dataType="numeric" style="min-width: 5rem">
+    <Column field="age" header="Edad" :sortable="true" dataType="numeric" style="width: 1rem">
       <template #body="{ data }">
         {{ data.age }}
       </template>
@@ -224,6 +232,19 @@ const getSeverity = (status) => {
       <template #filter="{ filterModel }">
         <InputText v-model="filterModel.value" type="text"
                    placeholder="Buscar por Número"/>
+      </template>
+    </Column>
+
+    <Column header="Estado" field="paymentStatus" :filterMenuStyle="{ width: '14rem' }" style="min-width: 4rem">
+      <template #body="{ data }">
+        <Tag :value="getPaymentStatusLabel(data.paymentStatus)" :severity="getPaymentStatusSeverity(data.paymentStatus)" />
+      </template>
+      <template #filter="{ filterModel }">
+        <Select v-model="filterModel.value" :options="paymentStatuses" placeholder="Selecciona uno" showClear>
+          <template #option="slotProps">
+            <Tag :value="slotProps.option" :severity="getPaymentStatusSeverity(slotProps.option)" />
+          </template>
+        </Select>
       </template>
     </Column>
 

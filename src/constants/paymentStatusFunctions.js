@@ -17,7 +17,7 @@
     }
 };
 
-export const getPaymentLabel = (paymentStatus) => {
+export const getPaymentStatusLabel = (paymentStatus) => {
     switch (paymentStatus) {
         case 'al_día':
             return 'Al día';
