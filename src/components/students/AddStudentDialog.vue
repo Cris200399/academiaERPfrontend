@@ -464,7 +464,7 @@ const handleSubmit = async () => {
       const newStudentAdded = await createStudentService(newStudent);
       toast.add({severity: 'success', summary: 'Éxito', detail: 'Alumno creado exitosamente', life: 1500});
       emit('studentAdded', newStudentAdded);
-      visible.value = false;
+      hideDialog();
       resetForm();
     } catch (error) {
       toast.add({severity: 'error', summary: 'Error', detail: 'Hubo un error al crear el alumno', life: 1500});

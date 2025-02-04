@@ -163,7 +163,7 @@ async function handleSubmit() {
     const newGroupAddedResponse = await createGroupService(newGroupFormat);
     toast.add({severity: 'success', summary: 'Operación completa', detail: 'Grupo creado exitosamente', life: 2500});
     emit('groupAdded', newGroupAddedResponse);
-    visible.value = false;
+    hideDialog();
 
   } catch (error) {
     console.log(error)
