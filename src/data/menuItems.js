@@ -24,7 +24,7 @@ export const menuItems = [
     {
         label: 'Calendario',
         icon: 'pi pi-calendar',
-        route: '/class'
+        route: '/calendar'
     },
     {
         label: 'Grupos',
