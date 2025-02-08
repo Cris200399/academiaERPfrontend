@@ -133,3 +133,23 @@ export const updateDocumentService = async (studentId, document) => {
         throw new Error('Error al actualizar el documento');
     }
 }
+
+export const getTotalOverdueStudentsService = async () => {
+    try {
+        const response = await axios.get(`${API_URLS.STUDENTS}/total-overdue-students`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching total overdue students:', error);
+        throw error;
+    }
+}
+
+export const getTotalToExpireStudentsService = async () => {
+    try {
+        const response = await axios.get(`${API_URLS.STUDENTS}/total-about-to-expire`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching total to expire students:', error);
+        throw error;
+    }
+}

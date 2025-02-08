@@ -235,14 +235,15 @@ const getSeverity = (status) => {
       </template>
     </Column>
 
-    <Column header="Estado" field="paymentStatus" :filterMenuStyle="{ width: '14rem' }" style="min-width: 4rem">
+    <Column header="Estado de Pago" field="paymentStatus" :filterMenuStyle="{ width: '14rem' }" style="min-width: 4rem">
       <template #body="{ data }">
-        <Tag :value="getPaymentStatusLabel(data.paymentStatus)" :severity="getPaymentStatusSeverity(data.paymentStatus)" />
+        <Tag :value="getPaymentStatusLabel(data.paymentStatus)"
+             :severity="getPaymentStatusSeverity(data.paymentStatus)"/>
       </template>
       <template #filter="{ filterModel }">
         <Select v-model="filterModel.value" :options="paymentStatuses" placeholder="Selecciona uno" showClear>
           <template #option="slotProps">
-            <Tag :value="slotProps.option" :severity="getPaymentStatusSeverity(slotProps.option)" />
+            <Tag :value="slotProps.option" :severity="getPaymentStatusSeverity(slotProps.option)"/>
           </template>
         </Select>
       </template>
