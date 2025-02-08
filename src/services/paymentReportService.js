@@ -19,3 +19,12 @@ export const getTotalPaymentsForActualMonthService = async () => {
         throw new Error(error.response.data.message);
     }
 }
+
+export const getTotalPaymentsForAMonthService = async (month) => {
+    try {
+        const response = await axios.get(`${API_URLS.PAYMENTS_REPORTS}/total-payments-month/${month}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+}

@@ -5,9 +5,16 @@
                 change="" :isPositive="false" background="bg-orange-300"/>
     </div>
     <div class="flex justify-center">
-      <StatCard title="Ingresos del mes" :value="`S/ ${totalSales}`" description="en el último mes" icon="pi-money-bill"
-                change="+10%"
+      <StatCard v-if="changeSales !== 'No hay datos previos'" title="Ingresos del mes" :value="`S/ ${actualMonthTotalSales}`" description="en el último mes"
+                icon="pi-money-bill"
+                :change="`${changeSales}`"
                 isPositive background="bg-blue-200"/>
+
+      <StatCard v-else title="Ingresos del mes" :value="`S/ ${actualMonthTotalSales}`" description=""
+                icon="pi-money-bill"
+                change=""
+                isPositive background="bg-blue-200"/>
+
     </div>
     <div class="flex justify-center">
       <StatCard title="Alumnos por vencer" :value="totalAboutToExpire" description="" icon="pi-stopwatch" change=""
@@ -28,7 +35,7 @@
 import SalesChart from "@/components/sales/SalesChart.vue";
 import StatCard from "@/components/shared/StatCard.vue";
 import {onMounted, ref} from "vue";
-import {getTotalPaymentsForActualMonthService} from "@/services/paymentReportService";
+import {getTotalPaymentsForActualMonthService, getTotalPaymentsForAMonthService} from "@/services/paymentReportService";
 import {
   getTotalOverdueStudentsService,
   getTotalStudentsService,
@@ -36,14 +43,16 @@ import {
 } from "@/services/studentService";
 
 const totalStudents = ref("");
-const totalSales = ref("");
+const actualMonthTotalSales = ref("");
 const totalOverdueStudents = ref("");
 const totalAboutToExpire = ref("");
+const changeSales = ref("");
 onMounted(async () => {
   await getTotalStudents();
   await getTotalSales();
   await getTotalOverdueStudents();
   await getTotalAboutToExpire();
+
 });
 
 async function getTotalStudents() {
@@ -52,7 +61,14 @@ async function getTotalStudents() {
 
 
 async function getTotalSales() {
-  totalSales.value = (await getTotalPaymentsForActualMonthService()).totalPayments;
+  actualMonthTotalSales.value = (await getTotalPaymentsForActualMonthService()).totalPayments;
+  const lastMonthSales = (await getTotalPaymentsForAMonthService((new Date().getMonth()) - 1)).totalPayments;
+  if (lastMonthSales !== 0) {
+    console.log(lastMonthSales);
+    changeSales.value = `${((actualMonthTotalSales.value - lastMonthSales) / lastMonthSales * 100).toFixed(2)}%`;
+  } else {
+    changeSales.value = `No hay datos previos`;
+  }
 }
 
 async function getTotalOverdueStudents() {
