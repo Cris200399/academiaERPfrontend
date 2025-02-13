@@ -17,12 +17,12 @@
     </div>
   </div>
   <div class="mt-0 ml-2">
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-5 p-2">
-
-      <GroupCard
-          @group-deleted="handleGroupDeleted"
-          @groupUpdated="handleGroupUpdated"
-          v-for="group in groups" :key="group.id" :group="group"/>
+    <!--    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-5 p-2">-->
+    <div class="flex gap-2 flex-wrap gap-y-3 sm:justify-center md:justify-center lg:justify-center xl:justify-start">
+      <GroupCard class="w-[15.5%] h-[100%]"
+                 @group-deleted="handleGroupDeleted"
+                 @groupUpdated="handleGroupUpdated"
+                 v-for="group in groups" :key="group.id" :group="group"/>
 
     </div>
   </div>

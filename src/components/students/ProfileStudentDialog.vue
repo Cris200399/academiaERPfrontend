@@ -42,7 +42,7 @@
               <div class="flex justify-content-between items-center mb-3">
                 <span class="material-icons">cake</span>
                 <span class="label">Fecha de Nacimiento:</span>
-                <span>{{ formatDate(student.dateOfBirth) }}</span>
+                <span>{{ formatCustomDate(student.dateOfBirth) }}</span>
               </div>
               <div class="flex justify-content-between mb-3">
                 <span class="material-icons">phone_iphone</span>
@@ -108,10 +108,10 @@
                 <template #date="slotProps">
                   <div v-if="isAssistanceDate(slotProps.date)"
                        v-tooltip="{ value: getTooltip(slotProps.date), hideDelay: 200 }"
-                       class="font-bold bg-green-400 rounded-full p-2 text-white relative">
+                       class="font-bold bg-green-400 p-3 text-white relative">
                     {{ slotProps.date.day }}
                   </div>
-                  <div v-else class="text-black-alpha-80">{{ slotProps.date.day }}</div>
+                  <div v-else >{{ slotProps.date.day }}</div>
                 </template>
               </DatePicker>
 
@@ -164,7 +164,7 @@ import Student from "@/models/student";
 import StudentAvatar from "@/components/shared/StudentAvatar.vue";
 import {getDocumentService} from "@/services/studentService";
 import UploadDocumentDialog from "@/components/students/UploadDocumentDialog.vue";
-import {formatDate} from "@/utils/formatDate";
+import {formatCustomDate} from "@/utils/formatCustomDate";
 import {getAssistancesPerStudentIdService} from "@/services/assistanceService";
 import Assistance from "@/models/assistance";
 import DatePicker from "primevue/datepicker";
@@ -252,8 +252,6 @@ const getTooltip = (slotDate) => {
   const assistance = assistances.value.find((a) =>
       isSameDay(a.date, slotDate)
   );
-
-  console.log(assistance);
   return assistance ? `✔️ ${assistance.getHour()}` : null;
 };
 

@@ -3,13 +3,13 @@
   <Dialog/>
   <Toast/>
   <!-- Barra de navegación superior (visible solo en pantallas pequeñas) -->
-  <nav class="bg-white shadow-md md:hidden mb-2">
+  <nav class="bg-white shadow-md md:hidden mb-2 sticky top-0 z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16">
         <div class="flex items-center">
           <!-- Logo -->
           <img src="/src/assets/logo.png" alt="Logo" class="h-8 w-8"/>
-          <h1 class="ml-2 text-lg font-semibold">ERP System</h1>
+          <h1 class="ml-2 text-lg font-semibold">Somos Campeones Academia</h1>
         </div>
         <!-- Botón del menú para móviles -->
         <div class="flex items-center">
@@ -23,106 +23,149 @@
     </div>
   </nav>
 
-  <div class="flex h-full">
-    <div class=" side-bar-width">
-      <!-- Sidebar (oculto en pantallas pequeñas) -->
-      <Drawer
-          v-model:visible="visible"
-          :dismissable="isMobile"
-          :modal="false"
-          :show-close-icon="false"
-          position="left"
-          @hide="hideDrawIfIsMobile"
-
-      >
-        <div class="flex flex-col h-full bg-white">
-          <!-- Logo -->
-          <div class="flex flex-col items-center px-6 pt-4 shrink-0 mb-8">
-            <img src="/src/assets/logo.png" alt="Logo" class="h-auto w-full sm:w-60"/>
-            <div class="ml-2">
-              <h1 class="text-lg font-semibold">ERP System</h1>
-            </div>
+  <div class="flex w-full screenHeight">
+    <!-- Sidebar estático (visible en pantallas medianas y grandes) -->
+    <div class="hidden md:block side-bar-width">
+      <div class="flex flex-col h-full bg-white">
+        <!-- Logo -->
+        <div class="flex flex-col items-center px-6 pt-4 shrink-0 mb-8">
+          <img src="/src/assets/logo.png" alt="Logo" class="h-auto w-full sm:w-60"/>
+          <div class="ml-2">
+            <h1 class="text-lg font-semibold">Sistema Somos Campeones</h1>
           </div>
+        </div>
 
-          <!-- Contenido del sidebar -->
-          <nav class="flex-grow overflow-y-auto">
-            <ul class="list-none p-4 m-0 space-y-2">
-              <li v-for="item in menuItems" :key="item.label">
-                <router-link
-                    @click=" hideDrawIfIsMobile"
-                    v-if="!item.subItems"
-                    :to="item.route"
+        <!-- Contenido del sidebar -->
+        <nav class="flex-grow overflow-y-auto">
+          <ul class="list-none p-4 m-0 space-y-2">
+            <li v-for="item in menuItems" :key="item.label">
+              <router-link
+                  v-if="!item.subItems"
+                  :to="item.route"
+                  v-ripple
+                  class="flex items-center p-3 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+                  :class="{ 'bg-gray-100': $route.path === item.route }"
+              >
+                <i :class="[item.icon, 'mr-3']"></i>
+                <span class="font-medium">{{ item.label }}</span>
+              </router-link>
+
+              <div v-else>
+                <a
                     v-ripple
-                    class="flex items-center p-3 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
-                    :class="{ 'bg-gray-100': $route.path === item.route }"
+                    v-styleclass="{
+                    selector: '@next',
+                    enterFromClass: 'hidden',
+                    enterActiveClass: 'animate-slidedown',
+                    leaveToClass: 'hidden',
+                    leaveActiveClass: 'animate-slideup',
+                  }"
+                    class="flex items-center cursor-pointer p-3 text-gray-700 hover:bg-gray-100 rounded-md transition-colors p-ripple duration-150"
                 >
                   <i :class="[item.icon, 'mr-3']"></i>
                   <span class="font-medium">{{ item.label }}</span>
-                </router-link>
+                  <i class="pi pi-chevron-down ml-auto"></i>
+                </a>
 
-                <div v-else>
-                  <a
-                      v-ripple
-                      v-styleclass="{
-                        selector: '@next',
-                        enterFromClass: 'hidden',
-                        enterActiveClass: 'animate-slidedown',
-                        leaveToClass: 'hidden',
-                        leaveActiveClass: 'animate-slideup',
-                      }"
-                      class="flex items-center cursor-pointer p-3 text-gray-700 hover:bg-gray-100 rounded-md transition-colors p-ripple duration-150"
-                  >
-                    <i :class="[item.icon, 'mr-3']"></i>
-                    <span class="font-medium">{{ item.label }}</span>
-                    <i class="pi pi-chevron-down ml-auto"></i>
-
-                  </a>
-
-                  <ul class="list-none py-0 pl-4 pr-0 m-0 hidden overflow-y-hidden transition-all duration-[400ms] ease-in-out">
-                    <li v-for="subItem in item.subItems" :key="subItem.label">
-                      <a
-                          v-ripple
-                          v-styleclass="{
-                            selector: '@next',
-                            enterFromClass: 'hidden',
-                            enterActiveClass: 'animate-slidedown',
-                            leaveToClass: 'hidden',
-                            leaveActiveClass: 'animate-slideup',
-                          }">
-                        <router-link
-                            @click=" hideDrawIfIsMobile"
-                            :to="subItem.route"
-                            v-ripple
-                            class="flex items-center cursor-pointer p-3 m-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors p-ripple duration-150"
-                            :class="{ ' bg-gray-100 ': $route.path === subItem.route }"
-                        >
-                          <i :class="[subItem.icon, 'mr-3']"></i>
-                          <span class="font-medium">{{ subItem.label }}</span>
-                        </router-link>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-
-              </li>
-            </ul>
-          </nav>
-
-          <!-- Perfil de usuario -->
-          <div class="mt-auto">
-            <hr class="mb-4 mx-4 border-t border-gray-200"/>
-            <div class="m-4 p-4 flex items-center">
-              <div class="ml-2">
-                <p class="text-sm font-medium text-gray-800">Otor John</p>
-                <p class="text-xs text-gray-500">HR Office</p>
+                <ul class="list-none py-0 pl-4 pr-0 m-0 hidden overflow-y-hidden transition-all duration-[400ms] ease-in-out">
+                  <li v-for="subItem in item.subItems" :key="subItem.label">
+                    <router-link
+                        :to="subItem.route"
+                        v-ripple
+                        class="flex items-center cursor-pointer p-3 m-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors p-ripple duration-150"
+                        :class="{ ' bg-gray-100 ': $route.path === subItem.route }"
+                    >
+                      <i :class="[subItem.icon, 'mr-3']"></i>
+                      <span class="font-medium">{{ subItem.label }}</span>
+                    </router-link>
+                  </li>
+                </ul>
               </div>
+            </li>
+          </ul>
+        </nav>
+
+        <!-- Perfil de usuario -->
+        <div class="mt-auto">
+          <hr class="mb-4 mx-4 border-t border-gray-200"/>
+          <div class="m-4 p-4 flex items-center">
+            <div class="ml-2">
+              <p class="text-sm font-medium text-gray-800">Otor John</p>
+              <p class="text-xs text-gray-500">HR Office</p>
             </div>
           </div>
         </div>
-      </Drawer>
+      </div>
     </div>
+
+    <!-- Drawer para pantallas pequeñas -->
+    <Drawer
+        v-model:visible="visible"
+        :dismissable="isMobile"
+        :modal="isMobile"
+        :show-close-icon="false"
+        position="left"
+        @hide="hideDrawIfIsMobile"
+        class="md:hidden"
+    >
+      <div class="flex flex-col h-full bg-white">
+        <div class="w-full mb-3 text-center">
+          <img src="/src/assets/logo.png" alt="Logo" class="h-48"/>
+          <h1 class="ml-2 text-lg font-semibold">Sistema Somos Campeones</h1>
+        </div>
+        <nav class="flex-grow overflow-y-auto">
+          <ul class="list-none p-4 m-0 space-y-2">
+            <li v-for="item in menuItems" :key="item.label">
+              <router-link
+                  v-if="!item.subItems"
+                  :to="item.route"
+                  v-ripple
+                  class="flex items-center p-3 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
+                  :class="{ 'bg-gray-100': $route.path === item.route }"
+              >
+                <i :class="[item.icon, 'mr-3']"></i>
+                <span class="font-medium">{{ item.label }}</span>
+              </router-link>
+
+              <div v-else>
+                <a
+                    v-ripple
+                    v-styleclass="{
+                    selector: '@next',
+                    enterFromClass: 'hidden',
+                    enterActiveClass: 'animate-slidedown',
+                    leaveToClass: 'hidden',
+                    leaveActiveClass: 'animate-slideup',
+                  }"
+                    class="flex items-center cursor-pointer p-3 text-gray-700 hover:bg-gray-100 rounded-md transition-colors p-ripple duration-150"
+                >
+                  <i :class="[item.icon, 'mr-3']"></i>
+                  <span class="font-medium">{{ item.label }}</span>
+                  <i class="pi pi-chevron-down ml-auto"></i>
+                </a>
+
+                <ul class="list-none py-0 pl-4 pr-0 m-0 hidden overflow-y-hidden transition-all duration-[400ms] ease-in-out">
+                  <li v-for="subItem in item.subItems" :key="subItem.label">
+                    <router-link
+                        :to="subItem.route"
+                        v-ripple
+                        class="flex items-center cursor-pointer p-3 m-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors p-ripple duration-150"
+                        :class="{ ' bg-gray-100 ': $route.path === subItem.route }"
+                    >
+                      <i :class="[subItem.icon, 'mr-3']"></i>
+                      <span class="font-medium">{{ subItem.label }}</span>
+                    </router-link>
+                  </li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </Drawer>
+
     <!-- Contenido principal -->
-    <div class=" main-width">
+    <div class="flex-grow mt-0 ml-2 overflow-x-auto">
       <router-view/>
     </div>
   </div>
@@ -133,12 +176,14 @@ import {ref, onMounted, onUnmounted} from 'vue';
 import {menuItems} from '@/data/menuItems';
 import Drawer from 'primevue/drawer';
 
-const visible = ref(true);
+const visible = ref(false);
 const isMobile = ref(false);
 
 const checkScreenSize = () => {
-  isMobile.value = window.innerWidth < 768; // sm: 640px
-  visible.value = !isMobile.value;
+  isMobile.value = window.innerWidth < 1100; // sm: 640px
+  if (!isMobile.value) {
+    visible.value = false;
+  }
 };
 
 onMounted(() => {
@@ -151,29 +196,30 @@ onUnmounted(() => {
 });
 
 function hideDrawIfIsMobile() {
-  visible.value = !isMobile.value;
+  if (isMobile.value) {
+    visible.value = false;
+  }
 }
-
 </script>
-
 
 <style scoped>
 .side-bar-width {
-  width: 20rem;
+  width: 15vw;
 }
 
-.main-width {
-  flex-grow: 1;
+.screenHeight {
+  height: 100vh;
 }
 
-/* Estilos para dispositivos móviles */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .side-bar-width {
-    width: 0;
-  }
-
-  .main-width {
-    width: 100%;
+    width: 25vw; /* Aumenta el ancho del sidebar en pantallas medianas */
   }
 }
+
+@media (max-width: 768px) {
+
+}
+
 </style>
+

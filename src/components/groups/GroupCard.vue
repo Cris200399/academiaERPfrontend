@@ -1,5 +1,5 @@
 ﻿<template>
-  <Card style="width: 25rem; overflow: hidden; position: relative;">
+  <Card style="width: 24rem; overflow: hidden; position: relative; min-height: 200px;">
     <template #title> {{ group.name }}
       <GroupMenu @group-deleted="handleGroupDeleted"
                  @groupUpdated="handleGroupUpdated"

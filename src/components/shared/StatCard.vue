@@ -23,8 +23,8 @@
 </template>
 
 <script setup>
-import {defineProps} from "vue";
 
+// eslint-disable-next-line no-undef
 defineProps({
   title: String,
   value: [String, Number],

@@ -7,8 +7,7 @@ import DatePicker from "primevue/datepicker";
 import Select from "primevue/select";
 
 import Student from "@/models/student";
-import {paymentMethodsOptions} from "@/constants/paymentMethodsOptions";
-import {paymentStatusOptions} from "@/constants/paymentStatusOptions";
+import {paymentMethodsOptions} from "@/utils/paymentMethodsOptions";
 import GroupPayment from "@/models/groupPayment";
 import {useToast} from "primevue/usetoast";
 import {createGroupPaymentService} from "@/services/groupPaymentService";
@@ -26,7 +25,8 @@ const concept = ref();
 
 const paymentMethods = ref([]);
 const dates = ref();
-const paymentStatus = ref();
+
+
 onMounted(async () => {
   await getGroupsService().then(groupsResponseData => {
     groupsResponseData.map(group => {
@@ -61,7 +61,7 @@ function togglePaymentMethods(paymentOption) {
 }
 
 async function onSubmit() {
-  const newGroupPayment = new GroupPayment(
+  const newGroupPayment = GroupPayment.toApi(
       selectedStudent.value.id,
       amount.value,
       paymentMethods.value.map(p => p.value),
@@ -69,7 +69,6 @@ async function onSubmit() {
       dates.value[0],
       dates.value[1],
       concept.value,
-      paymentStatus.value
   );
 
   try {
@@ -88,7 +87,6 @@ function resetForm(){
   concept.value = null;
   paymentMethods.value = [];
   dates.value = null;
-  paymentStatus.value = null;
 }
 
 
@@ -172,19 +170,6 @@ function resetForm(){
               <label class="block text-4xl font-semibold mb-4">Concepto</label>
               <Textarea v-model="concept" auto-resize class="w-2/4 p-3 rounded-lg border border-gray-200"
                         placeholder="Concepto de pago"/>
-            </div>
-          </div>
-          <div class="mb-4">
-            <h2 class="text-4xl font-semibold mb-4">Estado de pago</h2>
-            <div class="flex flex-wrap gap-4">
-              <div v-for="paymentStatusOption in paymentStatusOptions" :key="paymentStatusOption.value"
-                   class="flex items-center gap-2">
-                <RadioButton v-model="paymentStatus" :inputId="paymentStatusOption.name"
-                             :name="paymentStatusOption.name"
-                             variant="filled"
-                             :value="paymentStatusOption.value"/>
-                <label class="text-xl" :for="paymentStatusOption.name">{{ paymentStatusOption.name }}</label>
-              </div>
             </div>
           </div>
           <div class="mb-4 flex justify-center">

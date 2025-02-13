@@ -10,7 +10,7 @@ class Student {
             this.gender = data.gender;
             this.dateOfBirth = new Date(data.dateOfBirth);
             this.phone = data.phone;
-            this.group = data.group.name;
+            this.group = data.group && data.group.name ? data.group.name : '';
             this.dni = data.dni;
             this.guardian = data.guardian;
             this.age = this.calculateAge(data.dateOfBirth);

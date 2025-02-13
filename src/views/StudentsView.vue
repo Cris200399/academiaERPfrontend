@@ -1,5 +1,5 @@
 <template>
-  <div class="card p-6 bg-white shadow-md rounded-lg ml-2">
+  <div class="card bg-white shadow-md rounded-lg w-auto">
     <div class="flex justify-between items-center">
       <div>
         <div class="text-4xl font-bold text-center">
@@ -19,8 +19,8 @@
       </div>
     </div>
   </div>
-  <div class="dataTable mt-0 ml-2">
-    <DataTable
+  <div class="dataTable mt-0 ml-2 overflow-x-auto">
+    <StudentsDataTable
         @studentDeleted="handleStudentDeleted"
         :newStudentAdded='newStudentAdded'
     />
@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import DataTable from '../components/students/DataTable.vue';
+import StudentsDataTable from '../components/students/StudentsDataTable.vue';
 import AddStudentDialog from "@/components/students/AddStudentDialog.vue";
 
 import {getTotalStudentsService} from "@/services/studentService";
@@ -64,7 +64,7 @@ function onVisibleAddStudentDialog() {
 
 <style scoped>
 .dataTable {
-  max-width: 100%;
+  max-width: 100vw;
   justify-content: center;
   align-items: center;
   background-color: #f4f4f4;

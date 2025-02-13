@@ -11,7 +11,7 @@ import {
   getTodayAssistancePerStudentService
 } from "@/services/assistanceService";
 import Assistance from "@/models/assistance";
-import {getPaymentStatusLabel, getPaymentStatusSeverity} from "@/constants/paymentStatusFunctions";
+import {getPaymentStatusLabel, getPaymentStatusSeverity} from "@/utils/paymentStatusFunctions";
 
 // eslint-disable-next-line no-undef,no-unused-vars
 const props = defineProps({

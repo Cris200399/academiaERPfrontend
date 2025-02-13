@@ -32,8 +32,35 @@ export const menuItems = [
         route: '/groups',
     },
     {
-        label: 'Crear Pago',
+        label: 'Crear pago',
         icon: 'pi pi-money-bill',
-        route: '/create-payment',
+        subItems: [
+            {
+                label: 'Grupal',
+                route: '/create-group-payment',
+                icon: 'pi pi-users',
+            }
+        ]
     },
+    {
+        label: 'Historial de pagos',
+        icon: 'pi pi-history',
+        subItems: [
+            {
+                label: 'Grupales',
+                route: '/group-payments',
+                icon: 'pi pi-list',
+            },
+            {
+                label: 'Particulares',
+                route: '/private-payments',
+                icon: 'pi pi-list',
+            },
+        ]
+    },
+    {
+        label: 'Registrar clase particular',
+        icon: 'pi pi-address-book',
+        route: '/create-private-class'
+    }
 ];

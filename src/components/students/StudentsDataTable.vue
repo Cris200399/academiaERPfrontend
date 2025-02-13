@@ -9,12 +9,12 @@ import {FilterMatchMode, FilterOperator} from '@primevue/core/api';
 
 import {getStudentService, getStudentsService} from "@/services/studentService";
 import {getGroupsService} from "@/services/groupService";
-import ChangeStudentStatusButton from "@/components/students/DeleteStudentButton.vue";
+import ChangeStatusStudentButton from "@/components/students/ChangeStatusStudentButton.vue";
 import Student from "@/models/student";
 import EditStudentDialog from "@/components/students/EditStudentDialog.vue";
 import ProfileStudentDialog from "@/components/students/ProfileStudentDialog.vue";
-import {formatDate} from "@/utils/formatDate";
-import {getPaymentStatusLabel, getPaymentStatusSeverity} from "@/constants/paymentStatusFunctions";
+import {formatCustomDate} from "@/utils/formatCustomDate";
+import {getPaymentStatusLabel, getPaymentStatusSeverity} from "@/utils/paymentStatusFunctions";
 
 const students = ref([]);
 const groupNames = ref();
@@ -72,7 +72,10 @@ onMounted(async () => {
 function handleStudentStatusChanged(id) {
   const index = students.value.findIndex(student => student.id === id);
   students.value[index].status = students.value[index].status === 'activo' ? 'inactivo' : 'activo';
-  // emit('studentDeleted');
+
+  if (students.value[index].status === 'inactivo') {
+    students.value[index].group = '';
+  }
 }
 
 function handleStudentAdded(newStudent) {
@@ -206,9 +209,9 @@ const getSeverity = (status) => {
     </Column>
 
     <Column field="dateOfBirth" dataType="date" header="F. Nacimiento"
-            style="min-width: 110px; max-width: 110px">
+            style="min-width: 120px">
       <template #body="{ data }">
-        {{ formatDate(data.dateOfBirth) }}
+        {{ formatCustomDate(data.dateOfBirth) }}
       </template>
       <template #filter="{ filterModel }">
         <DatePicker v-model="filterModel.value" dateFormat="dd/mm/yy" placeholder="mm/dd/yyyy"/>
@@ -235,7 +238,7 @@ const getSeverity = (status) => {
       </template>
     </Column>
 
-    <Column header="Estado de Pago" field="paymentStatus" :filterMenuStyle="{ width: '14rem' }" style="min-width: 4rem">
+    <Column header="E. de pago" field="paymentStatus" :filterMenuStyle="{ width: '14rem' }" style="min-width: 3rem">
       <template #body="{ data }">
         <Tag :value="getPaymentStatusLabel(data.paymentStatus)"
              :severity="getPaymentStatusSeverity(data.paymentStatus)"/>
@@ -249,12 +252,11 @@ const getSeverity = (status) => {
       </template>
     </Column>
 
-
-    <Column header="Opciones" style="min-width: 5rem">
+    <Column headerStyle="width:4rem">
       <template #body="{ data }">
         <div class="flex gap-2">
           <EditStudentDialog @studentUpdated="handleStudentUpdated" :student="data"/>
-          <ChangeStudentStatusButton :student="data" @studentStatusChanged="handleStudentStatusChanged"/>
+          <ChangeStatusStudentButton :student="data" @studentStatusChanged="handleStudentStatusChanged"/>
           <ProfileStudentDialog :student="data" @updateImage="handleStudentUpdated"/>
         </div>
       </template>

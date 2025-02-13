@@ -1,4 +1,5 @@
-export const formatDate = (date) => {
+export const formatCustomDate = (date) => {
+    date = new Date(date);
     return date.toLocaleDateString('es-ES', {
         year: 'numeric',
         month: '2-digit',

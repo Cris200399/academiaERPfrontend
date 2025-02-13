@@ -22,7 +22,6 @@ class Group {
     }
 
     sortDays(days) {
-        console.log('Days:', days);
         return days.map((day) => day.toString()).sort((a, b) => orderDays.indexOf(a) - orderDays.indexOf(b));
     }
 
