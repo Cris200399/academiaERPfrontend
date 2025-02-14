@@ -162,7 +162,7 @@ function resetForm(){
               <label class="block text-4xl font-semibold mb-4">Fecha Inicio-Fin</label>
             </div>
             <div class="display-width">
-              <DatePicker v-model="dates" selectionMode="range" fluid show-icon :manualInput="true" show-button-bar/>
+              <DatePicker v-model="dates" selectionMode="range" fluid show-icon :manualInput="true" :hideOnRangeSelection="true" show-button-bar/>
             </div>
           </div>
           <div>

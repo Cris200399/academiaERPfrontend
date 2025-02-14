@@ -1,38 +1,80 @@
 <script setup>
-import { ref } from 'vue';
+import {onMounted, ref} from 'vue';
+import {getStudentsService} from "@/services/studentService";
+import Student from "@/models/student";
+import MultiSelect from 'primevue/multiselect';
+import FloatLabel from "primevue/floatlabel";
+import DatePicker from 'primevue/datepicker';
 
 const selectedStudents = ref([]);
 
-const students = [
-  { name: 'Student 1', code: '1' },
-  { name: 'Student 2', code: '2' },
-  { name: 'Student 3', code: '3' },
-  { name: 'Student 4', code: '4' },
-  { name: 'Student 5', code: '5' },
-  { name: 'Student 6', code: '6' },
-  { name: 'Student 7', code: '7' },
-  { name: 'Student 8', code: '8' },
-  { name: 'Student 9', code: '9' },
-  { name: 'Student 10', code: '10' },
-  { name: 'Student 11', code: '11' },
-  { name: 'Student 12', code: '12' },
-  { name: 'Student 13', code: '13' },
-  { name: 'Student 14', code: '14' },
-  { name: 'Student 15', code: '15' },
-  { name: 'Student 16', code: '16' },
-  { name: 'Student 17', code: '17' },
-  { name: 'Student 18', code: '18' },
-  { name: 'Student 19', code: '19' },
-  { name: 'Student 20', code: '20' },
-]
+const students = ref([]);
+const date = ref();
+
+const starTime = ref();
+const endTime = ref();
+
+onMounted(async () => {
+  const studentsResponse = await getStudentsService();
+  studentsResponse.forEach(student => {
+    students.value.push(new Student(student));
+  })
+})
 
 </script>
 
 <template>
-  <div class="card flex justify-center">
-    <MultiSelect v-model="selectedStudents" display="chip" :options="students" optionLabel="name" filter placeholder="Selecciona estudiantes" :selectionLimit="4" class="w-full md:w-80" />
+  <div class="card">
+    <h2 class="text-3xl font-bold">Crear clase particular</h2>
   </div>
-  {{ selectedStudents }}
+  <div class="card justify-start">
+    <div class="mb-4">
+      <label class="text-3xl">Seleccionar alumnos</label>
+    </div>
+    <div class="my-1">
+      <FloatLabel class="w-full md:w-80" variant="on">
+        <MultiSelect v-model="selectedStudents" display="chip" option-label="fullName" :options="students" filter
+                     option-value="id"
+                     :selectionLimit="4" class="w-full md:w-80">
+
+          <template #option="slotProps">
+            <span>{{ slotProps.option.getFullName() }}</span>
+          </template>
+        </MultiSelect>
+        <label for="on_label">Seleccionar alumnos</label>
+      </FloatLabel>
+    </div>
+    <div class="my-4 w-fit">
+      <div class="mb-4">
+        <label class="text-3xl">Seleccionar fecha</label>
+      </div>
+      <FloatLabel variant="on">
+        <label for="on_label">Fecha</label>
+        <DatePicker class="w-full" v-model="date" showButtonBar/>
+      </FloatLabel>
+    </div>
+
+    <div class="my-4 w-52">
+      <div class="mb-4">
+        <label class="text-3xl">Hora de inicio</label>
+      </div>
+      <FloatLabel variant="on">
+        <label for="on_label">Desde</label>
+        <DatePicker class="w-full" v-model="starTime" timeOnly hourFormat="12" showButtonBar/>
+      </FloatLabel>
+    </div>
+
+    <div class="my-4 w-52">
+      <div class="mb-4">
+        <label class="text-3xl">Hora fin</label>
+      </div>
+      <FloatLabel variant="on">
+        <label for="on_label">Hasta</label>
+        <DatePicker class="w-full" v-model="endTime" timeOnly hourFormat="12"/>
+      </FloatLabel>
+    </div>
+
+  </div>
 </template>
 
 <style scoped>

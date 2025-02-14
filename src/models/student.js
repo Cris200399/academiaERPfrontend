@@ -18,6 +18,7 @@ class Student {
             this.documentId = data.documentId;
             this.status = data.status;
             this.paymentStatus = data.paymentStatus;
+            this.fullName = this.getFullName();
         } else {
             // Constructor for sending student to an endpoint
             this.name = data.name;
@@ -34,6 +35,7 @@ class Student {
             this.documentId = data.documentId;
             this.status = data.status
             this.paymentStatus = data.paymentStatus;
+            this.fullName = this.getFullName();
         }
     }
 
