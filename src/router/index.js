@@ -7,6 +7,7 @@ import AssistanceView from "@/views/AssistanceView.vue";
 import CreateGroupPaymentView from "@/views/CreateGroupPaymentView.vue";
 import GroupPaymentsView from "@/views/GroupPaymentsView.vue";
 import CreatePrivateClassView from "@/views/CreatePrivateClassView.vue";
+import PrivateClassesView from "@/views/PrivateClassesView.vue";
 
 const routes = [
     {path: '/', name: 'Home', component: Home},
@@ -17,6 +18,7 @@ const routes = [
     {path: '/create-group-payment', name: 'CreateGroupPayment', component: CreateGroupPaymentView},
     {path: '/group-payments', name: 'GroupPayments', component: GroupPaymentsView},
     {path: '/create-private-class', name: 'CreatePrivateClass', component: CreatePrivateClassView},
+    {path: '/private-classes', name: 'PrivateClasses', component: PrivateClassesView},
 ];
 
 const router = createRouter({

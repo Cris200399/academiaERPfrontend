@@ -7,4 +7,6 @@ export const API_URLS = {
     ASSISTANCE: `${API_BASE_URL}/assistances`,
     GROUP_PAYMENT: `${API_BASE_URL}/group-payments`,
     PAYMENTS_REPORTS: `${API_BASE_URL}/payments-reports`,
+    PRIVATE_CLASSES: `${API_BASE_URL}/private-classes`,
+    PRIVATE_CLASSES_PAYMENTS: `${API_BASE_URL}/private-class-payments`
 };

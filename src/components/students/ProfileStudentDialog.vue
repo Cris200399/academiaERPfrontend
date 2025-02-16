@@ -111,7 +111,7 @@
                        class="font-bold bg-green-400 p-3 text-white relative">
                     {{ slotProps.date.day }}
                   </div>
-                  <div v-else >{{ slotProps.date.day }}</div>
+                  <div v-else>{{ slotProps.date.day }}</div>
                 </template>
               </DatePicker>
 
@@ -255,7 +255,7 @@ const getTooltip = (slotDate) => {
   return assistance ? `✔️ ${assistance.getHour()}` : null;
 };
 
-function getDisabledDays(){
+function getDisabledDays() {
   const assistanceDates = assistances.value.map(a => a.date.toDateString());
   const allDates = Array.from({length: 30}, (_, i) => {
     const date = new Date();

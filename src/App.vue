@@ -46,7 +46,7 @@
                   class="flex items-center p-3 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
                   :class="{ 'bg-gray-100': $route.path === item.route }"
               >
-                <i :class="[item.icon, 'mr-3']"></i>
+                <span class="material-icons mr-3">{{ item.icon }}</span>
                 <span class="font-medium">{{ item.label }}</span>
               </router-link>
 
@@ -62,7 +62,7 @@
                   }"
                     class="flex items-center cursor-pointer p-3 text-gray-700 hover:bg-gray-100 rounded-md transition-colors p-ripple duration-150"
                 >
-                  <i :class="[item.icon, 'mr-3']"></i>
+                  <span class="material-icons mr-3">{{ item.icon }}</span>
                   <span class="font-medium">{{ item.label }}</span>
                   <i class="pi pi-chevron-down ml-auto"></i>
                 </a>
@@ -75,7 +75,7 @@
                         class="flex items-center cursor-pointer p-3 m-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors p-ripple duration-150"
                         :class="{ ' bg-gray-100 ': $route.path === subItem.route }"
                     >
-                      <i :class="[subItem.icon, 'mr-3']"></i>
+                      <span class="material-icons mr-3">{{ subItem.icon }}</span>
                       <span class="font-medium">{{ subItem.label }}</span>
                     </router-link>
                   </li>

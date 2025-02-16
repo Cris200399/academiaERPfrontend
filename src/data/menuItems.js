@@ -1,66 +1,76 @@
-﻿// src/data/menuItems.js
-export const menuItems = [
+﻿export const menuItems = [
     {
         label: 'Inicio',
-        icon: 'pi pi-home',
+        icon: 'home', // Casa
         route: '/'
     },
     {
         label: 'Alumnos',
-        icon: 'pi pi-users',
+        icon: 'group', // Grupo de personas
         subItems: [
             {
                 label: 'Lista de Alumnos',
                 route: '/students',
-                icon: 'pi pi-users',
+                icon: 'group', // Lista de personas
             },
             {
                 label: 'Asistencia',
                 route: '/students/assistance',
-                icon: 'pi pi-list',
+                icon: 'check_circle', // Check o lista de verificación
             },
         ]
     },
     {
         label: 'Calendario',
-        icon: 'pi pi-calendar',
+        icon: 'calendar_month', // Calendario
         route: '/calendar'
     },
     {
         label: 'Grupos',
-        icon: 'pi pi-table',
+        icon: 'table_view', // Tabla o grupo
         route: '/groups',
     },
     {
         label: 'Crear pago',
-        icon: 'pi pi-money-bill',
+        icon: 'attach_money', // Dinero
         subItems: [
             {
                 label: 'Grupal',
                 route: '/create-group-payment',
-                icon: 'pi pi-users',
+                icon: 'group_add', // Personas y un signo de más
             }
         ]
     },
     {
         label: 'Historial de pagos',
-        icon: 'pi pi-history',
+        icon: 'history', // Historial
         subItems: [
             {
                 label: 'Grupales',
                 route: '/group-payments',
-                icon: 'pi pi-list',
+                icon: 'list', // Lista
             },
             {
                 label: 'Particulares',
                 route: '/private-payments',
-                icon: 'pi pi-list',
+                icon: 'list_alt', // Lista
             },
         ]
     },
     {
-        label: 'Registrar clase particular',
-        icon: 'pi pi-address-book',
-        route: '/create-private-class'
+        label: 'Clases Particulares',
+        icon: 'school', // Persona y libro (educación)
+        subItems: [
+            {
+                label: 'Crear Clase',
+                icon: 'add', // Signo de más
+                route: '/create-private-class'
+            },
+            {
+                label:'Lista de Clases',
+                icon: 'list', // Lista
+                route: '/private-classes'
+            },
+        ]
     }
 ];
