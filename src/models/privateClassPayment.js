@@ -1,6 +1,6 @@
 class PrivateClassPayment {
-    constructor(id = '', student, privateClass, date, amount, paymentMethod) {
-        this.id = id;
+    constructor(_id = '', student, privateClass, date, amount, paymentMethod) {
+        this.id = _id;
         this.student = student;
         this.privateClass = privateClass;
         this.date = date;
