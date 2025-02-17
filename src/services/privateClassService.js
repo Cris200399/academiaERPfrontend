@@ -12,7 +12,7 @@ export const createPrivateClassService = async (privateClass) => {
     }
 }
 
-export const getPrivateClassesService = async (query) => {
+export const getPrivateClassesService = async (query = {}) => {
     try {
         const response = await axios.get(API_URLS.PRIVATE_CLASSES, {params: query});
         return response.data;
@@ -22,12 +22,22 @@ export const getPrivateClassesService = async (query) => {
     }
 }
 
-export const getPrivateClassesWithStudentsService = async () => {
+export const getPrivateClassesWithStudentsService = async (query = {}) => {
     try {
-        const response = await axios.get(`${API_URLS.PRIVATE_CLASSES}/students`);
+        const response = await axios.get(`${API_URLS.PRIVATE_CLASSES}/students`, {params: query});
         return response.data;
     } catch (error) {
         console.error('Error getting private classes with students:', error);
+        throw error;
+    }
+}
+
+export const patchPrivateClassService = async (id, privateClass) => {
+    try {
+        const response = await axios.patch(`${API_URLS.PRIVATE_CLASSES}/${id}`, privateClass);
+        return response.data;
+    } catch (error) {
+        console.error('Error patching private class:', error);
         throw error;
     }
 }

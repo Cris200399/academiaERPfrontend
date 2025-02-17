@@ -67,7 +67,6 @@ import GroupPayment from "@/models/groupPayment";
 import {patchGroupPaymentService} from "@/services/groupPaymentService";
 import {useToast} from "primevue/usetoast";
 
-const isDialogVisible = ref(false);
 const amount = ref(0);
 const paymentMethods = ref([]);
 const dates = ref(null);
@@ -106,7 +105,6 @@ function openDialog(payment) {
   paymentMethods.value = payment.paymentMethod.map(paymentMethod => {
     return paymentMethodsOptions.find(paymentOption => paymentOption.value === paymentMethod);
   })
-  isDialogVisible.value = true;
 }
 
 function closeDialog() {

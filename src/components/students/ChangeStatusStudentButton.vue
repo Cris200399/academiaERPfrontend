@@ -43,8 +43,7 @@ async function handleClick() {
       severity: 'success'
     },
     accept: async () => {
-      const response = await changeStudentStatusService(props.student.id, props.student.status === 'activo' ? 'inactivo' : 'activo');
-      console.log(response);
+      await changeStudentStatusService(props.student.id, props.student.status === 'activo' ? 'inactivo' : 'activo');
       emit('studentStatusChanged', props.student.id);
       toast.add({severity: 'success', summary: 'Confirmado', detail: 'Estado cambiado', life: 1500});
     },

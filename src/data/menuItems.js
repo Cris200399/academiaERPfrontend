@@ -67,7 +67,7 @@
                 route: '/create-private-class'
             },
             {
-                label:'Lista de Clases',
+                label:'Lista de clases particulares',
                 icon: 'list', // Lista
                 route: '/private-classes'
             },

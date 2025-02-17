@@ -30,7 +30,17 @@
       <Column header="Alumnos">
         <template #body="{data}">
           <div v-for="student in data.students" :key="student._id">
-            {{ student.name }} {{ student.lastName }}
+            {{ student.name }} {{ student.lastName }} <br>
+          </div>
+        </template>
+      </Column>
+      <Column header="Opciones">
+        <template #body="{data}">
+          <div class="flex gap-2">
+            <Button icon="pi pi-trash" severity="danger" @click="deletePrivatePayment(data.id)"/>
+            <Button icon="pi pi-pencil" severity="success" @click="editPrivateClassDialog = true"/>
+            <EditPrivateClassDialog :visible="editPrivateClassDialog" @closeDialog="editPrivateClassDialog = false"
+                                    :class-data="data" @updateClass="handleUpdateClass(data.id)"/>
           </div>
         </template>
       </Column>
@@ -76,10 +86,16 @@ import {onMounted, ref} from "vue";
 import DataTable from "primevue/datatable";
 import {FilterMatchMode} from "@primevue/core/api";
 import {formatCustomDate} from "@/utils/formatCustomDate";
-import {getPrivateClassesAndPaymentsService} from "@/services/privateClassAndPaymentsService";
+import {
+  deletePrivatePaymentService,
+  getPrivateClassesAndPaymentsService
+} from "@/services/privateClassAndPaymentsService";
 import PrivateClassAndPayment from "@/models/privateClassAndPayment";
 import {formatCurrency} from "@/utils/formatCurrency";
 import StudentGroupPaymentItem from "@/models/StudentGroupPaymentItem";
+import {useConfirm} from "primevue/useconfirm";
+import {useToast} from "primevue/usetoast";
+import EditPrivateClassDialog from "@/components/privateClass/EditPrivateClassDialog.vue";
 
 const privateClasses = ref([]);
 const expandedRows = ref([]);
@@ -91,6 +107,11 @@ const filters = ref({
   'students.lastName': {value: null, matchMode: FilterMatchMode.CONTAINS},
 });
 const showTitleColumn = ref(true);
+
+const confirm = useConfirm();
+const toast = useToast();
+
+const editPrivateClassDialog = ref(false);
 
 onMounted(async () => {
   await getPrivateClasses();
@@ -105,6 +126,33 @@ async function getPrivateClasses() {
 
   showTitleColumn.value = privateClasses.value.some(item => item.title);
 }
+
+async function deletePrivatePayment(privateClassId) {
+  confirm.require({
+    header: '¿Estás seguro que deseas eliminar esta clase particular?',
+    message: 'Al eliminar la clase también se eliminarán los pagos asociados',
+    accept: async () => {
+      await deletePrivatePaymentService(privateClassId);
+      toast.add({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Clase particular eliminada correctamente',
+        life: 1500
+      });
+      privateClasses.value = privateClasses.value.filter(item => item.id !== privateClassId);
+    },
+    reject: () => {
+      toast.add({severity: 'info', summary: 'Cancelado', detail: 'No se ha eliminado la clase particular', life: 1500});
+    }
+  });
+}
+
+async function handleUpdateClass(privateClassId) {
+  const updatedPrivateClass = await getPrivateClassesAndPaymentsService({_id: privateClassId});
+  const index = privateClasses.value.findIndex(item => item.id === privateClassId);
+  privateClasses.value[index] = new PrivateClassAndPayment(updatedPrivateClass[0]);
+}
+
 
 </script>
 

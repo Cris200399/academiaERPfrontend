@@ -22,7 +22,7 @@ const students = ref([]);
 const title = ref();
 const selectedStudent = ref();
 const date = ref();
-const starTime = ref();
+const startTime = ref();
 const endTime = ref();
 const amount = ref();
 
@@ -46,7 +46,7 @@ async function onSubmit() {
         title: title.value,
         students: [selectedStudent.value],
         date: date.value,
-        startTime: formatDateTo24h(starTime.value),
+        startTime: formatDateTo24h(startTime.value),
         endTime: formatDateTo24h(endTime.value)
       }
   )
@@ -92,7 +92,7 @@ function resetForm() {
   title.value = '';
   selectedStudent.value = null;
   date.value = null;
-  starTime.value = null;
+  startTime.value = null;
   endTime.value = null;
   amount.value = null;
   paymentMethods.value = [];
@@ -144,7 +144,7 @@ function resetForm() {
           </div>
           <FloatLabel variant="on">
             <label for="on_label">Seleccionar hora de inicio</label>
-            <DatePicker class="w-full" v-model="starTime" timeOnly hourFormat="12" showButtonBar/>
+            <DatePicker class="w-full" v-model="startTime" timeOnly hourFormat="12" showButtonBar/>
           </FloatLabel>
         </div>
 
