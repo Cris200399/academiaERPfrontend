@@ -107,7 +107,7 @@ import {formatCurrency} from "@/utils/formatCurrency";
 import {formatCustomDate} from "@/utils/formatCustomDate";
 
 
-import EditGroupPayment from "@/components/payments/EditGroupPayment.vue";
+import EditGroupPayment from "@/components/groupPayments/EditGroupPayment.vue";
 
 const studentGroupPayments = ref([]);
 const expandedRows = ref([]);

@@ -48,7 +48,6 @@ async function onChangeGroup() {
       });
     });
   }
-
 }
 
 function togglePaymentMethods(paymentOption) {

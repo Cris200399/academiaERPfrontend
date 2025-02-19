@@ -101,17 +101,14 @@
 
       <!-- Phone -->
       <div class="flex flex-col justify-center ">
-        <FloatLabel variant="on" class="input-size">
-          <InputMask
-              id="phone"
-              v-model="formData.phone"
-              mask="999 999 999"
-              fluid
-              :class="{'p-invalid': errors.phone}"
-              @blur="validateField('phone')"
-          />
-          <label for="on_label">Teléfono</label>
-        </FloatLabel>
+        <vue-tel-input v-model="formData.phone"
+                       mode="international"
+                       :input-options="{ placeholder: 'Ingresa el número de celular' }"
+                       :dropdown-options="{
+                              showFlags: true,
+                              showSearchBox: true,
+                              searchBoxPlaceholder: 'Buscar país...'}"
+        />
         <small class="p-error" v-if="errors.phone">{{ errors.phone }}</small>
       </div>
 
@@ -170,16 +167,14 @@
         </div>
 
         <div class="flex flex-wrap justify-center items-center">
-          <FloatLabel variant="on" class="input-size">
-            <InputText
-                v-model="formData.guardian.phone"
-                size="large"
-                class="input-size"
-                :class="{'p-invalid': errors.guardianPhone}"
-                @blur="validateField('guardianPhone')"
-            />
-            <label class="justify-center mb-5">Teléfono del Apoderado</label>
-          </FloatLabel>
+          <vue-tel-input v-model="formData.guardian.phone"
+                         mode="international"
+                         :input-options="{ placeholder: 'Número del apoderado' }"
+                         :dropdown-options="{
+                              showFlags: true,
+                              showSearchBox: true,
+                              searchBoxPlaceholder: 'Buscar país...'}"
+          />
           <small class="p-error" v-if="errors.guardianPhone">{{ errors.guardianPhone }}</small>
         </div>
 

@@ -1,5 +1,5 @@
 <script setup>
-import CreateGroupPayment from "@/components/payments/CreateGroupPayment.vue";
+import CreateGroupPayment from "@/components/groupPayments/CreateGroupPayment.vue";
 </script>
 
 <template>

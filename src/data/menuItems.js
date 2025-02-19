@@ -12,12 +12,23 @@
                 label: 'Lista de Alumnos',
                 route: '/students',
                 icon: 'group', // Lista de personas
+            }
+        ]
+    },
+    {
+        label: 'Asistencia',
+        icon: 'check', // Check
+        subItems: [
+            {
+                label: 'Clase en curso',
+                route: '/students/assistance',
+                icon: 'school', // Persona y libro (educación)
             },
             {
-                label: 'Asistencia',
-                route: '/students/assistance',
-                icon: 'check_circle', // Check o lista de verificación
-            },
+                label: 'Marcar asistencia',
+                route: '/mark-assistance',
+                icon: 'pending_actions', // Check
+            }
         ]
     },
     {
@@ -28,33 +39,22 @@
     {
         label: 'Grupos',
         icon: 'table_view', // Tabla o grupo
-        route: '/groups',
-    },
-    {
-        label: 'Crear pago',
-        icon: 'attach_money', // Dinero
         subItems: [
             {
-                label: 'Grupal',
+                label: 'Administrar Grupos',
+                route: '/groups',
+                icon: 'group', // Grupo de personas
+            },
+            {
+                label: 'Crear Pago',
                 route: '/create-group-payment',
-                icon: 'group_add', // Personas y un signo de más
-            }
-        ]
-    },
-    {
-        label: 'Historial de pagos',
-        icon: 'history', // Historial
-        subItems: [
+                icon: 'attach_money', // Dinero
+            },
             {
-                label: 'Grupales',
+                label: 'Historial de Pagos',
                 route: '/group-payments',
-                icon: 'list', // Lista
-            },
-            {
-                label: 'Particulares',
-                route: '/private-payments',
-                icon: 'list_alt', // Lista
-            },
+                icon: 'history', // Historial
+            }
         ]
     },
     {
@@ -67,7 +67,7 @@
                 route: '/create-private-class'
             },
             {
-                label:'Próximas particulares',
+                label: 'Próximas particulares',
                 icon: 'list', // Lista
                 route: '/private-classes'
             },

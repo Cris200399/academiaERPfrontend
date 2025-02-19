@@ -1,6 +1,7 @@
 import 'primeicons/primeicons.css';
 import "./style.css";
 import "./flags.css"
+import 'vue-tel-input/vue-tel-input.css';
 
 import {createApp} from 'vue';
 
@@ -11,6 +12,8 @@ import router from './router';
 import ToastService from 'primevue/toastservice';
 import DialogService from 'primevue/dialogservice'
 import ConfirmationService from 'primevue/confirmationservice';
+
+import VueTelInput from 'vue-tel-input';
 
 
 import PrimeVue from "primevue/config";
@@ -26,6 +29,8 @@ app.use(router);
 app.use(ConfirmationService);
 app.use(ToastService);
 app.use(DialogService);
+
+app.use(VueTelInput);
 
 
 app.use(PrimeVue,

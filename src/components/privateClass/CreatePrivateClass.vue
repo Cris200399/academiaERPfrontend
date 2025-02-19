@@ -46,8 +46,8 @@ async function onSubmit() {
         title: title.value,
         students: [selectedStudent.value],
         date: date.value,
-        startTime: formatDateTo24h(startTime.value),
-        endTime: formatDateTo24h(endTime.value)
+        startTime: startTime.value,
+        endTime: endTime.value
       }
   )
 
@@ -140,22 +140,24 @@ function resetForm() {
 
         <div class="my-4 w-full">
           <div class="mb-4">
-            <label class="text-3xl">Inicio</label>
+            <label class="text-3xl">Hora de inicio</label>
           </div>
-          <FloatLabel variant="on">
-            <label for="on_label">Seleccionar hora de inicio</label>
-            <DatePicker class="w-full" v-model="startTime" timeOnly hourFormat="12" showButtonBar/>
-          </FloatLabel>
+          <input
+              v-model="startTime"
+              type="time"
+              class="p-2 border rounded"
+          >
         </div>
 
         <div class="my-4 w-full">
           <div class="mb-4">
-            <label class="text-3xl">Fin</label>
+            <label class="text-3xl">Hora de fin</label>
           </div>
-          <FloatLabel variant="on">
-            <label for="on_label">Seleccionar hora de fin</label>
-            <DatePicker class="w-full" v-model="endTime" timeOnly hourFormat="12"/>
-          </FloatLabel>
+          <input
+              v-model="endTime"
+              type="time"
+              class="p-2 border rounded"
+          >
         </div>
 
         <div class="my-4 w-full">

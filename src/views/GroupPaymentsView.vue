@@ -8,5 +8,5 @@
 </template>
 
 <script setup>
-import DataTableGroupPayments from "@/components/payments/DataTableGroupPayments.vue";
+import DataTableGroupPayments from "@/components/groupPayments/DataTableGroupPayments.vue";
 </script>
