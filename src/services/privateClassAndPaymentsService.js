@@ -2,9 +2,9 @@ import axios from "axios";
 
 import {API_URLS} from "@/config/apiConfig";
 
-export const getPrivateClassesAndPaymentsService = async (query = {}) => {
+export const getNextPrivateClassesAndPaymentsService = async (query = {}) => {
     try {
-        const response = await axios.get(API_URLS.PRIVATE_CLASSES_AND_PAYMENTS, {params: query});
+        const response = await axios.get(`${API_URLS.PRIVATE_CLASSES_AND_PAYMENTS}/coming`, {params: query});
         return response.data;
     } catch (error) {
         console.error('Error getting private classes and payments:', error);
@@ -12,7 +12,7 @@ export const getPrivateClassesAndPaymentsService = async (query = {}) => {
     }
 }
 
-export const deletePrivatePaymentService = async (privateClassId) => {
+export const deletePrivateClassAndPaymentService = async (privateClassId) => {
     try {
         const response = await axios.delete(`${API_URLS.PRIVATE_CLASSES_AND_PAYMENTS}/${privateClassId}`);
         return response.data;

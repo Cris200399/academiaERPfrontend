@@ -22,3 +22,13 @@ export const getPrivateClassPaymentsService = async (query) => {
         throw error;
     }
 }
+
+export const deletePrivateClassPaymentService = async (id) => {
+    try {
+        const response = await axios.delete(`${API_URLS.PRIVATE_CLASSES_PAYMENTS}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting private class payment:', error);
+        throw error;
+    }
+}

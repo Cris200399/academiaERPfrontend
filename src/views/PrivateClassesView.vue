@@ -5,7 +5,7 @@ import DataTablePrivateClasses from "@/components/privateClass/DataTablePrivateC
 
 <template>
   <div class="card w-full flex justify-center">
-    <h2 class="text-3xl font-bold">Clases particulares</h2>
+    <h2 class="text-3xl font-bold">Próximas particulares</h2>
   </div>
   <div class="card w-full">
     <DataTablePrivateClasses/>

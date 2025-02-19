@@ -29,7 +29,8 @@
     "tailwindcss-primeui": "^0.3.4",
     "vite": "^4.0.0",
     "vue": "^3.2.13",
-    "vue-router": "^4.4.5"
+    "vue-router": "^4.4.5",
+    "vue-tel-input": "^9.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",

@@ -37,8 +37,15 @@
       <Column header="Opciones">
         <template #body="{data}">
           <div class="flex gap-2">
-            <Button icon="pi pi-trash" severity="danger" @click="deletePrivatePayment(data.id)"/>
-            <Button icon="pi pi-pencil" severity="success" @click="editPrivateClassDialog = true"/>
+            <Button v-tooltip.bottom="{value:'Agregar alumno', hideDelay:200}" @click="addStudentClassDialog = true"
+                    icon="pi pi-plus" severity="success"/>
+            <Button v-tooltip.bottom="{value:'Editar clase', hideDelay:200}"
+                    icon="pi pi-pencil" severity="info" @click="editPrivateClassDialog = true"/>
+            <Button v-tooltip.bottom="{value:'Eliminar clase', hideDelay:200}"
+                    icon="pi pi-trash" severity="danger" @click="deletePrivateClass(data.id)"/>
+            <AddStudentPrivateClassDialog :visible="addStudentClassDialog" :private-class-id="data.id"
+                                          @updateClass="handleUpdateClass(data.id)"
+                                          @closeDialog="addStudentClassDialog = false"/>
             <EditPrivateClassDialog :visible="editPrivateClassDialog" @closeDialog="editPrivateClassDialog = false"
                                     :class-data="data" @updateClass="handleUpdateClass(data.id)"/>
           </div>
@@ -71,6 +78,13 @@
                 {{ StudentGroupPaymentItem.getPaymentsMethods(data.paymentMethod) }}
               </template>
             </Column>
+            <Column>
+              <template #body="{data}">
+                <Button v-tooltip.bottom="{value:'Eliminar alumno y pago', hideDelay:200}"
+                        @click="deletePrivatePayment(data._id, slotProps.data.id)" icon="pi pi-trash"
+                        class="p-button-danger"/>
+              </template>
+            </Column>
           </DataTable>
           <p v-else>No hay pagos registrados para esta clase.</p>
         </div>
@@ -87,8 +101,8 @@ import DataTable from "primevue/datatable";
 import {FilterMatchMode} from "@primevue/core/api";
 import {formatCustomDate} from "@/utils/formatCustomDate";
 import {
-  deletePrivatePaymentService,
-  getPrivateClassesAndPaymentsService
+  deletePrivateClassAndPaymentService,
+  getNextPrivateClassesAndPaymentsService
 } from "@/services/privateClassAndPaymentsService";
 import PrivateClassAndPayment from "@/models/privateClassAndPayment";
 import {formatCurrency} from "@/utils/formatCurrency";
@@ -96,6 +110,8 @@ import StudentGroupPaymentItem from "@/models/StudentGroupPaymentItem";
 import {useConfirm} from "primevue/useconfirm";
 import {useToast} from "primevue/usetoast";
 import EditPrivateClassDialog from "@/components/privateClass/EditPrivateClassDialog.vue";
+import AddStudentPrivateClassDialog from "@/components/privateClass/AddStudentPrivateClassDialog.vue";
+import {deletePrivateClassPaymentService} from "@/services/privateClassPaymentService";
 
 const privateClasses = ref([]);
 const expandedRows = ref([]);
@@ -112,14 +128,15 @@ const confirm = useConfirm();
 const toast = useToast();
 
 const editPrivateClassDialog = ref(false);
+const addStudentClassDialog = ref(false);
 
 onMounted(async () => {
-  await getPrivateClasses();
+  await getNextPrivateClasses();
   loading.value = false;
 });
 
-async function getPrivateClasses() {
-  const privateClassesResponse = await getPrivateClassesAndPaymentsService();
+async function getNextPrivateClasses() {
+  const privateClassesResponse = await getNextPrivateClassesAndPaymentsService();
   privateClassesResponse.forEach(privateClassAndPayment => {
     privateClasses.value.push(new PrivateClassAndPayment(privateClassAndPayment));
   });
@@ -127,12 +144,12 @@ async function getPrivateClasses() {
   showTitleColumn.value = privateClasses.value.some(item => item.title);
 }
 
-async function deletePrivatePayment(privateClassId) {
+async function deletePrivateClass(privateClassId) {
   confirm.require({
     header: '¿Estás seguro que deseas eliminar esta clase particular?',
     message: 'Al eliminar la clase también se eliminarán los pagos asociados',
     accept: async () => {
-      await deletePrivatePaymentService(privateClassId);
+      await deletePrivateClassAndPaymentService(privateClassId);
       toast.add({
         severity: 'success',
         summary: 'Éxito',
@@ -148,11 +165,31 @@ async function deletePrivatePayment(privateClassId) {
 }
 
 async function handleUpdateClass(privateClassId) {
-  const updatedPrivateClass = await getPrivateClassesAndPaymentsService({_id: privateClassId});
+  const updatedPrivateClass = await getNextPrivateClassesAndPaymentsService({_id: privateClassId});
   const index = privateClasses.value.findIndex(item => item.id === privateClassId);
   privateClasses.value[index] = new PrivateClassAndPayment(updatedPrivateClass[0]);
 }
 
+function deletePrivatePayment(paymentId, privateClassId) {
+  confirm.require({
+    header: '¿Estás seguro que deseas eliminar este pago?',
+    message: 'Al eliminar el pago no se podrá recuperar',
+    accept: async () => {
+      await deletePrivateClassPaymentService(paymentId);
+      await handleUpdateClass(privateClassId);
+      toast.add({
+        severity: 'success',
+        summary: 'Éxito',
+        detail: 'Pago eliminado correctamente',
+        life: 1500
+      });
+    },
+    reject: () => {
+      toast.add({severity: 'info', summary: 'Cancelado', detail: 'No se ha eliminado el pago', life: 1500});
+    }
+  });
+
+}
 
 </script>
 

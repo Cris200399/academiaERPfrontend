@@ -41,3 +41,23 @@ export const patchPrivateClassService = async (id, privateClass) => {
         throw error;
     }
 }
+
+export const addStudentToPrivateClassService = async (privateClassId, studentId) => {
+    try {
+        const response = await axios.patch(`${API_URLS.PRIVATE_CLASSES}/${privateClassId}/student/${studentId}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error adding student to private class:', error);
+        throw error;
+    }
+}
+
+export const deletePrivateClassService = async (id) => {
+    try {
+        const response = await axios.delete(`${API_URLS.PRIVATE_CLASSES}/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error deleting private class:', error);
+        throw error;
+    }
+}

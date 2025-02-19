@@ -2,27 +2,63 @@ import axios from 'axios';
 
 import {API_URLS} from "@/config/apiConfig";
 
-export const getLast3MonthsGroupsReportsService = async () => {
+export const getLatest3MonthsGroupsReportsService = async () => {
     try {
-        const response = await axios.get(`${API_URLS.PAYMENTS_REPORTS}/3-latest-months-payments`);
+        const response = await axios.get(`${API_URLS.PAYMENTS_REPORTS}/group-3-latest-months-payments`);
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.message);
     }
 }
 
-export const getTotalPaymentsForActualMonthService = async () => {
+export const getTotalGroupsPaymentsForActualMonthService = async () => {
     try {
-        const response = await axios.get(`${API_URLS.PAYMENTS_REPORTS}/total-payments-actual-month`);
+        const response = await axios.get(`${API_URLS.PAYMENTS_REPORTS}/group-total-payments-actual-month`);
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.message);
     }
 }
 
-export const getTotalPaymentsForAMonthService = async (month) => {
+export const getTotalGroupsPaymentsForAMonthService = async (month) => {
     try {
-        const response = await axios.get(`${API_URLS.PAYMENTS_REPORTS}/total-payments-month/${month}`);
+        const response = await axios.get(`${API_URLS.PAYMENTS_REPORTS}/group-total-payments-month/${month}`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+}
+
+export const get3LatestMonthsPrivateReportsService = async () => {
+    try {
+        const response = await axios.get(`${API_URLS.PAYMENTS_REPORTS}/private-3-latest-months-payments`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+}
+
+export const getTotalPrivatePaymentsForActualMonthService = async () => {
+    try {
+        const response = await axios.get(`${API_URLS.PAYMENTS_REPORTS}/private-total-payments-actual-month`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+}
+
+export const getTotalPrivatePaymentsForLastMonthService = async () => {
+    try {
+        const response = await axios.get(`${API_URLS.PAYMENTS_REPORTS}/private-total-payments-last-month`);
+        return response.data;
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+}
+
+export const getTotalPrivatePaymentsForAMonthService = async (month) => {
+    try {
+        const response = await axios.get(`${API_URLS.PAYMENTS_REPORTS}/private-total-payments-month/${month}`);
         return response.data;
     } catch (error) {
         throw new Error(error.response.data.message);

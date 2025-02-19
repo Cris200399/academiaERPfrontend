@@ -7,17 +7,15 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import * as echarts from "echarts";
-import { getLast3MonthsGroupsReportsService } from "@/services/paymentReportService";
+import {
+  get3LatestMonthsPrivateReportsService,
+  getLatest3MonthsGroupsReportsService
+} from "@/services/paymentReportService";
 import ReportSalesItem from "@/models/reportSalesItem";
 
 const chartRef = ref(null);
-const groupSalesData = ref([
-
-]);
+const groupSalesData = ref([]);
 const privateSalesData = ref([
-  { month: "Enero", totalPayments: 100 },
-  { month: "Febrero", totalPayments: 330 },
-  { month: "Marzo", totalPayments: 1050 },
 ]);
 
 onMounted(async () => {
@@ -81,11 +79,14 @@ onMounted(async () => {
 });
 
 async function getReports() {
-  const groupReports = await getLast3MonthsGroupsReportsService();
+  const groupReports = await getLatest3MonthsGroupsReportsService();
   groupReports.forEach((report) => {
     groupSalesData.value.push(new ReportSalesItem(report));
-    groupSalesData.value.push(new ReportSalesItem(report));
-    groupSalesData.value.push(new ReportSalesItem(report));
+  });
+
+  const privateReports = await get3LatestMonthsPrivateReportsService();
+  privateReports.forEach((report) => {
+    privateSalesData.value.push(new ReportSalesItem(report));
   });
 }
 </script>
