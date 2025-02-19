@@ -120,20 +120,27 @@
 
 
           <div v-if="pdfUrl" class="mt-4">
-            <h3 class="text-lg font-bold mb-2">DNI
-            </h3>
+            <h3 class="text-lg font-bold mb-2">DNI</h3>
             <div class="pdf-preview-container">
-              <iframe
-                  :src="pdfUrl"
+              <object
+                  :data="pdfUrl"
                   type="application/pdf"
-                  width="100%"
-                  height="500px"
-                  class="border rounded-lg"
-              ></iframe>
+                  class="w-full h-[500px] border rounded-lg max-w-full"
+              >
+                <div class="flex flex-col items-center justify-center p-4 text-center">
+                  <p class="mb-4">No se puede mostrar el PDF en este dispositivo.</p>
+                  <Button
+                      @click="openInNewTab"
+                      class="p-button-primary"
+                  >
+                    <i class="pi pi-external-link mr-2"></i>
+                    Ver PDF
+                  </Button>
+                </div>
+              </object>
             </div>
 
-            <!-- Botones de acción -->
-            <div class="mt-5 flex gap-2 justify-around ">
+            <div class="mt-5 flex gap-2 justify-around">
               <Button
                   @click="openInNewTab"
                   class="p-button-secondary"
@@ -141,9 +148,7 @@
                 <i class="pi pi-external-link mr-2"></i>
                 Abrir en nueva pestaña
               </Button>
-              <!--              <Spacer/>-->
 
-              <!-- Subir Documentos -->
               <UploadDocumentDialog @updateDocument="loadDocument" :student="student"/>
             </div>
           </div>
