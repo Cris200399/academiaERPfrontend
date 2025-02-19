@@ -119,4 +119,5 @@
         rotateRight: 'Girar a la derecha',
         rotateLeft: 'Girar a la izquierda'
     }
+
 };

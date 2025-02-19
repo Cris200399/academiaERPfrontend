@@ -85,6 +85,7 @@ function hideDialog() {
       <div class="flex flex-col items-center gap-6">
         <FileUpload mode="basic" @select="onFileSelect" customUpload auto severity="secondary"
                     accept="application/pdf" :maxFileSize="1000000" chooseLabel="Seleccionar archivo"
+                    invalidFileSizeMessage="Tamaño máximo: 1MB" invalidFileMessage="Solo archivos PDF"
                     class="p-button-outlined"/>
         <small class="block mt-2 text-gray-500">Tamaño máximo: 1MB. Solo archivos PDF.</small>
         <iframe v-if="pdfDocument"

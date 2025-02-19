@@ -38,6 +38,8 @@
             :maxFileSize="1000000"
             @select="onFileSelect"
             chooseLabel="Seleccionar imagen"
+            invalidFileSizeMessage="Tamaño máximo: 1MB"
+            invalidFileMessage="Solo imágenes"
             :customUpload="true"
             @uploader="handleFileUpload"
         />
