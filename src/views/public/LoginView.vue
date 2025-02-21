@@ -75,7 +75,6 @@ const login = async () => {
     userStore.user = user; // Guarda la info del usuario en Pinia
     await router.push('/'); // Redirige a la página principal
   } catch (error) {
-    console.error("Error de autenticación:", error);
     errorMessage.value = error.response?.data?.message || 'Credenciales incorrectas';
   }
 };
@@ -85,11 +84,11 @@ const login = async () => {
 <style scoped>
 .login-page {
   height: 100vh;
-  width: 100%;
+  width: 100vw;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('https://www.peru.travel/Contenido/General/Imagen/es/617/1.1/marinera.jpg');
+  background-image: url('https://images.pexels.com/photos/956999/milky-way-starry-sky-night-sky-star-956999.jpeg?cs=srgb&dl=pexels-felixmittermeier-956999.jpg&fm=jpg');
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-attachment: fixed;

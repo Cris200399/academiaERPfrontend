@@ -305,7 +305,7 @@ const validateDNI = (dni) => {
 };
 
 const validatePhone = (phone) => {
-  return phone.replace(/\s/g, '').length === 9;
+  return phone && phone.trim().length >= 8 && phone.trim().length <= 15;
 };
 
 const validateField = (field) => {

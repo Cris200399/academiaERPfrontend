@@ -18,7 +18,7 @@ export const loginService = async (credentials) => {
 
 export const fetchUser = async () => {
     const response = await api.get('/auth/me', { withCredentials: true });
-    return response.data.user;
+    return response.data;
 };
 
 export const logoutService = async () => {
