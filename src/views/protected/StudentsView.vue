@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import StudentsDataTable from '../components/students/StudentsDataTable.vue';
+import StudentsDataTable from '../../components/students/StudentsDataTable.vue';
 import AddStudentDialog from "@/components/students/AddStudentDialog.vue";
 
 import {getTotalStudentsService} from "@/services/studentService";

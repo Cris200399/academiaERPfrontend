@@ -1,10 +1,8 @@
-import axios from "axios";
-
-import {API_URLS} from "@/config/apiConfig";
+import {api, API_URLS} from '@/config/config';
 
 export const getAssistanceService = async () => {
     try {
-        const response = await axios.get(API_URLS.ASSISTANCE);
+        const response = await api.get(API_URLS.ASSISTANCE);
         return response.data;
     } catch (error) {
         console.error("Error fetching assistances:", error);
@@ -14,7 +12,7 @@ export const getAssistanceService = async () => {
 
 export const deleteAssistanceService = async (assistanceId) => {
     try {
-        const response = await axios.delete(`${API_URLS.ASSISTANCE}/${assistanceId}`);
+        const response = await api.delete(`${API_URLS.ASSISTANCE}/${assistanceId}`);
         if (response.status === 204) {
             return {message: "Assistance deleted successfully"};
         } else {
@@ -28,7 +26,7 @@ export const deleteAssistanceService = async (assistanceId) => {
 
 export const createAssistanceService = async (assistanceData) => {
     try {
-        const response = await axios.post(API_URLS.ASSISTANCE, assistanceData);
+        const response = await api.post(API_URLS.ASSISTANCE, assistanceData);
         return response.data;
     } catch (error) {
         console.error("Error creating assistance:", error);
@@ -38,7 +36,7 @@ export const createAssistanceService = async (assistanceData) => {
 
 export const updateAssistanceService = async (assistanceId, assistanceData) => {
     try {
-        const response = await axios.put(`${API_URLS.ASSISTANCE}/${assistanceId}`, assistanceData);
+        const response = await api.put(`${API_URLS.ASSISTANCE}/${assistanceId}`, assistanceData);
         return response.data;
     } catch (error) {
         console.error("Error updating assistance:", error);
@@ -48,7 +46,7 @@ export const updateAssistanceService = async (assistanceId, assistanceData) => {
 
 export const updateAssistanceStatus = async (assistanceId, status) => {
     try {
-        const response = await axios.patch(`${API_URLS.ASSISTANCE}/${assistanceId}/status`, {status});
+        const response = await api.patch(`${API_URLS.ASSISTANCE}/${assistanceId}/status`, {status});
         return response.data;
     } catch (error) {
         console.error("Error updating assistance status:", error);
@@ -58,7 +56,7 @@ export const updateAssistanceStatus = async (assistanceId, status) => {
 
 export const getTodayAssistancePerStudentService = async (studentId, groupId) => {
     try {
-        const response = await axios.get(`${API_URLS.ASSISTANCE}/today?studentId=${studentId}&groupId=${groupId}`);
+        const response = await api.get(`${API_URLS.ASSISTANCE}/today?studentId=${studentId}&groupId=${groupId}`);
         return response.data;
     } catch (error) {
         console.error("Error fetching today's assistance:", error);
@@ -68,7 +66,7 @@ export const getTodayAssistancePerStudentService = async (studentId, groupId) =>
 
 export const getAssistancesPerStudentIdService = async (studentId) => {
     try {
-        const response = await axios.get(`${API_URLS.ASSISTANCE}/student/${studentId}`);
+        const response = await api.get(`${API_URLS.ASSISTANCE}/student/${studentId}`);
         return response.data;
     } catch (error) {
         console.error("Error fetching student's assistances:", error);

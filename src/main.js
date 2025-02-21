@@ -21,16 +21,17 @@ import StyleClass from 'primevue/styleclass';
 import Ripple from 'primevue/ripple';
 import Tooltip from 'primevue/tooltip';
 import {spanishLocale} from "@/language/spanishLocale";
-
+import {createPinia} from 'pinia';
 
 const app = createApp(App);
+const pinia = createPinia();
 
 app.use(router);
 app.use(ConfirmationService);
 app.use(ToastService);
 app.use(DialogService);
-
 app.use(VueTelInput);
+app.use(pinia);
 
 
 app.use(PrimeVue,
