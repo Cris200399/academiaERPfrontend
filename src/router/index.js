@@ -1,6 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import { useUserStore } from '@/stores/userStore';
-import { fetchUser } from '@/services/authService';
+import {createRouter, createWebHistory} from 'vue-router';
+import {useUserStore} from '@/stores/userStore';
+import {fetchUser} from '@/services/authService';
 import Home from '../views/protected/HomeView.vue';
 import CalendarView from '../views/protected/CalendarView.vue';
 import AlumnosView from '../views/protected/StudentsView.vue';
@@ -14,28 +14,30 @@ import MarkAssistanceView from "@/views/protected/MarkAssistanceView.vue";
 import LoginView from "@/views/public/LoginView.vue";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
+import SettingsView from "@/views/protected/SettingsView.vue";
 
 const routes = [
     {
         path: '/login',
         component: AuthLayout,
-        children: [{ path: '', component: LoginView }]
+        children: [{path: '', component: LoginView}]
     },
     {
         path: '/',
         component: DashboardLayout,
-        meta: { requiresAuth: true },
+        meta: {requiresAuth: true},
         children: [
-            { path: '/', name: 'Home', component: Home },
-            { path: '/calendar', name: 'Class', component: CalendarView },
-            { path: '/students', name: 'Students', component: AlumnosView },
-            { path: '/groups', name: 'Groups', component: GroupsView },
-            { path: '/students/assistance', name: 'Assistance', component: AssistanceView },
-            { path: '/create-group-payment', name: 'CreateGroupPayment', component: CreateGroupPaymentView },
-            { path: '/group-payments', name: 'GroupPayments', component: GroupPaymentsView },
-            { path: '/create-private-class', name: 'CreatePrivateClass', component: CreatePrivateClassView },
-            { path: '/private-classes', name: 'PrivateClasses', component: PrivateClassesView },
-            { path: '/mark-assistance', name: 'MarkAssistance', component: MarkAssistanceView },
+            {path: '/', component: Home},
+            {path: '/calendar', component: CalendarView},
+            {path: '/students', component: AlumnosView},
+            {path: '/groups', component: GroupsView},
+            {path: '/students/assistance', component: AssistanceView},
+            {path: '/create-group-payment', component: CreateGroupPaymentView},
+            {path: '/group-payments', component: GroupPaymentsView},
+            {path: '/create-private-class', component: CreatePrivateClassView},
+            {path: '/private-classes', component: PrivateClassesView},
+            {path: '/mark-assistance', component: MarkAssistanceView},
+            {path: '/config', component: SettingsView},
         ]
     }
 ];
@@ -51,8 +53,7 @@ router.beforeEach(async (to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!userStore.user) {
             try {
-                const user = await fetchUser(); // Consulta al backend
-                userStore.user = user; // Guarda el usuario en Pinia
+                userStore.user = await fetchUser(); // Guarda el usuario en Pinia
                 next();
             } catch (error) {
                 console.error('No autenticado:', error);

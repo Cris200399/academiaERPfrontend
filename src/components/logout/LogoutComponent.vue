@@ -64,14 +64,9 @@ const userName = computed(() => user.value ? user.value.name : 'Invitado');
 
 const menuItems = [
   {
-    label: 'Perfil',
-    icon: 'pi pi-user',
-    command: () => router.push('/perfil')
-  },
-  {
     label: 'Configuración',
     icon: 'pi pi-cog',
-    command: () => router.push('/configuracion')
+    command: () => router.push('/config')
   },
   {separator: true},
   {

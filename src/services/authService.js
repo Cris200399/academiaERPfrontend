@@ -1,26 +1,15 @@
-import {api, API_URLS} from '@/config/config';
-
-// export const loginService = async (credentials) => {
-//     try {
-//         const response = await api.post(`${API_URLS.AUTH}/login`, credentials);
-//         return response.data;
-//     } catch (error) {
-//         console.error("Error logging in:", error);
-//         throw error;
-//     }
-// }
-
+import {api} from '@/config/config';
 
 export const loginService = async (credentials) => {
-    const response = await api.post('/auth/login', credentials, { withCredentials: true });
+    const response = await api.post('/auth/login', credentials);
     return response.data.user;
 };
 
 export const fetchUser = async () => {
-    const response = await api.get('/auth/me', { withCredentials: true });
+    const response = await api.get('/auth/me');
     return response.data;
 };
 
 export const logoutService = async () => {
-    await api.post('/auth/logout', {}, { withCredentials: true });
+    await api.post('/auth/logout', {});
 };
