@@ -84,10 +84,9 @@ async function getTotalSales() {
 }
 
 async function getGroupSales() {
-  actualMonthGroupTotalSales.value = (await getTotalGroupsPaymentsForActualMonthService()).totalPayments;
+  actualMonthGroupTotalSales.value = (await getTotalGroupsPaymentsForActualMonthService()).totalPayments ?? 0;
   const lastMonthSales = (await getTotalGroupsPaymentsForAMonthService((new Date().getMonth()) - 1)).totalPayments;
   if (lastMonthSales !== 0) {
-    console.log(lastMonthSales);
     changeGroupSales.value = `${((actualMonthGroupTotalSales.value - lastMonthSales) / lastMonthSales * 100).toFixed(2)}%`;
   } else {
     changeGroupSales.value = `No hay datos previos`;
@@ -95,7 +94,7 @@ async function getGroupSales() {
 }
 
 async function getParticularSales() {
-  actualMonthParticularTotalSales.value = (await getTotalPrivatePaymentsForActualMonthService()).totalPayments;
+  actualMonthParticularTotalSales.value = (await getTotalPrivatePaymentsForActualMonthService()).totalPayments ?? 0;
   const lastMonthSales = (await getTotalPrivatePaymentsForAMonthService((new Date().getMonth()) - 1)).totalPayments;
   if (lastMonthSales !== 0) {
     changeParticularSales.value = `${((actualMonthParticularTotalSales.value - lastMonthSales) / lastMonthSales * 100).toFixed(2)}%`;

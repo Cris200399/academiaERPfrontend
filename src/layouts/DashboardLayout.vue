@@ -5,7 +5,7 @@
       <div class="flex justify-between h-16">
         <div class="flex items-center">
           <!-- Logo -->
-          <img src="/src/assets/logo.png" alt="Logo" class="h-8 w-8"/>
+          <img src="/public/logo.png" alt="Logo" class="h-8 w-8"/>
           <h1 class="ml-2 text-lg font-semibold">Somos Campeones Academia</h1>
         </div>
         <!-- Botón del menú para móviles -->
@@ -26,7 +26,7 @@
       <div class="flex flex-col h-full bg-white">
         <!-- Logo -->
         <div class="flex flex-col items-center px-6 pt-4 shrink-0 mb-8">
-          <img src="/src/assets/logo.png" alt="Logo" class="h-auto w-full sm:w-60"/>
+          <img src="/logo.png" alt="Logo" class="h-auto w-full sm:w-60"/>
           <div class="ml-2">
             <h1 class="text-lg font-semibold">Sistema Somos Campeones</h1>
           </div>
@@ -101,7 +101,7 @@
     >
       <div class="flex flex-col h-full bg-white">
         <div class="w-full mb-3 text-center">
-          <img src="/src/assets/logo.png" alt="Logo" class="h-48"/>
+          <img src="/public/logo.png" alt="Logo" class="h-48"/>
           <h1 class="ml-2 text-lg font-semibold">Sistema Somos Campeones</h1>
         </div>
         <nav class="flex-grow overflow-y-auto">
