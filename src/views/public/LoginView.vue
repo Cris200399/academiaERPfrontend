@@ -13,7 +13,7 @@
                 id="email"
                 type="email"
                 v-model="email"
-                placeholder="ejemplo@dominio.com"
+                placeholder="ejemplo@mail.com"
                 required
             />
           </div>
@@ -27,9 +27,6 @@
                 placeholder="Tu contraseña"
                 required
             />
-            <div class="forgot-password">
-              <a href="#">¿Olvidaste tu contraseña?</a>
-            </div>
           </div>
 
           <button type="submit" class="login-btn">
@@ -42,9 +39,6 @@
         </form>
         <div v-if="errorMessage" class="error-container">
           <p class="error">{{ errorMessage }}</p>
-        </div>
-        <div class="register">
-          <p>¿No tienes cuenta? <a href="#">Regístrate</a></p>
         </div>
       </div>
     </div>

@@ -5,7 +5,7 @@
       <div class="flex justify-between h-16">
         <div class="flex items-center">
           <!-- Logo -->
-          <img src="/public/logo.png" alt="Logo" class="h-8 w-8"/>
+          <img src="/logo.png" alt="Logo" class="h-8 w-8"/>
           <h1 class="ml-2 text-lg font-semibold">Somos Campeones Academia</h1>
         </div>
         <!-- Botón del menú para móviles -->
