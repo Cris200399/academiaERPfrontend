@@ -20,8 +20,6 @@ const students = ref([]);
 const groupNames = ref();
 
 // eslint-disable-next-line no-undef
-const emit = defineEmits(['studentDeleted']);
-// eslint-disable-next-line no-undef
 const props = defineProps({
   newStudentAdded: Object
 });

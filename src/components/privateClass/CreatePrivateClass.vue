@@ -7,7 +7,6 @@ import FloatLabel from "primevue/floatlabel";
 import DatePicker from 'primevue/datepicker';
 import CalendarComponent from "@/components/calendar/CalendarComponent.vue";
 import PrivateClass from "@/models/privateClass";
-import {formatDateTo24h} from "@/utils/formatDateTo24h";
 import {createPrivateClassService} from "@/services/privateClassService";
 import {useToast} from "primevue/usetoast";
 import InputNumber from "primevue/inputnumber";
