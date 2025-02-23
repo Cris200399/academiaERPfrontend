@@ -10,6 +10,16 @@ export const getUsersService = async () => {
     }
 };
 
+export const getAdminsService = async () => {
+    try {
+        const response = await api.get('/users/admins');
+        return response.data;
+    } catch (error) {
+        console.error('Error al obtener administradores:', error);
+        throw error;
+    }
+}
+
 export const createUserService = async (userData) => {
     try {
         const response = await api.post('/users', userData);

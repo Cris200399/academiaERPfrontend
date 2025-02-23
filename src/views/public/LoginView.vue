@@ -73,7 +73,6 @@ const login = async () => {
     }
 
     userStore.user = user; // Guarda la info del usuario en Pinia
-    console.log(user);
     await router.push('/'); // Redirige a la página principal
   } catch (error) {
     errorMessage.value = error.response?.data?.message || 'Credenciales incorrectas';
