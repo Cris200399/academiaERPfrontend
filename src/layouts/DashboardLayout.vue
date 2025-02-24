@@ -113,6 +113,7 @@
                   v-ripple
                   class="flex items-center p-3 text-gray-700 hover:bg-gray-100 rounded-md transition-colors"
                   :class="{ 'bg-gray-100': $route.path === item.route }"
+                  @click="closeDrawer"
               >
                 <i :class="[item.icon, 'mr-3']"></i>
                 <span class="font-medium">{{ item.label }}</span>
@@ -138,6 +139,7 @@
                 <ul class="list-none py-0 pl-4 pr-0 m-0 hidden overflow-y-hidden transition-all duration-[400ms] ease-in-out">
                   <li v-for="subItem in item.subItems" :key="subItem.label">
                     <router-link
+                        @click="closeDrawer"
                         :to="subItem.route"
                         v-ripple
                         class="flex items-center cursor-pointer p-3 m-2 text-gray-700 hover:bg-gray-100 rounded-md transition-colors p-ripple duration-150"
@@ -196,6 +198,12 @@ function hideDrawIfIsMobile() {
     visible.value = false;
   }
 }
+
+const closeDrawer = () => {
+  if (isMobile.value) {
+    visible.value = false;
+  }
+};
 </script>
 
 <style scoped>
@@ -213,8 +221,5 @@ function hideDrawIfIsMobile() {
   }
 }
 
-@media (max-width: 768px) {
-
-}
 
 </style>
