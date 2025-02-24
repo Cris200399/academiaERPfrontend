@@ -1,9 +1,9 @@
-import {API_URLS} from '@/config/config';
+import getApiEndpoints from '@/config/apiEndpoints';
 import API from "@/config/axiosConfig";
 
 export const getStudentsService = async () => {
     try {
-        const response = await API.get(API_URLS.STUDENTS);
+        const response = await API.get(getApiEndpoints.STUDENTS);
         return response.data;
     } catch (error) {
         console.error('Error fetching students:', error);
@@ -13,7 +13,7 @@ export const getStudentsService = async () => {
 
 export const getStudentService = async (id) => {
     try {
-        const response = await API.get(`${API_URLS.STUDENTS}/${id}`);
+        const response = await API.get(`${getApiEndpoints.STUDENTS}/${id}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching student:', error);
@@ -23,7 +23,7 @@ export const getStudentService = async (id) => {
 
 export const createStudentService = async (student) => {
     try {
-        const response = await API.post(API_URLS.STUDENTS, student);
+        const response = await API.post(getApiEndpoints.STUDENTS, student);
         return response.data;
     } catch (error) {
         console.error('Error adding student:', error);
@@ -33,7 +33,7 @@ export const createStudentService = async (student) => {
 
 export const changeStudentStatusService = async (id, status) => {
     try {
-        const response = await API.patch(`${API_URLS.STUDENTS}/${id}/status`, {status});
+        const response = await API.patch(`${getApiEndpoints.STUDENTS}/${id}/status`, {status});
         return response.data;
     } catch (error) {
         console.error('Error changing student status:', error);
@@ -43,7 +43,7 @@ export const changeStudentStatusService = async (id, status) => {
 
 export const getTotalStudentsService = async () => {
     try {
-        const response = await API.get(`${API_URLS.STUDENTS}/total`);
+        const response = await API.get(`${getApiEndpoints.STUDENTS}/total`);
         return response.data;
     } catch (error) {
         console.error('Error fetching total students:', error);
@@ -53,7 +53,7 @@ export const getTotalStudentsService = async () => {
 
 export const updateStudentService = async (id, student) => {
     try {
-        const response = await API.put(`${API_URLS.STUDENTS}/${id}`, student);
+        const response = await API.put(`${getApiEndpoints.STUDENTS}/${id}`, student);
         return response.data;
     } catch (error) {
         console.error('Error updating student:', error);
@@ -63,7 +63,7 @@ export const updateStudentService = async (id, student) => {
 
 export const getStudentProfileImageService = async (id) => {
     try {
-        const response = await API.get(`${API_URLS.STUDENTS}/${id}/profile-image`,
+        const response = await API.get(`${getApiEndpoints.STUDENTS}/${id}/profile-image`,
             {
                 responseType: 'blob'
             });
@@ -80,7 +80,7 @@ export const updateStudentProfileImageService = async (id, image) => {
         formData.append('image', image, image.name);
 
         const response = await API.put(
-            `${API_URLS.STUDENTS}/${id}/profile-image`,
+            `${getApiEndpoints.STUDENTS}/${id}/profile-image`,
             formData,
             {
                 headers: {
@@ -98,7 +98,7 @@ export const updateStudentProfileImageService = async (id, image) => {
 export const getDocumentService = async (studentId) => {
     try {
         const response = await API.get(
-            `${API_URLS.STUDENTS}/${studentId}/document`,
+            `${getApiEndpoints.STUDENTS}/${studentId}/document`,
             {responseType: 'blob'}
         );
         return URL.createObjectURL(response.data);
@@ -118,7 +118,7 @@ export const updateDocumentService = async (studentId, document) => {
         formData.append('document', document);
 
         const response = await API.put(
-            `${API_URLS.STUDENTS}/${studentId}/document`,
+            `${getApiEndpoints.STUDENTS}/${studentId}/document`,
             formData,
             {
                 headers: {
@@ -135,7 +135,7 @@ export const updateDocumentService = async (studentId, document) => {
 
 export const getTotalOverdueStudentsService = async () => {
     try {
-        const response = await API.get(`${API_URLS.STUDENTS}/total-overdue-students`);
+        const response = await API.get(`${getApiEndpoints.STUDENTS}/total-overdue-students`);
         return response.data;
     } catch (error) {
         console.error('Error fetching total overdue students:', error);
@@ -145,7 +145,7 @@ export const getTotalOverdueStudentsService = async () => {
 
 export const getTotalToExpireStudentsService = async () => {
     try {
-        const response = await API.get(`${API_URLS.STUDENTS}/total-about-to-expire`);
+        const response = await API.get(`${getApiEndpoints.STUDENTS}/total-about-to-expire`);
         return response.data;
     } catch (error) {
         console.error('Error fetching total to expire students:', error);

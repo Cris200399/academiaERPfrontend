@@ -1,9 +1,9 @@
-import {API_URLS} from '@/config/config';
+import getApiEndpoints from "@/config/apiEndpoints";
 import API from "@/config/axiosConfig";
 
 export const createPrivateClassPaymentService = async (privateClassPayment) => {
     try {
-        const response = await API.post(API_URLS.PRIVATE_CLASSES_PAYMENTS, privateClassPayment);
+        const response = await API.post(getApiEndpoints.PRIVATE_CLASSES_PAYMENTS, privateClassPayment);
         return response.data;
     } catch (error) {
         console.error('Error creating private class payment:', error);
@@ -13,7 +13,7 @@ export const createPrivateClassPaymentService = async (privateClassPayment) => {
 
 export const getPrivateClassPaymentsService = async (query) => {
     try {
-        const response = await API.get(API_URLS.PRIVATE_CLASSES_PAYMENTS, {params: query});
+        const response = await API.get(getApiEndpoints.PRIVATE_CLASSES_PAYMENTS, {params: query});
         return response.data;
     } catch (error) {
         console.error('Error getting private class payments:', error);
@@ -23,7 +23,7 @@ export const getPrivateClassPaymentsService = async (query) => {
 
 export const deletePrivateClassPaymentService = async (id) => {
     try {
-        const response = await API.delete(`${API_URLS.PRIVATE_CLASSES_PAYMENTS}/${id}`);
+        const response = await API.delete(`${getApiEndpoints.PRIVATE_CLASSES_PAYMENTS}/${id}`);
         return response.data;
     } catch (error) {
         console.error('Error deleting private class payment:', error);

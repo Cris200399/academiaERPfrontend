@@ -1,8 +1,8 @@
 import axios from 'axios';
-import { useUserStore } from '@/stores/userStore';
+import {useUserStore} from '@/stores/userStore';
 
 const API = axios.create({
-    baseURL: 'http://localhost:5001/api',
+    baseURL: 'https://academiabackend-en0f.onrender.com/api',
     withCredentials: false
 });
 
