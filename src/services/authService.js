@@ -2,7 +2,7 @@ import {api} from '@/config/config';
 
 export const loginService = async (credentials) => {
     const response = await api.post('/auth/login', credentials);
-    return response.data.user;
+    return response.data;
 };
 
 export const fetchUser = async () => {

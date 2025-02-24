@@ -59,14 +59,14 @@ const userStore = useUserStore();
 
 const login = async () => {
   try {
-    const user = await loginService({email: email.value, password: password.value});
+    const userResponse = await loginService({email: email.value, password: password.value});
 
-    if (!user) {
+    if (!userResponse) {
       errorMessage.value = 'Error al obtener la información del usuario.';
       return;
     }
-
-    userStore.user = user; // Guarda la info del usuario en Pinia
+    userStore.user = userResponse.user; // Guarda la info del usuario en Pinia
+    userStore.setToken(userResponse.token); // Guarda el token en el almacenamiento local
     await router.push('/'); // Redirige a la página principal
   } catch (error) {
     errorMessage.value = error.response?.data?.message || 'Credenciales incorrectas';

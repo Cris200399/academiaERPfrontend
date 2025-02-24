@@ -3,7 +3,8 @@ import { fetchUser, logoutService } from '@/services/authService';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
-        user: null // El usuario autenticado
+        user: null, // El usuario autenticado
+        token: localStorage.getItem('authToken') || null
     }),
     actions: {
         async loadUser() {
@@ -14,8 +15,16 @@ export const useUserStore = defineStore('user', {
             }
         },
         async logout() {
-            await logoutService();
+            this.clearToken();
             this.user = null;
+        },
+        setToken(token) {
+            this.token = token;
+            localStorage.setItem('authToken', token); // Guardar en LocalStorage para persistencia
+        },
+        clearToken() {
+            this.token = null;
+            localStorage.removeItem('authToken');
         }
     }
 });
