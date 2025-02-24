@@ -1,27 +1,21 @@
 import axios from 'axios';
+import { useUserStore } from '@/stores/userStore';
 
-// Función para obtener el token desde localStorage
-const getAuthToken = () => localStorage.getItem('authToken');
+const API = axios.create({
+    baseURL: 'http://localhost:5001/api',
+    withCredentials: false
+});
 
-const createAxiosInstance = (baseURL) => {
-    const instance = axios.create({
-        baseURL: baseURL,
-        withCredentials: false, // Ya no usamos cookies
-    });
+// Interceptor para agregar el token automáticamente
+API.interceptors.request.use(
+    (config) => {
+        const userStore = useUserStore();
+        if (userStore.token) {
+            config.headers.Authorization = `Bearer ${userStore.token}`;
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
 
-    // Interceptor de solicitud: Agregar el token a todas las peticiones
-    instance.interceptors.request.use(
-        (config) => {
-            const token = getAuthToken();
-            if (token) {
-                config.headers.Authorization = `Bearer ${token}`;
-            }
-            return config;
-        },
-        (error) => Promise.reject(error)
-    );
-
-    return instance;
-};
-
-export default createAxiosInstance;
+export default API;

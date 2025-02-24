@@ -1,8 +1,9 @@
-import {api, API_URLS} from '@/config/config';
+import {API_URLS} from '@/config/config';
+import API from "@/config/axiosConfig";
 
 export const getGroupsService = async () => {
     try {
-        const response = await api.get(API_URLS.GROUPS);
+        const response = await API.get(API_URLS.GROUPS);
         return response.data;
     } catch (error) {
         console.error('Error fetching groups:', error);
@@ -12,7 +13,7 @@ export const getGroupsService = async () => {
 
 export const getAvailableGroupsService = async () => {
     try {
-        const response = await api.get(`${API_URLS.GROUPS}/available`);
+        const response = await API.get(`${API_URLS.GROUPS}/available`);
         return response.data;
     } catch (error) {
         console.error('Error fetching groups:', error);
@@ -22,7 +23,7 @@ export const getAvailableGroupsService = async () => {
 
 export const createGroupService = async (groupData) => {
     try {
-        const response = await api.post(API_URLS.GROUPS, groupData);
+        const response = await API.post(API_URLS.GROUPS, groupData);
         return response.data;
     } catch (error) {
         console.error('Error creating group:', error);
@@ -32,7 +33,7 @@ export const createGroupService = async (groupData) => {
 
 export const deleteGroupService = async (groupId) => {
     try {
-        await api.delete(`${API_URLS.GROUPS}/${groupId}`);
+        await API.delete(`${API_URLS.GROUPS}/${groupId}`);
     } catch (error) {
         console.error('Error deleting group:', error);
         throw error;
@@ -41,7 +42,7 @@ export const deleteGroupService = async (groupId) => {
 
 export const updateGroupService = async (groupId, groupData) => {
     try {
-        const response = await api.put(`${API_URLS.GROUPS}/${groupId}`, groupData);
+        const response = await API.put(`${API_URLS.GROUPS}/${groupId}`, groupData);
         return response.data;
     } catch (error) {
         console.error('Error updating group:', error);
@@ -51,7 +52,7 @@ export const updateGroupService = async (groupId, groupData) => {
 
 export const getGroupInProgressService = async () => {
     try {
-        const response = await api.get(`${API_URLS.GROUPS}/in-progress`);
+        const response = await API.get(`${API_URLS.GROUPS}/in-progress`);
         return response.data;
     } catch (error) {
         console.error('Error fetching groups:', error);
@@ -61,7 +62,7 @@ export const getGroupInProgressService = async () => {
 
 export const getGroupWithStudentsService = async (groupId) => {
     try {
-        const response = await api.get(`${API_URLS.GROUPS}/${groupId}/members`);
+        const response = await API.get(`${API_URLS.GROUPS}/${groupId}/members`);
         return response.data;
     } catch (error) {
         console.error('Error fetching group:', error);
@@ -71,7 +72,7 @@ export const getGroupWithStudentsService = async (groupId) => {
 
 export const getTodayGroupActivitiesService = async () => {
     try {
-        const response = await api.get(`${API_URLS.GROUPS}/today`);
+        const response = await API.get(`${API_URLS.GROUPS}/today`);
         return response.data;
     } catch (error) {
         console.error('Error fetching activities:', error);
@@ -81,7 +82,7 @@ export const getTodayGroupActivitiesService = async () => {
 
 export const getWeekGroupActivitiesService = async () => {
     try {
-        const response = await api.get(`${API_URLS.GROUPS}/week`);
+        const response = await API.get(`${API_URLS.GROUPS}/week`);
         return response.data;
     } catch (error) {
         console.error('Error fetching activities:', error);

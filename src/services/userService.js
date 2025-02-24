@@ -1,8 +1,9 @@
-import {api} from "@/config/config";
+import {} from "@/config/config";
+import API from "@/config/axiosConfig";
 
 export const getUsersService = async () => {
     try {
-        const response = await api.get('/users');
+        const response = await API.get('/users');
         return response.data;
     } catch (error) {
         console.error('Error al obtener usuarios:', error);
@@ -12,7 +13,7 @@ export const getUsersService = async () => {
 
 export const getAdminsService = async () => {
     try {
-        const response = await api.get('/users/admins');
+        const response = await API.get('/users/admins');
         return response.data;
     } catch (error) {
         console.error('Error al obtener administradores:', error);
@@ -22,7 +23,7 @@ export const getAdminsService = async () => {
 
 export const createUserService = async (userData) => {
     try {
-        const response = await api.post('/users', userData);
+        const response = await API.post('/users', userData);
         return response.data;
     } catch (error) {
         console.error('Error al crear usuario:', error);
@@ -32,7 +33,7 @@ export const createUserService = async (userData) => {
 
 export const updateUserService = async (id, userData) => {
     try {
-        const response = await api.put(`/users/${id}`, userData);
+        const response = await API.put(`/users/${id}`, userData);
         return response.data;
     } catch (error) {
         console.error('Error al actualizar usuario:', error);
@@ -42,7 +43,7 @@ export const updateUserService = async (id, userData) => {
 
 export const updatePasswordService = async (id, currentPassword, newPassword) => {
     try {
-        const response = await api.patch(`/users/${id}/password`, {currentPassword, newPassword});
+        const response = await API.patch(`/users/${id}/password`, {currentPassword, newPassword});
         return response.data;
     } catch (error) {
         console.error('Error al actualizar contraseña:', error);
@@ -52,7 +53,7 @@ export const updatePasswordService = async (id, currentPassword, newPassword) =>
 
 export const deleteUserService = async (userId) => {
     try {
-        const response = await api.delete(`/users/${userId}`);
+        const response = await API.delete(`/users/${userId}`);
         return response.data;
     } catch (error) {
         console.error('Error al eliminar usuario:', error);

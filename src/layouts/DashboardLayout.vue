@@ -101,7 +101,7 @@
     >
       <div class="flex flex-col h-full bg-white">
         <div class="w-full mb-3 text-center">
-          <img src="/public/logo.png" alt="Logo" class="h-48"/>
+          <img src="/logo.png" alt="Logo" class="h-48"/>
           <h1 class="ml-2 text-lg font-semibold">Sistema Somos Campeones</h1>
         </div>
         <nav class="flex-grow overflow-y-auto">

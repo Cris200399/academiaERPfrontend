@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { fetchUser, logoutService } from '@/services/authService';
+import { fetchUser } from '@/services/authService';
 
 export const useUserStore = defineStore('user', {
     state: () => ({
