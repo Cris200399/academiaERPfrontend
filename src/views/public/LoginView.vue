@@ -82,7 +82,7 @@ const login = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('https://images.pexels.com/photos/956999/milky-way-starry-sky-night-sky-star-956999.jpeg?cs=srgb&dl=pexels-felixmittermeier-956999.jpg&fm=jpg');
+  background-image: url('background.jpg');
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -165,11 +165,6 @@ input::placeholder {
   color: #aaa;
 }
 
-.forgot-password {
-  text-align: right;
-  margin-top: 0.5rem;
-}
-
 .forgot-password a {
   color: #8E54E9;
   font-size: 0.75rem;
@@ -219,13 +214,6 @@ input::placeholder {
   color: #d63031;
   font-size: 0.875rem;
   margin: 0;
-}
-
-.register {
-  margin-top: 1.5rem;
-  text-align: center;
-  font-size: 0.875rem;
-  color: #666;
 }
 
 .register a {

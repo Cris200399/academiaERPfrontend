@@ -13,7 +13,7 @@
       </div>
       <div class="user-details">
         <span class="user-name">{{ userName }}</span>
-                <span class="user-role">{{ userRole }}</span>
+        <span class="user-role">{{ userRole }}</span>
       </div>
     </div>
 
@@ -48,6 +48,7 @@ import Avatar from 'primevue/avatar';
 import Menu from 'primevue/menu';
 import Dialog from 'primevue/dialog';
 import {useUserStore} from "@/stores/userStore";
+import {getUserRole} from "@/utils/getUserRole";
 
 const router = useRouter();
 const menu = ref();
@@ -64,7 +65,7 @@ const user = computed(() => userStore.user);
 
 // Si el usuario está definido, obtén su nombre
 const userName = computed(() => user.value ? user.value.name : 'Invitado');
-const userRole = computed(() => user.value ? user.value.role : 'Usuario');
+const userRole = computed(() => getUserRole(user.value.role));
 
 const menuItems = [
   {
@@ -72,7 +73,8 @@ const menuItems = [
     icon: 'pi pi-cog',
     command: () => {
       emit('closeSideBar');
-      router.push('/config')}
+      router.push('/config')
+    }
   },
   {separator: true},
   {
