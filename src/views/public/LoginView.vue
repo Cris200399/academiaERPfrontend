@@ -82,7 +82,7 @@ const login = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('background.jpg');
+  background-image: url('/background.jpg');
   background-size: 100% 100%;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -113,7 +113,7 @@ const login = async () => {
   margin: 0;
   font-size: 2rem;
   font-weight: 700;
-  background: linear-gradient(90deg, #4776E6, #8E54E9);
+  background: linear-gradient(90deg, #d6c0ae, #c62020);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
