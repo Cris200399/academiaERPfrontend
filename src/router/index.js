@@ -1,20 +1,23 @@
-import {createRouter, createWebHistory} from 'vue-router';
-import {useUserStore} from '@/stores/userStore';
-import {fetchUser} from '@/services/authService';
-import Home from '../views/protected/HomeView.vue';
-import CalendarView from '../views/protected/CalendarView.vue';
-import AlumnosView from '../views/protected/StudentsView.vue';
-import GroupsView from '../views/protected/GroupsView.vue';
-import AssistanceView from "@/views/protected/AssistanceView.vue";
-import CreateGroupPaymentView from "@/views/protected/CreateGroupPaymentView.vue";
-import GroupPaymentsView from "@/views/protected/GroupPaymentsView.vue";
-import CreatePrivateClassView from "@/views/protected/CreatePrivateClassView.vue";
-import PrivateClassesView from "@/views/protected/PrivateClassesView.vue";
-import MarkAssistanceView from "@/views/protected/MarkAssistanceView.vue";
-import LoginView from "@/views/public/LoginView.vue";
-import AuthLayout from "@/layouts/AuthLayout.vue";
-import DashboardLayout from "@/layouts/DashboardLayout.vue";
-import SettingsView from "@/views/protected/SettingsView.vue";
+import { createRouter, createWebHistory } from 'vue-router';
+import { useUserStore } from '@/stores/userStore';
+import { fetchUser } from '@/services/authService';
+
+// Lazy loading de vistas para mejorar el rendimiento
+const LoginView = () => import('@/views/public/LoginView.vue');
+const AuthLayout = () => import('@/layouts/AuthLayout.vue');
+const DashboardLayout = () => import('@/layouts/DashboardLayout.vue');
+
+const Home = () => import('@/views/protected/HomeView.vue');
+const CalendarView = () => import('@/views/protected/CalendarView.vue');
+const StudentsView = () => import('@/views/protected/StudentsView.vue');
+const GroupsView = () => import('@/views/protected/GroupsView.vue');
+const AssistanceView = () => import('@/views/protected/AssistanceView.vue');
+const CreateGroupPaymentView = () => import('@/views/protected/CreateGroupPaymentView.vue');
+const GroupPaymentsView = () => import('@/views/protected/GroupPaymentsView.vue');
+const CreatePrivateClassView = () => import('@/views/protected/CreatePrivateClassView.vue');
+const PrivateClassesView = () => import('@/views/protected/PrivateClassesView.vue');
+const MarkAssistanceView = () => import('@/views/protected/MarkAssistanceView.vue');
+const SettingsView = () => import('@/views/protected/SettingsView.vue');
 
 const routes = [
     {
@@ -29,7 +32,7 @@ const routes = [
         children: [
             {path: '/', component: Home},
             {path: '/calendar', component: CalendarView},
-            {path: '/students', component: AlumnosView},
+            {path: '/students', component: StudentsView},
             {path: '/groups', component: GroupsView},
             {path: '/students/assistance', component: AssistanceView},
             {path: '/create-group-payment', component: CreateGroupPaymentView},

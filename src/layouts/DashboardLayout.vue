@@ -162,7 +162,7 @@
     </Drawer>
 
     <!-- Contenido principal -->
-    <div class="flex-grow mt-0 ml-2 overflow-x-auto">
+    <div class="flex-grow mt-2 mx-2 overflow-x-auto">
       <router-view/>
     </div>
   </div>
