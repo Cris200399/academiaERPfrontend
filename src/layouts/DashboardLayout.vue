@@ -157,7 +157,7 @@
       </div>
       <!-- Perfil de usuario -->
       <div class="">
-        <LogoutComponent/>
+        <LogoutComponent @closeSideBar="closeDrawer"/>
       </div>
     </Drawer>
 

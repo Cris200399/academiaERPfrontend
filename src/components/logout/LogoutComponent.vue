@@ -13,7 +13,7 @@
       </div>
       <div class="user-details">
         <span class="user-name">{{ userName }}</span>
-        <!--        <span class="user-role">{{ userRole }}</span>-->
+        <span class="user-role">{{ userRole }}</span>
       </div>
     </div>
 
@@ -48,10 +48,14 @@ import Avatar from 'primevue/avatar';
 import Menu from 'primevue/menu';
 import Dialog from 'primevue/dialog';
 import {useUserStore} from "@/stores/userStore";
+import {getUserRole} from "@/utils/getUserRole";
 
 const router = useRouter();
 const menu = ref();
 const showLogoutConfirm = ref(false);
+
+// eslint-disable-next-line no-undef
+const emit = defineEmits(['closeSideBar']);
 
 // Instancia del store de usuario
 const userStore = useUserStore();
@@ -61,12 +65,16 @@ const user = computed(() => userStore.user);
 
 // Si el usuario está definido, obtén su nombre
 const userName = computed(() => user.value ? user.value.name : 'Invitado');
+const userRole = computed(() => getUserRole(user.value.role));
 
 const menuItems = [
   {
     label: 'Configuración',
     icon: 'pi pi-cog',
-    command: () => router.push('/config')
+    command: () => {
+      emit('closeSideBar');
+      router.push('/config')
+    }
   },
   {separator: true},
   {
@@ -150,22 +158,6 @@ const confirmLogout = async () => {
   color: #666;
 }
 
-/* Estilos para el menú desplegable */
-:deep(.p-menu) {
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  overflow: hidden;
-  border: none;
-}
-
-:deep(.p-menu .p-menuitem-link) {
-  padding: 0.75rem 1rem;
-}
-
-:deep(.p-menu .p-menuitem-icon) {
-  margin-right: 0.75rem;
-  color: #8E54E9;
-}
 
 /* Estilos para el diálogo de confirmación */
 .logout-dialog {
@@ -173,15 +165,6 @@ const confirmLogout = async () => {
   overflow: hidden;
 }
 
-:deep(.p-dialog-header) {
-  background: linear-gradient(90deg, #4776E6, #8E54E9);
-  color: white;
-  padding: 1rem 1.5rem;
-}
-
-:deep(.p-dialog-content) {
-  padding: 1.5rem;
-}
 
 .confirmation-content {
   display: flex;
@@ -194,11 +177,6 @@ const confirmLogout = async () => {
 .logout-icon {
   font-size: 2rem;
   color: #ff9800;
-}
-
-:deep(.p-dialog-footer) {
-  padding: 1rem 1.5rem;
-  background-color: #f8f9fa;
 }
 
 /* Botón con gradiente para mantener estilo del login */

@@ -4,7 +4,7 @@
       <div class="profile-avatar">
         <Avatar :image="user.avatar || null" :label="getInitials(user.name)" class="user-avatar"/>
         <div class="role-badge" :class="getRoleBadgeClass(user.role)">
-          {{ user.role }}
+          {{ getUserRole(user.role) }}
         </div>
       </div>
 
@@ -86,6 +86,7 @@ import Password from 'primevue/password';
 import {useUserStore} from "@/stores/userStore";
 import {updateUserService, updatePasswordService} from "@/services/userService";
 import {useToast} from "primevue/usetoast";
+import {getUserRole} from "@/utils/getUserRole";
 
 const userStore = useUserStore();
 const user = ref({name: '', email: '', role: '', avatar: null});
