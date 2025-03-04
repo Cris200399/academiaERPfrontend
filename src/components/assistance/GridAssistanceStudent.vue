@@ -35,7 +35,7 @@ onMounted(async () => {
   if (props.student.profileImageId) {
     await getProfileImage();
   } else {
-    image.value = '/src/assets/profileImageBlank.webp';
+    image.value = 'profileImageBlank.webp';
   }
 
   await getTodayAssistancePerStudentService(props.student.id, props.groupId).then((response) => {

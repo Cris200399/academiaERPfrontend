@@ -133,7 +133,7 @@ function resetForm() {
           </div>
           <FloatLabel variant="on">
             <label for="on_label">Seleccionar fecha</label>
-            <DatePicker class="w-full" v-model="date" showButtonBar/>
+            <DatePicker class="w-full" v-model="date" :min-date="new Date()" showButtonBar/>
           </FloatLabel>
         </div>
 

@@ -112,7 +112,7 @@ onMounted(() => {
   if (props.profileImageId) {
     getProfileImage();
   } else {
-    image.value = 'src/assets/profileImageBlank.webp';
+    image.value = 'profileImageBlank.webp';
   }
 });
 
