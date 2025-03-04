@@ -24,9 +24,9 @@ onMounted(async () => {
 
   const option = {
     title: {
-      text: "Ingresos en los últimos meses",
+      text: "Ingresos en los últimos 3 meses",
       left: "center",
-      textStyle: { color: "#333", fontSize: 25, fontWeight: "bold" },
+      textStyle: { color: "#333", fontSize: 20, fontWeight: "bold" },
       padding: 5,
     },
     tooltip: {
