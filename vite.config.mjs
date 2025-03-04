@@ -4,7 +4,7 @@ import vue from '@vitejs/plugin-vue';
 import Components from 'unplugin-vue-components/vite';
 import { PrimeVueResolver } from '@primevue/auto-import-resolver';
 import { compression } from 'vite-plugin-compression2';
-import visualizer from 'rollup-plugin-visualizer';
+import {visualizer} from 'rollup-plugin-visualizer';
 
 export default defineConfig({
     plugins: [
