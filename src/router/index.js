@@ -1,5 +1,6 @@
 import {createRouter, createWebHashHistory} from 'vue-router';
 import { useUserStore } from '@/stores/userStore';
+import { fetchUser } from '@/services/authService';
 
 // Lazy loading de vistas para mejorar el rendimiento
 const LoginView = () => import('@/views/public/LoginView.vue');
@@ -49,24 +50,17 @@ const router = createRouter({
     routes,
 });
 
-
 router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore();
-    const token = localStorage.getItem('token'); // Añade verificación de token
 
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!token) {
-            next('/login');
-            return;
-        }
-
         if (!userStore.user) {
             try {
-                await userStore.loadUser();
+                userStore.user = await fetchUser(); // Guarda el usuario en Pinia
                 next();
             } catch (error) {
-                console.error('Error de autenticación:', error);
-                next('/login');
+                console.error('No autenticado:', error);
+                next('/login'); // Si no está autenticado, redirige al login
             }
         } else {
             next();
