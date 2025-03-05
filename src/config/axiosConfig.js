@@ -2,7 +2,7 @@ import axios from 'axios';
 import {useUserStore} from '@/stores/userStore';
 
 const API = axios.create({
-    baseURL: 'https://academiabackend-en0f.onrender.com/api',
+    baseURL: import.meta.env.VITE_API_BASE_URL,
     withCredentials: false
 });
 
